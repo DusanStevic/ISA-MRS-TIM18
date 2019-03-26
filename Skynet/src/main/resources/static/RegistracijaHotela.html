@@ -1,0 +1,67 @@
+<html>
+<head>
+     <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/registracijaKompanije.js"></script>
+</head>
+<body>
+
+    <div class="heder">
+        <div class="heder_elem">
+            <table>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <a class="dropbtn">Registracija</a>
+                            <div class="dropdown-content">
+                                <a href="#">Registracija korisnika</a>
+                                <a href="#">Registracija kompanije</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <form class="regForm">
+        <h1>Unos podataka o hotelu:</h1>
+        <table>
+            <tr>
+                <td> Naziv hotela:</td>
+            </tr>
+            <tr>
+                <td><input type="text" id="nazivHotela" /></td>
+            </tr>
+            <tr>
+                <td> Lokacija:</td>
+            </tr>
+            <tr>
+                <td><input type="text" id="lokacijaHotela" /></td>
+            </tr>
+            <tr>
+                <td>Slika hotela:</td>
+            </tr>
+        </table>
+
+        <h1>Podaci o administratorima:</h1>
+        <p>Unesite email adrese svih administratora hotela. Kliknite na "Dodaj novo polje" kada zelite da dodate novi email. Kada administrator sistema odobri registraciju, na email adresu cete dobiti link sa kog cete se registrovati.</p>
+        <table id="tabela">
+            <tr>
+                <td>
+                    Email adrese administraotra:
+                    <p><input type="text" id="email0" /></p>
+                </td>
+            </tr>
+        </table>
+        <button type="button" id="new" onclick="dodajNovog()">Dodaj novo polje</button>
+        <input type="submit" value="Posalji" />
+    </form>
+
+    <script>
+        $("#tabela").on('click', '.x_button', function () {
+            $(this).closest('tr').remove();
+        });
+    </script>
+
+</body>
+</html>

@@ -9,7 +9,6 @@ public class SkynetApplication {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		SpringApplication.run(SkynetApplication.class,args);
-
 	}
 
 }
