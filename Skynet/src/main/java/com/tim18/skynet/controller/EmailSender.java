@@ -1,6 +1,10 @@
 package com.tim18.skynet.controller;
 
-import javax.mail.Message; 
+
+//mora se dodati dependency za ovu biblioteku ,a ne jar
+
+
+/*import javax.mail.Message; 
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -39,3 +43,4 @@ public class EmailSender {
 		transport.close();
 	}
 }
+*/
