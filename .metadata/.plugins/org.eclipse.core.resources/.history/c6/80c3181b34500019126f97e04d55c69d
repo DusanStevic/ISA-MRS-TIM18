@@ -1,0 +1,8 @@
+package com.tim18.skynet.controller;
+
+
+@RestController
+@RequestMapping(value="api/korisnici")
+public class KorisnikController {
+
+}

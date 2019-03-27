@@ -1,0 +1,7 @@
+package com.tim18.skynet.dto;
+
+public class KorisnikDTO {
+	private String ime;
+	private String prezime;
+
+}

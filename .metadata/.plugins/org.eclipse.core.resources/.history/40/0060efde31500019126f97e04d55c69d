@@ -1,0 +1,5 @@
+package com.tim18.skynet.repository;
+
+public interface KorisnikRepository {
+
+}

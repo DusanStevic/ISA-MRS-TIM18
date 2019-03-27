@@ -1,0 +1,15 @@
+package com.tim18.skynet.dto;
+
+public class KorisnikDTO {
+	private Long id;
+	private String firstName;
+	private String lastName;
+	
+	
+	public KorisnikDTO() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+
+}
