@@ -13,26 +13,26 @@ import com.tim18.skynet.service.AirlineService;
 public class AirlineServiceImpl implements AirlineService{
 	
 	@Autowired
-	private AirlinRepository userRepository;
+	private AirlinRepository airlineRepository;
 
 	
 	public Airline save(Airline airline) {
-		return userRepository.save(airline);
+		return airlineRepository.save(airline);
 	}
 
 	
 	public Airline findOne(Long id) {
-		return userRepository.getOne(id);
+		return airlineRepository.getOne(id);
 	}
 
 	
 	public List<Airline> findAll() {
-		return userRepository.findAll();
+		return airlineRepository.findAll();
 	}
 
 
 	public void remove(Long id) {
-		userRepository.deleteById(id);
+		airlineRepository.deleteById(id);
 		
 	}
 	
