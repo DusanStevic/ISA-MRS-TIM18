@@ -1,8 +1,0 @@
-package com.tim18.skynet.model;
-
-import javax.persistence.Entity;
-
-@Entity
-public class Korisnik {
-
-}

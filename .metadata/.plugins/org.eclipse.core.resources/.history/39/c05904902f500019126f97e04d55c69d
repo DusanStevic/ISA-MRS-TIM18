@@ -1,6 +1,0 @@
-package com.tim18.skynet.model;
-
-@Entity
-public class Korisnik {
-
-}
