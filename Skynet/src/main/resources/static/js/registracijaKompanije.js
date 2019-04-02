@@ -1,37 +1,47 @@
-function registrujHotel() {
-    var naziv = document.getElementById("nazivHotela").value;
-    var lokacija = document.getElementById("lokacijaHotela").value;
-    var email = document.getElementById("email0").value;
+function hotelRegistration() {
+	var root;
+	if (document.getElementById("hotel").checked == true) {
+		root = "http://localhost:8080/addHotel";
+	}
+	else if(document.getElementById("rentacar").checked == true){
+		root = "http://localhost:8080/addRentCar";
+	}
+	else if(document.getElementById("airline").checked == true){
+		root = "http://localhost:8080/addAirline";
+	}
+	else{
+		alert("Morate odabrati tip kompanije koja se dodaje.");
+		return;
+	}
+	
+    var name = document.getElementById("name").value;
+    var adress = document.getElementById("adress").value;
+    var desc = document.getElementById("description").value;
 
     $.ajax({
-        url: "http://localhost:8080/registrujHotel",
+        url: root,
+        type : 'POST',
         contentType : 'application/json',
-        dataType: "json",
-        data: hotelToJSON(naziv, lokacija),
+		dataType : "json",
+		data : textToJSON(name, adress, desc),
         success: function (data) {
-            alert("Uspesno dodat hotel!");
+            alert("Uspesno dodato!");
         },
         error: function (XMLHttpRequest) {
-            alert("Error");
+
         }
     })
 }
 
-function hotelToJSON(naziv, lokacija){
+function textToJSON(name, adress, description) {
 	return JSON.stringify({
-		"naziv":naziv,
-		"lokacija":lokacija
+		"name" : name,
+		"adress" : adress,
+		"description" : description,
 	})
 }
 
 $(document).on("submit",".regForm", function(){
-	registrujHotel();
+	hotelRegistration();
 })
 
-var i = 1;
-
-function dodajNovog() {
-    var tr = "<tr><td> <p><input type=\"text\" id=\"email\"" + i + "/></p></td><td><button class=\"x_button\" type=\"button\" id=\"x\"" + i + ">X</button></td</tr>";
-    $("#tabela").append(tr);
-    i++;
-}
