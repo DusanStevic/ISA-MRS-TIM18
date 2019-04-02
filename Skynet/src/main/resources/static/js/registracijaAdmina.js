@@ -51,3 +51,4 @@ function unosToJSON(ime, prezime, korisnickoIme, lozinka, email, kompanija) {
 $(document).on("submit",".admin", function(){
 	registrujAdmina();
 })
+
