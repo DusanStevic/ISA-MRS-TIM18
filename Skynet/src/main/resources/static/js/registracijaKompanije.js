@@ -43,5 +43,6 @@ function textToJSON(name, adress, description) {
 
 $(document).on("submit",".regForm", function(){
 	hotelRegistration();
+	
 })
 
