@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.tim18.skynet.model.Airline;
 import com.tim18.skynet.model.AirlineAdmin;
 import com.tim18.skynet.dto.AdminDTO;
 import com.tim18.skynet.service.impl.AirlineAdminServiceImpl;
+import com.tim18.skynet.service.impl.AirlineServiceImpl;
 
 @RestController
 //@RequestMapping(value="api/airlineAdmins")
@@ -29,9 +30,18 @@ public class AirlineAdminController {
 	
 
 	
-	@RequestMapping( value="api/airlineAdmins",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
-	public AirlineAdmin createAirlineAdmin(@Valid @RequestBody AirlineAdmin airlineAdmin) {
-		return airlineAdminService.save(airlineAdmin);
+	@RequestMapping(value = "/addAirlineAdmin", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
+	public AirlineAdmin createAirlineAdmin(@RequestBody AdminDTO admin) {
+		Airline airline = null;
+		//ZA SAD OVAKO POSLE LEPSE
+		List<Airline> list = new AirlineServiceImpl().findAll();
+		for(Airline a : list){
+			if(a.getName().equals(admin.getCompany())){
+				airline = a;
+			}
+		}
+		AirlineAdmin user = new AirlineAdmin(admin.getName(), admin.getSurname(), admin.getUsername(), admin.getEmail(), admin.getPassword(), airline);
+		return airlineAdminService.save(user);
 	}
 	
 	

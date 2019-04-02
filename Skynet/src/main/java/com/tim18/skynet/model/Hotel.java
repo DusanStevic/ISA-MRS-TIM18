@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Hotel {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -17,9 +18,11 @@ public class Hotel {
 	private String address;
 	@Column(nullable = false)
 	private String description;
+	
 	public Hotel() {
 		super();
 	}
+	
 	public Hotel(String name, String address, String description) {
 		super();
 		this.name = name;

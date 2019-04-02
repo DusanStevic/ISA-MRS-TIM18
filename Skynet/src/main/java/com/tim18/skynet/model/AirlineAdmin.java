@@ -1,15 +1,18 @@
 package com.tim18.skynet.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class AirlineAdmin {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
 	private String name;
@@ -21,8 +24,8 @@ public class AirlineAdmin {
 	private String email;
 	@Column(nullable = false)
 	private String password;
-	//@Column()
-	//private Airline airline;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Airline airline;
 
 	public AirlineAdmin() {
 		super();
@@ -34,7 +37,7 @@ public class AirlineAdmin {
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		//this.airline = airline;
+		this.airline = airline;
 	}
 	
 	public Long getId() {
@@ -73,7 +76,6 @@ public class AirlineAdmin {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-/*
 	public Airline getAirline() {
 		return airline;
 	}
@@ -81,5 +83,4 @@ public class AirlineAdmin {
 	public void setAirline(Airline airline) {
 		this.airline = airline;
 	}
-*/
 }

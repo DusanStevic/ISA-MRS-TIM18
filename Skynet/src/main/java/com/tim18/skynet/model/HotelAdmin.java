@@ -1,15 +1,18 @@
 package com.tim18.skynet.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class HotelAdmin {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
 	private String name;
@@ -21,8 +24,8 @@ public class HotelAdmin {
 	private String email;
 	@Column(nullable = false)
 	private String password;
-	//@Column()
-	//private Hotel hotel;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Hotel hotel;
 
 	public HotelAdmin() {
 		super();
@@ -34,7 +37,7 @@ public class HotelAdmin {
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		//this.hotel = hotel;
+		this.hotel = hotel;
 	}
 	
 	public Long getId() {
@@ -73,7 +76,7 @@ public class HotelAdmin {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-/*
+
 	public Hotel getHotel() {
 		return hotel;
 	}
@@ -81,5 +84,4 @@ public class HotelAdmin {
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
 	}
-*/
 }
