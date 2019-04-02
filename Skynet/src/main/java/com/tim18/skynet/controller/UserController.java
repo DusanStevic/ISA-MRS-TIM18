@@ -28,7 +28,7 @@ public class UserController {
 	
 
 	
-	@RequestMapping( method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping( value="api/users",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
 	public User createUser(@Valid @RequestBody User user) {
 		return userService.save(user);
 	}
