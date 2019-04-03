@@ -20,8 +20,9 @@ public class Airline {
 	public Airline() {
 		super();
 	}
-	public Airline(String name, String address, String description) {
+	public Airline(Long id,String name, String address, String description) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.description = description;
