@@ -66,7 +66,7 @@ public class UserController {
 		}
 
 		user.setName(u.getName());
-		user.setName(u.getSurname());
+		user.setSurname(u.getSurname());
 		
 
 		User updateUser = userService.save(user);
