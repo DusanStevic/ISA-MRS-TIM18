@@ -44,7 +44,7 @@ function unosToJSON(ime, prezime, korisnickoIme, lozinka, email, kompanija) {
 		"username" : korisnickoIme,
 		"password" : lozinka,
 		"email" : email,
-		"company" : kompanija,
+		"company" : kompanija
 	})
 }
 
