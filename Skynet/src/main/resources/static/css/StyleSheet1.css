@@ -125,7 +125,7 @@ input.invalid {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #842f4b;
     color: #ffffff;
     border: none;
     padding: 10px 20px;
@@ -135,7 +135,7 @@ button {
 }
 
 .submit{
-    background-color: #4CAF50;
+    background-color: #842f4b;
     color: #ffffff;
     border: none;
     padding: 10px 20px;
@@ -178,4 +178,13 @@ button {
 
 .step.finish {
     background-color: #4CAF50;
+}
+
+#mojA {
+  background-color: #842f4b;
+  color: white;
+  padding: 14px 25px;
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block;
 }
