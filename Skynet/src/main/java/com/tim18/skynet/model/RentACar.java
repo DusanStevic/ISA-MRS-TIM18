@@ -12,10 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class RentACar {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	private Long id;
 	@Column(nullable = false)
 	private String name;
@@ -24,23 +26,39 @@ public class RentACar {
 	@Column(nullable = false)
 	private String description;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "rac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Branch> branches = new HashSet<Branch>();
+	private Set<Branch> branchs = new HashSet<Branch>();
 
 	
-	public RentACar(Long id, String name, String address, String description, Set<Branch> branches) {
+	
+	
+	public RentACar(Long id, String name, String address, String description, Set<Branch> branchs) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.description = description;
-		this.branches = branches;
+		this.branchs = branchs;
+	}
+	public RentACar(Long id, String name, String address, String description) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.address = address;
+		this.description = description;
 	}
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Set<Branch> getBranchs() {
+		return branchs;
+	}
+	public void setBranchs(Set<Branch> branchs) {
+		this.branchs = branchs;
 	}
 	public String getName() {
 		return name;
@@ -63,11 +81,6 @@ public class RentACar {
 	public RentACar() {
 		super();
 	}
-	public Set<Branch> getBranches() {
-		return branches;
-	}
-	public void setBranches(Set<Branch> branches) {
-		this.branches = branches;
-	}
+
 	
 }
