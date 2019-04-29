@@ -28,6 +28,7 @@ public class RACController {
 	public RentACar createRentAcar(@Valid @RequestBody RentACar rac) {
 		return racService.save(rac);
 	}
+	
 
 	@RequestMapping(value = "/api/racs", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<RentACar> getAll() {
@@ -61,7 +62,6 @@ public class RACController {
 			rac.setName(c.getName());
 			rac.setAddress(c.getAddress());
 			rac.setDescription(c.getDescription());
-			rac.setBranches(c.getBranches());
 				
 				
 				

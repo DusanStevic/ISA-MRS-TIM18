@@ -9,7 +9,7 @@ import javax.persistence.Id;
 @Entity
 public class Airline {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	private Long id;
 	@Column(nullable = false)
 	private String name;

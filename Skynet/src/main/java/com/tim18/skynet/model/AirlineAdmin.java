@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class AirlineAdmin {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	private Long id;
 	@Column(nullable = false)
 	private String name;
