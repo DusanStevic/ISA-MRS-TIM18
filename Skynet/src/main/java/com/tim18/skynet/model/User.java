@@ -1,13 +1,30 @@
 package com.tim18.skynet.model;
 
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+import org.joda.time.DateTime;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
-public class User {
+public class User implements UserDetails{
+	
+	private static final long serialVersionUID = 3015781790824785864L;
 	
 	@Id
 	@GeneratedValue
@@ -22,6 +39,16 @@ public class User {
 	private String password;
 	@Column(nullable = false)
 	private String email;
+	@Column(name = "enabled")
+	private boolean enabled;
+	@Column(name = "last_password_reset_date")
+	private Timestamp lastPasswordResetDate;
+	@Column (name="first_time")
+	private Boolean firstTime;
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+	private List<Authority> authorities;
 	
 	public User() {
 		// TODO Auto-generated constructor stub
@@ -52,6 +79,8 @@ public class User {
 
 
 	public void setPassword(String password) {
+		Timestamp now = new Timestamp(DateTime.now().getMillis());
+		this.setLastPasswordResetDate(now);
 		this.password = password;
 	}
 
@@ -72,9 +101,8 @@ public class User {
 
 
 
-	public User(Long id, String name, String surname, String username, String password, String email) {
+	public User(String name, String surname, String username, String password, String email) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.username = username;
@@ -83,6 +111,18 @@ public class User {
 	}
 
 
+	public User(String name, String surname, String username, String password, String email, boolean enabled,
+			Timestamp lastPasswordResetDate, Boolean firstTime) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.enabled = enabled;
+		this.lastPasswordResetDate = lastPasswordResetDate;
+		this.firstTime = firstTime;
+	}
 
 
 	public Long getId() {
@@ -113,7 +153,57 @@ public class User {
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
-	
-	
 
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public Timestamp getLastPasswordResetDate() {
+		return lastPasswordResetDate;
+	}
+
+	public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+		this.lastPasswordResetDate = lastPasswordResetDate;
+	}
+
+	public Boolean getFirstTime() {
+		return firstTime;
+	}
+
+
+	public void setFirstTime(Boolean firstTime) {
+		this.firstTime = firstTime;
+	}
+	
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.authorities;
+	}
+	
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return enabled;
+	}
 }

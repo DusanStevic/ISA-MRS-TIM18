@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ public class AirlineController {
 //	}
 	
 	
-	@RequestMapping( value="api/airlines",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping( value="api/airline",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
 	public Airline createAirline(@Valid @RequestBody Airline airline) {
 		return airlineService.save(airline);
 	}
@@ -41,7 +42,7 @@ public class AirlineController {
 	
 
 	
-	@RequestMapping(value = "/api/airlines", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "api/airlines", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Airline> getAllAirlines() {
 		return airlineService.findAll();
 	}
