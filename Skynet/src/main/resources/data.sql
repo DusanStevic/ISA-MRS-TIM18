@@ -1,10 +1,4 @@
-insert into user (id,name,surname) values(1,'Marko', 'Marković');
-insert into user (id,name,surname) values(2,'Milan', 'Milanović');
-insert into user (id,name,surname) values(3,'Ivana', 'Ivanović');
-insert into user (id,name,surname) values(4,'Iva', 'Ivić');
-insert into airline (id,name,address,description) values (1,'AirSerbia','Batajnica','lowcost');
-insert into airline (id,name,address,description) values (2,'AlItalia','Milano','lowcost');
-insert into hotel (id,name,address,description) values (1,'Park','Novi Sad','Hotel sa 3 zvezdice');
-insert into hotel (id,name,address,description) values (2,'Hajat','Beograd','Hotel sa 4 zvezdice');
-insert into rentacar (id,name,address,description) values (1,'Easy car','Novi Sad','rent with class');
-insert into rentacar (id,name,address,description) values (2,'Safe car','Beograd','safe rent');
+insert into user (dtype, id, username, password, name, surname, email, enabled,last_password_reset_date, first_time)
+values('User',1,'admin','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','Stojko', 'Stojanovic', 'stojko@example.com', true, '2019-04-28 21:00:00', true);
+insert into authority (id, name) values (1, 'ROLE_SYSTEM_ADMIN');
+--insert into user_authority (user_id, authority_id) values(1,1);

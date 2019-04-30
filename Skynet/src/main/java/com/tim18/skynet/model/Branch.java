@@ -1,14 +1,14 @@
 package com.tim18.skynet.model;
 
-import java.util.HashSet;
+import java.util.HashSet; 
 import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -21,9 +21,9 @@ public class Branch {
 	@Id
 	@GeneratedValue
 	private Long id;
-
+	@Column(nullable = false)
 	private String name;
-	
+	@Column(nullable = false)
 	private String address;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

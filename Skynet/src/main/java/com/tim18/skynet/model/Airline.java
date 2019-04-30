@@ -1,9 +1,8 @@
 package com.tim18.skynet.model;
 
-import javax.persistence.Column;
+import javax.persistence.Column; 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -17,9 +16,25 @@ public class Airline {
 	private String address;
 	@Column(nullable = false)
 	private String description;
+	@Column(nullable = false)
+	private String image;
+	
 	public Airline() {
 		super();
 	}
+	
+	
+	
+	public Airline(String name, String address, String description, String image) {
+		super();
+		this.name = name;
+		this.address = address;
+		this.description = description;
+		this.image = image;
+	}
+
+
+
 	public Airline(Long id,String name, String address, String description) {
 		super();
 		this.id = id;
@@ -50,5 +65,13 @@ public class Airline {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 }

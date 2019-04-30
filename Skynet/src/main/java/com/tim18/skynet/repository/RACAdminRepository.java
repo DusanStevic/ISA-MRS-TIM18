@@ -7,3 +7,4 @@ import com.tim18.skynet.model.RACAdmin;
 public interface RACAdminRepository extends JpaRepository<RACAdmin, Long>{
 
 }
+

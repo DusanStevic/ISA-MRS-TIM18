@@ -1,10 +1,17 @@
 package com.tim18.skynet.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Hotel {
@@ -18,17 +25,55 @@ public class Hotel {
 	private String address;
 	@Column(nullable = false)
 	private String description;
+	@Column(nullable = false)
+	private String image;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	List<Room> rooms = new ArrayList<Room>();
 	
 	public Hotel() {
 		super();
 	}
 	
-	public Hotel(String name, String address, String description) {
+	
+	
+	public Hotel(String name, String address, String description, String image) {
 		super();
 		this.name = name;
 		this.address = address;
 		this.description = description;
+		this.image = image;
 	}
+	
+	public Hotel(String name, String address, String description, List<Room> rooms) {
+		super();
+		this.name = name;
+		this.address = address;
+		this.description = description;
+		this.rooms = rooms;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+
+
+	public List<Room> getRooms() {
+		return rooms;
+	}
+
+	public void setRooms(List<Room> rooms) {
+		this.rooms = rooms;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -1,20 +1,23 @@
 package com.tim18.skynet.controller;
 
 
-//mora se dodati dependency za ovu biblioteku ,a ne jar
+import java.util.Properties;
 
-
-/*import javax.mail.Message; 
+import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.Properties;
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.tim18.skynet.dto.EmailDTO;
+import com.tim18.skynet.security.TokenHelper;
 
 @RestController
 public class EmailSender {
@@ -23,8 +26,12 @@ public class EmailSender {
 	static Session getMailSession;
 	static MimeMessage generateMailMessage;
 	
-	@RequestMapping("/sendEmail")
-	public void sendEmail(String emailAdress, String subjest, String body) throws AddressException, MessagingException{
+	@Autowired
+	TokenHelper tokenUtils;
+	
+	@PostMapping("/sendEmail")
+	public void sendEmail(@RequestBody EmailDTO email) throws AddressException, MessagingException{
+		System.out.println("SALJEM MAIL");
 		mailServerProperties = System.getProperties();
 		mailServerProperties.put("mail.smtp.port", "587");
 		mailServerProperties.put("mail.smtp.auth", "true");
@@ -32,9 +39,10 @@ public class EmailSender {
 
 		getMailSession = Session.getDefaultInstance(mailServerProperties, null);
 		generateMailMessage = new MimeMessage(getMailSession);
-		generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(emailAdress));
-		generateMailMessage.setSubject(subjest);
-		String emailBody = body;
+		generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email.getEmail()));
+		//generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("sonjajosanov98@gmail.com"));
+		generateMailMessage.setSubject(email.getSubject());
+		String emailBody = email.getBody();
 		generateMailMessage.setContent(emailBody, "text/html");
 
 		Transport transport = getMailSession.getTransport("smtp");
@@ -43,4 +51,3 @@ public class EmailSender {
 		transport.close();
 	}
 }
-*/

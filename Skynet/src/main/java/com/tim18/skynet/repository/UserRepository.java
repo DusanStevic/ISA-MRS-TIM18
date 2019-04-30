@@ -1,9 +1,23 @@
 package com.tim18.skynet.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;  
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import com.tim18.skynet.model.RegularUser;
 import com.tim18.skynet.model.User;
 
-public interface UserRepository extends JpaRepository<User, Long>{
+@Repository
+public interface UserRepository extends JpaRepository<User, Long>{	
+	
+	@Query(value = "select * from users u where u.id =(select t.user from verification_tokens t where t.token = ?1)", nativeQuery = true)
+	User findByToken(String token);
+	
+	public List<RegularUser> findByNameAndSurname(String name, String surname);
+	public List<RegularUser> findBySurname(String surname);
+	public List<RegularUser> findByName(String name);
+	public User findOneByUsername(String username);
 
 }

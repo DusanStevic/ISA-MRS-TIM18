@@ -26,26 +26,6 @@ public class AirlineAdminController {
 
 	@Autowired
 	private AirlineAdminServiceImpl airlineAdminService;
-	
-	
-
-	
-	@RequestMapping(value = "/addAirlineAdmin", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
-	public AirlineAdmin createAirlineAdmin(@RequestBody AdminDTO admin) {
-		Airline airline = null;
-		//ZA SAD OVAKO POSLE LEPSE
-		List<Airline> list = new AirlineServiceImpl().findAll();
-		for(Airline a : list){
-			if(a.getName().equals(admin.getCompany())){
-				airline = a;
-			}
-		}
-		AirlineAdmin user = new AirlineAdmin(admin.getName(), admin.getSurname(), admin.getUsername(), admin.getEmail(), admin.getPassword(), airline);
-		return airlineAdminService.save(user);
-	}
-	
-	
-	
 
 	
 	@RequestMapping(value = "/api/airlineAdmins", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

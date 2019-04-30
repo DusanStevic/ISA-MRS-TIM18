@@ -1,15 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+﻿<head>
   <title>Index</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <link rel = "stylesheet" type = "text/css" href = "css/style.css" >
-  <link href="js/toastr.min.css" rel="stylesheet"/>
-  <script type="text/javascript" src="js/toastr.min.js"></script>
+  <!--  <script type="text/javascript" src="js/displayCompanies.js"></script> -->
+  <script type="text/javascript" src="js/login.js"></script>
+  <script type="text/javascript" src="js/authorization.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 	<nav class="navbar navbar-inverse">
@@ -22,18 +22,71 @@
     </ul>
     
     <ul class="nav navbar-nav navbar-right">
-
-      <li><a href="airlineAdministrator.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-      <li><a href="user.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      <li><a href="addAdmin.html"><span class="glyphicon glyphicon-plus"></span> Add Admin</a></li>
-      <li><a href="RegistracijaAdmina.html"> Registrovanje Administratora</a></li>
-      <li><a href="RegistracijaKompanije.html"> Registrovanje Kompanije</a></li>
-      <li><a href="RentACar.html">Rent-a-car service</a></li>
-
+      <li><a href="registration.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li><a href="#login" id="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
     </ul>
   </div>
 </nav>
 
+<div class="tab">
+	<form id = "searchCompany">
+		<table class="tab_table">
+			<tr>
+                <td>Display:</td>
+                <td><input type="radio" name="type" value="airline" />Airlines</td>
+                <td><input type="radio" name="type" value="hotel" checked/>Hotels</td>
+                <td><input type="radio" name="type" value="rac" />Rent-A-Car services</td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+<div class="white_middle_container">
+	<table class="content_table" id="companiesInfo">
+            
+     </table>
+</div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id ="loginForm">
+                <table>
+                    <tr>
+                        <td><h3>Username: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="username"/></td>
+                    </tr>
+                    <tr>
+                        <td><h3>Password: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><input type="password" id="password"/></td>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" value="Log in" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <script>
+        var modal = document.getElementById('modal');
+        var span = document.getElementsByClassName("close")[0];
+        $(document).on('click', '#login', function (e) {
+            modal.style.display = "block";
+
+        })
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
 

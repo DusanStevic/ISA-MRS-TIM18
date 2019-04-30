@@ -4,14 +4,32 @@ public class CompanyDTO {
 	private String name;
 	private String adress;
 	private String description;
+	private String image;
 	
-	public CompanyDTO(String name, String adress, String description) {
+	
+	
+	public CompanyDTO(String name, String adress, String description, String image) {
 		super();
 		this.name = name;
 		this.adress = adress;
 		this.description = description;
+		this.image = image;
 	}
 	
+	
+
+	public String getImage() {
+		return image;
+	}
+
+
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+
+
 	public CompanyDTO() {
 		super();
 	}
