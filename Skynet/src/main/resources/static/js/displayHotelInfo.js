@@ -200,7 +200,7 @@ $(document).on('submit','#editHotelForm',function(){
 	}
 	$.ajax({
 		type:'POST',
-		url:'/editHotel',
+		url:'/api/editHotel',
 		contentType:'application/json',
 		dataType:'json',
 		data:hotelIdToJSON(id, name, adress, desc, image),
