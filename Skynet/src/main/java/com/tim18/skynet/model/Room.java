@@ -1,11 +1,15 @@
 package com.tim18.skynet.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import com.tim18.skynet.dto.RoomDTO;
@@ -26,6 +30,9 @@ public class Room {
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Hotel hotel;
+	
+	@ManyToMany(mappedBy = "rooms")
+	List<RoomOffer> roomOffers = new ArrayList<RoomOffer>(); 
 
 	public Room(double price, String description, int bedNumber, String image, Hotel hotel) {
 		super();
@@ -94,5 +101,13 @@ public class Room {
 
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
+	}
+
+	public List<RoomOffer> getRoomOffers() {
+		return roomOffers;
+	}
+
+	public void setRoomOffers(List<RoomOffer> roomOffers) {
+		this.roomOffers = roomOffers;
 	}
 }
