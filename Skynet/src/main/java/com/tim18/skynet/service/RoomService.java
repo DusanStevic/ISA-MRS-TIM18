@@ -8,5 +8,5 @@ public interface RoomService {
 	public Room save(Room room);
 	public Room findOne(Long id);
 	public List<Room> findAll();
-	public void remove(Long id);
+	public void delete(Long id);
 }

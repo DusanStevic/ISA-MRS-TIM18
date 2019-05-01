@@ -5,17 +5,15 @@ public class RoomDTO {
 	private double price;
 	private int beds;
 	private String description;
-	private long roomId;
-	private long hotelId;
+	private long id;
 	
-	public RoomDTO(String image, double price, int beds, String description, long roomId, long hotelId) {
+	public RoomDTO(String image, double price, int beds, String description, long id) {
 		super();
 		this.image = image;
 		this.price = price;
 		this.beds = beds;
 		this.description = description;
-		this.roomId = roomId;
-		this.hotelId = hotelId;
+		this.id = id;
 	}
 	public RoomDTO() {
 		super();
@@ -44,17 +42,11 @@ public class RoomDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public long getRoomId() {
-		return roomId;
+	public long getId() {
+		return id;
 	}
-	public void setRoomId(long roomId) {
-		this.roomId = roomId;
-	}
-	public long getHotelId() {
-		return hotelId;
-	}
-	public void setHotelId(long hotelId) {
-		this.hotelId = hotelId;
+	public void setId(long roomId) {
+		this.id = roomId;
 	}
 }
 
