@@ -31,7 +31,7 @@ import com.tim18.skynet.model.Authority;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.RACAdmin;
-import com.tim18.skynet.model.RegularUser;
+import com.tim18.skynet.model.RegisteredUser;
 import com.tim18.skynet.model.RentACar;
 import com.tim18.skynet.model.User;
 import com.tim18.skynet.model.UserRoleName;
@@ -168,7 +168,7 @@ public class AuthenticationController {
 		if (this.userService.usernameTaken(user.getUsername()) == true) {
 			return new ResponseEntity<>("Username already exists. Please choose another username.", HttpStatus.OK);
 		}
-		RegularUser newUser = new RegularUser();
+		RegisteredUser newUser = new RegisteredUser();
 		newUser.setUsername(user.getUsername());
 		newUser.setId(null);
 		newUser.setEmail(user.getEmail());
@@ -212,7 +212,7 @@ public class AuthenticationController {
 			userType = UserRoleName.ROLE_RENTACAR_ADMIN;
 		} else if (user instanceof AirlineAdmin) {
 			userType = UserRoleName.ROLE_AIRLINE_ADMIN;
-		} else if (user instanceof RegularUser) {
+		} else if (user instanceof RegisteredUser) {
 			userType = UserRoleName.ROLE_USER;
 		} else {
 			userType = UserRoleName.ROLE_SYSTEM_ADMIN;
