@@ -1,0 +1,79 @@
+<head>
+    <title>Registered User</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <!--  <script type="text/javascript" src="js/displayCompanies.js"></script>-->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            
+            <div class="navbar-header">
+      			<a class="navbar-brand" href="RegisteredUser.html"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>
+    		</div>
+
+            <ul class="nav navbar-nav ">
+                <li><a href="RegisteredUser.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> Profile<span class="caret"></span></a>
+		        <ul class="dropdown-menu">
+		         
+		          <li><a href = "#" id = "profil_btn" > View user profile </a></li>
+				  <li><a href = "#" id = "izmenaProfila_btn" > Edit user profile </a></li>
+		          
+		        </ul>
+		        <li> <a href = "#" id = "korisnici_btn" > <span class="glyphicon glyphicon-list-alt"></span> Korisnici</a></li>
+      			<li> <a href = "#" id = "pretraga_btn"><span class="glyphicon glyphicon-search"></span> Pretraga</a></li>
+		        <li>
+		      		<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-thumbs-up"></span> Friends <span class="caret"></span></a>
+			        <ul class="dropdown-menu">
+			        	<li><a href="sysAdmin-addHotel.html" id="addHotel"> View friends </a></li>
+			            <li><a href="sysAdmin-addHotel.html" id="addHotel"> Add friends </a></li>
+			            <li><a href="#" id="viewCompanies"> Friend requests </a></li>
+			        </ul>
+		        </li>
+		        <li>
+		      		<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-book"></span> Reservations <span class="caret"></span></a>
+			        <ul class="dropdown-menu">
+			        	<li><a href="sysAdmin-addHotel.html" id="addHotel"> View reservations </a></li>
+			            <li><a href="sysAdmin-addHotel.html" id="addHotel"> Delete reservations </a></li>
+			            
+			        </ul>
+		        </li>
+		     </ul>
+		     
+		     
+		      
+		      
+		      
+		      
+		       <ul class="nav navbar-nav navbar-right">
+               
+                <li><a href="#l"><span class="glyphicon glyphicon-log-in"></span>Log out</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="tab">
+	<form id = "searchCompany">
+		<table class="tab_table">
+			<tr>
+                <td>Display:</td>
+                <td><input type="radio" name="type" value="airline" />Airlines</td>
+                <td><input type="radio" name="type" value="hotel" checked/>Hotels</td>
+                <td><input type="radio" name="type" value="rac" />Rent-A-Car services</td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+<div class="white_middle_container">
+	<table class="content_table" id="companiesInfo">
+            
+     </table>
+</div>
+</body>
+</html>

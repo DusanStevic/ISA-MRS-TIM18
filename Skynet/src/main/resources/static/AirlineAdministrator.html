@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Admin</title>
+  <title>Airline Administrator</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -20,44 +20,62 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="administrator.html"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>
+      <a class="navbar-brand" href="AirlineAdministrator.html"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="administrator.html">Home</a></li>
+      <li class="active"><a href="AirlineAdministrator.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <span class="glyphicon glyphicon-user"></span> Profil<span class="caret"></span></a>
+        <span class="glyphicon glyphicon-user"></span> Profile<span class="caret"></span></a>
         <ul class="dropdown-menu">
          
-          <li><a href = "#" id = "profil_btn" > Pregled profila </a></li>
-		  <li><a href = "#" id = "izmenaProfila_btn" > Izmena profila </a></li>
+          <li><a href = "#" id = "profil_btn" > View user profile </a></li>
+		  <li><a href = "#" id = "izmenaProfila_btn" > Edit user profile </a></li>
           
+        </ul>
+      </li>
+      <li>
+      	<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-briefcase"></span> Company<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+        	<li><a href="sysAdmin-addHotel.html" id="addHotel"> View company profile </a></li>
+            <li><a href="sysAdmin-addHotel.html" id="addHotel"> Edit company profile </a></li>
+            <li><a href="#" id="viewCompanies"> View companies </a></li>
+        </ul>
+      </li>
+      
+      
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span class="glyphicon glyphicon-globe"></span> Destinations<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href = "#" id = "destinacije_btn" > View destinations </a></li>
+		  <li><a href = "#" id = "dodajDest_btn" > Add destinations </a></li>
         </ul>
       </li>
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <span class="glyphicon glyphicon-plane"></span> Letovi<span class="caret"></span></a>
+        <span class="glyphicon glyphicon-plane"></span> Flights<span class="caret"></span></a>
         <ul class="dropdown-menu">
-         
-		  <li><a href = "#" id = "dodajLet_btn" > Dodaj let </a></li>
-		  <li><a href = "#" id = "letovi_btn">Prikazi letove</a> </li>
-          
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <span class="glyphicon glyphicon-globe"></span> Destinacije<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-        
-		  <li><a href = "#" id = "dodajDest_btn" > Dodaj destinaciju </a></li>
-		  <li><a href = "#" id = "destinacije_btn" > Prikazi Destinacije </a></li>
-          
+          <li><a href = "#" id = "letovi_btn"> View flights </a></li>
+		  <li><a href = "#" id = "dodajLet_btn" > Add flights </a></li> 
         </ul>
       </li>
       
       
       <li> <a href = "#" id = "korisnici_btn" > <span class="glyphicon glyphicon-list-alt"></span> Korisnici</a></li>
       <li> <a href = "#" id = "pretraga_btn"><span class="glyphicon glyphicon-search"></span> Pretraga</a></li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span class="glyphicon glyphicon-stats"></span> Reports<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+        
+		  <li><a href = "#" id = "dodajDest_btn" > Dnevni izvestaj </a></li>
+		  <li><a href = "#" id = "destinacije_btn" > Mesecni Izvestaj </a></li>
+		  <li><a href = "#" id = "dodajDest_btn" > Godisnji izvestaj </a></li>
+		  <li><a href = "#" id = "destinacije_btn" > Prodate karte </a></li>
+          
+        </ul>
+      </li>
       
 
     </ul>

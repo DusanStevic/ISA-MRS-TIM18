@@ -1,7 +1,7 @@
 package com.tim18.skynet.service;
 
-import com.tim18.skynet.model.RegularUser;
+import com.tim18.skynet.model.RegisteredUser;
 
 public interface RegularUserService {
-	RegularUser findById(Long id);
+	RegisteredUser findById(Long id);
 }

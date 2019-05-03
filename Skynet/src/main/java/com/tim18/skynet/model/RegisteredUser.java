@@ -3,7 +3,7 @@ package com.tim18.skynet.model;
 import javax.persistence.Entity;
 
 @Entity
-public class RegularUser extends User{
+public class RegisteredUser extends User{
 
 	/**
 	 * 
