@@ -23,6 +23,14 @@ $(window).on("load",function(){
 	        success: fillRACs
 	    })
 	}
+	else if (window.location.href.match('sysAdmin-viewAdmins.html') != null) {
+		$.ajax({
+	        type: 'GET',
+	        url: '/api/admins',
+	        contentType: 'application/json',
+	        success: fillAdmins
+	    })
+	}
 	else{
 		
 	}
@@ -51,6 +59,43 @@ function fillAirlines(data){
 		$('#airlines').append(opt);
 	})
 }
+
+function fillAdmins(data){
+	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	$.each(list, function(index, admin){
+		var tr=$('<tr></tr>');
+		var blocking = "Block";
+		if(admin.enabled == false){
+			blocking = "Unblock";
+		}
+		tr.append('<td>'+admin.username+'</td><td>'+admin.name+'</td><td>'+admin.surname+'</td><td>'+admin.email+'</td>'+'<td>'+admin.company+'</td>'+'<td><a href="#" name="'+admin.id+'" id="blockAdmin">'+blocking+'</a></td>')
+		$('#adminsInfo').append(tr);
+	})
+}
+
+$(document).on('click', "#blockAdmin", function(e){
+	var id=$(this).attr("name");
+	$.ajax({
+        type: 'PUT',
+        url: '/api/blockAdmin/'+id,
+        contentType: 'text/plain',
+        success: function(data){
+            var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+            if(data != null){
+            	if(data.enabled == false){
+            		alert("Admin successfully blocked!");
+            	}
+            	else{
+            		alert("Admin successfully unblocked!");
+            	}
+            	location.reload();
+            }
+            else{
+            	alert("Admin could not be found.");
+            }
+        }
+    })
+})
 
 $(document).on('submit', "#addAirlineAdminForm", function(e){
 	var email = $('#email').val();
@@ -136,24 +181,11 @@ $(document).on('submit', "#addRACAdminForm", function(e){
     })
 })
 
-function uploadImage(file) {
-	$.ajax({
-		url : "/uploadImage",
-		type : 'POST',
-		contentType : 'multipart/form-data',
-		data : file,
-		processData : false,
-		success : function() {
-
-		}
-	})
-}
-
 $(document).on('submit', "#addAirlineForm", function(e){
 	var name = $('#name').val();
 	var address = $('#adress').val();
 	var desc = $('#promo').val();
-	var image = "images/airline1.jpg";
+	var image = "images/airplane.png";
 	if(name == "" || address == "" || desc == "" || image == ""){
 		alert("All fields must be filled!");
 		return;
@@ -164,7 +196,6 @@ $(document).on('submit', "#addAirlineForm", function(e){
         contentType: 'application/json',
         data:inputToCompany(name, address, desc, image),
         success: function(data){
-            var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
             alert("Airline successfully added!");
         }
     })
@@ -174,7 +205,7 @@ $(document).on('submit', "#addRACForm", function(e){
 	var name = $('#name').val();
 	var address = $('#adress').val();
 	var desc = $('#promo').val();
-	var image ="images/rent2.jpg";
+	var image ="images/rac.png";
 	$.ajax({
         type: 'POST',
         url: '/api/rac',
@@ -191,7 +222,7 @@ $(document).on('submit', "#addHotelForm", function(e){
 	var name = $('#name').val();
 	var address = $('#adress').val();
 	var desc = $('#promo').val();
-	var image = "images/hotel9.jpg";
+	var image = "images/hotel.png";
 	$.ajax({
         type: 'POST',
         url: '/api/hotel',

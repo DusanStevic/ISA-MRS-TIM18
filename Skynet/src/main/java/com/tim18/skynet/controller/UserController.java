@@ -1,5 +1,6 @@
 package com.tim18.skynet.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -11,11 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tim18.skynet.dto.AdminDTO;
 import com.tim18.skynet.model.AirlineAdmin;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
@@ -45,18 +48,48 @@ public class UserController {
 	
 	
 	
-	@GetMapping(value = "api/getAirlineAdmin", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AirlineAdmin> getAirlineAdmin() {
-		User user = (User) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		AirlineAdmin retVal = (AirlineAdmin) user;
-		return new ResponseEntity<>(retVal, HttpStatus.OK);
+	@GetMapping(value = "/api/admins", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AdminDTO>> getAdmins() {
+		List<AdminDTO> users = new ArrayList<AdminDTO>();
+		for(User u : userService.findAll()){
+			if(u instanceof AirlineAdmin){
+				String company = ((AirlineAdmin)u).getAirline().getName();
+				AdminDTO admin = new AdminDTO(company, u.getName(), u.getSurname(), u.getUsername(), "", u.getEmail());
+				users.add(admin);
+			}
+			else if(u instanceof HotelAdmin){
+				String company = ((HotelAdmin)u).getHotel().getName();
+				AdminDTO admin = new AdminDTO(company, u.getName(), u.getSurname(), u.getUsername(), "", u.getEmail());
+				users.add(admin);
+			}
+			else if(u instanceof RACAdmin){
+				String company = ((RACAdmin)u).getRentacar().getName();
+				AdminDTO admin = new AdminDTO(company, u.getName(), u.getSurname(), u.getUsername(), "", u.getEmail());
+				users.add(admin);
+			}
+		}
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "api/getRACAdmin", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RACAdmin> getRACAdmin() {
-		User user = (User) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		RACAdmin retVal = (RACAdmin) user;
-		return new ResponseEntity<>(retVal, HttpStatus.OK);
+	@PutMapping(value = "/api/blockAdmin/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<User> blockAdmin(@PathVariable(value = "id") Long id) {
+		User user = null;
+		for(User u : userService.findAll()){
+			if(u.getId() == id){
+				if(u.isEnabled()){
+					u.setEnabled(false);
+				}
+				else{
+					u.setEnabled(true);
+				}
+				user = u;
+				userService.save(u);
+			}
+		}
+		if(user == null){
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
 	

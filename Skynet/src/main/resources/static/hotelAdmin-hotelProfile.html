@@ -9,6 +9,7 @@
     <!-- <script type="text/javascript" src="js/displayHotelInfo.js"></script> -->
     <script type="text/javascript" src="js/authorization.js"></script>
     <script type="text/javascript" src="js/hotelAdmin.js"></script>
+    <script type="text/javascript" src="js/uploadFile.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
@@ -86,12 +87,6 @@
                         <td><input type="text" id="hotelAdress"/></td>
                     </tr>
                     <tr>
-                        <td><h3>Image:</h3></td>
-                    </tr>
-                    <tr>
-                        <td><input type="file" id="hotelImg"/></td>
-                    </tr>
-                    <tr>
                         <td><h3>Description: </h3></td>
                     </tr>
                     <tr>
@@ -143,6 +138,25 @@
                     </tr>
                     <tr>
                         <td><input type="submit" value="Save changes" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form enctype="multipart/form-data" id="uploadImageForm" name="uploadImageForm">
+                <table>
+                	<tr>
+                        <td><h3>Image: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><input type="file" name="file" /></td>
+                    </tr>
+                    <tr>
+                    	<td><input type="submit" value="Upload"/></td>
                     </tr>
                 </table>
             </form>
