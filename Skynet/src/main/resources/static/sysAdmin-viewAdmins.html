@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Sys admin - home</title>
@@ -9,7 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/sysadmin.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <!-- <script type="text/javascript" src="js/displayCompanies.js"></script> -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
@@ -44,22 +43,10 @@
             </ul>
         </div>
     </nav>
-        <div class="tab">
-	<form id = "searchCompany">
-		<table class="tab_table">
-			<tr>
-                <td>Display:</td>
-                <td><input type="radio" name="type" value="airline" />Airlines</td>
-                <td><input type="radio" name="type" value="hotel" checked/>Hotels</td>
-                <td><input type="radio" name="type" value="rac" />Rent-A-Car services</td>
-			</tr>
-		</table>
-	</form>
-</div>
 
 <div class="white_middle_container">
-	<table class="content_table" id="companiesInfo">
-            
+	<table class="admin_table" id="adminsInfo" border="1">
+            <tr><th>Username</th><th>First name</th><th>Last name</th><th>Email</th><th>Company's name</th><th></th></tr>
      </table>
 </div>
 </body>

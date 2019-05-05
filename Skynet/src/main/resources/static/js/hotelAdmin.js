@@ -1,6 +1,16 @@
 var TOKEN_KEY = 'jwtToken';
 
-getHotel();
+$(window).on("load",function(){
+	if (window.location.href.match('hotelAdmin-hotelProfile.html') != null) {
+		getHotel();
+	}
+	else if (window.location.href.match('hotelAdmin-home.html') != null) {
+		checkFirstTime();
+	}
+	else{
+		checkFirstTime();
+	}
+})
 
 function getHotelAdmin() {
 	var token = getJwtToken(TOKEN_KEY);
@@ -162,10 +172,13 @@ function displayHotel(data){
                 '</div>' +
             '</div>' +
         '</td>');
+		var tr5=$('<tr></tr>');
+		tr5.append('<td><div class="edit_input"><input type="button" value="Upload image" id="uploadImage" /></div></td>');
 		$('#hotelInfo').append(tr1);
 		$('#hotelInfo').append(tr2);
 		$('#hotelInfo').append(tr3);
 		$('#hotelInfo').append(tr4);
+		$('#hotelInfo').append(tr5);
 		
 	})
 }
@@ -228,7 +241,7 @@ $(document).on('submit','#editRoomForm',function(){
 	var beds = $('#editBeds').val();
 	var price = $('#editPrice').val();
 	var desc = $('#editRoomDesc').val();
-	var image = $('#editRoomImage').val();
+	var image = "a";
 	if(isNaN(beds) || isNaN(price)){
 		alert("Number of beds and price must be numbers!");
 		return;
@@ -266,6 +279,20 @@ $(document).on('click','#editRoom',function(e){
         }
     })
     var modal = document.getElementById('modal2');
+	var span = document.getElementsByClassName("close")[0];
+	modal.style.display = "block";
+	span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+})
+
+$(document).on('click','#uploadImage',function(e){
+    var modal = document.getElementById('modal3');
 	var span = document.getElementsByClassName("close")[0];
 	modal.style.display = "block";
 	span.onclick = function () {
@@ -451,6 +478,16 @@ $(document).on('submit','#editHotelForm',function(){
 		}
 	})
 })
+
+$(document).on('submit', "#uploadImageForm", function(event){
+	 event.preventDefault();
+	 var formElement = this;
+	 var formData = new FormData(formElement);
+	 uploadImage(formElement, formData, "/api/editHotelImage");
+	 event.preventDefault();
+})
+
+
 
 function inputToHotelRoom(image, beds, price, desc){
 	return JSON.stringify({

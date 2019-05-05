@@ -9,7 +9,6 @@ $(document).on('submit', "#loginForm", function(e){
 	var next_window;
 
 	$.ajax({
-
 		dataType : 'json',
 		url : '/auth/login',
 		type : 'POST',
@@ -24,22 +23,20 @@ $(document).on('submit', "#loginForm", function(e){
 				if (data.userRoleName == "ROLE_HOTEL_ADMIN") {
 					window.location.href = "hotelAdmin-home.html";
 				} else if (data.userRoleName == "ROLE_AIRLINE_ADMIN") {
-					window.location.href = "AirlineAdministrator.html"
+					//strana za avio
 				} else if (data.userRoleName == "ROLE_RENTACAR_ADMIN") {
 					console.log('Role is rentacardmin');
 					//strana za rac
 				} 
 				else if (data.userRoleName=="ROLE_USER"){
-					window.location.href = "RegisteredUser.html";
+					window.location.href = "user-home.html";
 				}else{
-					window.location.href="sysAdmin-home.html"
+					window.location.href="sysAdmin-home.html";
 				}
 			}
 		},
 		error : function(e) {
 			alert('Wrong username or password. Please try again.');
-			console.log('error');
-
 		}
 	})
 })

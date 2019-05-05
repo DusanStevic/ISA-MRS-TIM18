@@ -20,10 +20,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.tim18.skynet.dto.AdminDTO;
 import com.tim18.skynet.dto.UserDTO;
 import com.tim18.skynet.model.Airline;
 import com.tim18.skynet.model.AirlineAdmin;
@@ -229,5 +231,18 @@ public class AuthenticationController {
 			return new RedirectView("http://localhost:8080/confirmed.html");
 		}
 		return null;
+	}
+	
+	@PutMapping(value = "/auth/changePassword")
+	public ResponseEntity<UserTokenState> changePassword(@RequestBody AdminDTO admin) {
+		User user = (User) this.userService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		user.setFirstTime(false);
+		user.setPassword(this.userService.encodePassword(admin.getPassword()));
+		user.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
+		this.userService.saveUser(user);
+		String jwt = tokenUtils.generateToken(user.getUsername());
+		int expiresIn = tokenUtils.getExpiredIn();
+		UserRoleName userType = null;
+		return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, userType), HttpStatus.OK);
 	}
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tim18.skynet.dto.CompanyDTO;
+import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
@@ -57,6 +58,16 @@ public class HotelController {
 		if(dto.getName().equals("") == false){
 			hotel.setName(dto.getName());
 		}
+		user.setHotel(hotel);
+		return new ResponseEntity<>(hotelService.save(hotel), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/api/editHotelImage", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Hotel> editHotelImage(@RequestBody ImageDTO image) {
+		HotelAdmin user = (HotelAdmin) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		Hotel hotel = user.getHotel();
+		System.out.println(image.getUrl());
+		hotel.setImage(image.getUrl());
 		user.setHotel(hotel);
 		return new ResponseEntity<>(hotelService.save(hotel), HttpStatus.OK);
 	}
