@@ -1,6 +1,6 @@
 body{
 	margin: 0px;
-	background-image: url('../images/avion.jpg');
+	background-image: url('../images/background.jpg');
 	background-size: cover;
 	background-attachment: fixed;
 }
@@ -249,9 +249,9 @@ table.mainTable thead th:first-child {
             position:absolute;
             overflow: hidden;
             border: 1px solid #ccc;
-            background-color: #f1f1f1;
-            left: 5%;
-            right:5%;
+            background-color: #660066;
+            left: 10%;
+            right:10%;
             min-height: 53px;
         }
 
@@ -274,28 +274,27 @@ table.mainTable thead th:first-child {
                 padding: 14px 16px;
                 transition: 0.3s;
                 font-size: 17px;
+                color:white;
             }
 
                 /* Change background color of buttons on hover */
                 .tab button:hover {
-                    background-color: #ddd;
+                    background-color: #993399;
                 }
 
                 /* Create an active/current tablink class */
                 .tab button.active {
-                    background-color: #ccc;
+                    background-color: #993399;
                 }
 
         /* Style the tab content */
         .tabcontent {
             position:absolute;
             top:19%;
-            left: 5%;
-            right:5%;
+            left: 10%;
+            right:10%;
             overflow:scroll;
             background-color:white;
-            display: none;
-            border: 1px solid #ccc;
             border-top: none;
             min-height:550px;
         }
@@ -413,6 +412,51 @@ table.mainTable thead th:first-child {
             width:500px;
             height:250px;
         }
+        
+        .ombre_div{
+        	background: linear-gradient(to top, #33ccff 0%, #660066 100%);
+        	width:50%;
+        	left:25em;
+            right:25em;
+            top:5%;
+            position:relative;
+            padding:50px;
+            color:white;
+            overflow:hidden;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+        
+        .ombre_table{
+            font:25px;
+            color:white;
+            overflow:hidden;
+        }
+        
+        .ombre_table td{
+        	font:25px;
+        }
+
+        .ombre_table input, select{
+            width:500px;
+            padding:10px;
+            color:black;
+        }
+        .ombre_table textarea{
+            width:500px;
+            height:250px;
+        }
+        
+        .ombre_table a{
+        	color:white;
+        }
+        
+        .ombre_right{
+        	background: linear-gradient(to top, #33ccff 0%, #660066 100%);
+        	width:55%;
+            right:0em;
+            top:5%;
+            position:relative;
+        }
 
         .small_image{
             width:250px;
@@ -422,4 +466,84 @@ table.mainTable thead th:first-child {
         .min{}
         .min td, tr{
             padding:0px;
+        }
+
+        .blue_middle_container {
+            position:absolute;
+            top:19%;
+            left: 10%;
+            right:10%;
+            overflow:hidden;
+            background-color:white;
+            border-top: none;
+            min-height:550px;
+        }
+
+        .middle_table{
+            position:relative;
+            left:2em;
+            right:2em;
+            width:90%;
+        }
+        .middle_table td{
+            padding: 10px;
+            min-width: 50px;
+        }
+
+        .central{
+            text-align:center;
+        }
+
+        .hover_image{
+            width:250px;
+            height:auto;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+
+        .hover_image :hover{
+            opacity: 0.3;
+        }
+
+        .tirkiz_table{
+            position:relative;
+            left:0px;
+            right:0px;
+            width:100%;
+            height:auto;
+        }
+
+        .tirkiz_table_content{
+            padding:9px;
+            background: linear-gradient(to bottom, #ffffff 0%, #33ccff 100%);
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            
+        }
+
+        .tirkiz_table_content input, select{
+            width:350px;
+            color:black;
+            padding:3px;
+        }
+        .tirkiz_table_content select{
+            width:250px;
+            color:black;
+            padding:3px;
+        }
+        .tirkiz_table td{
+            color:black;
+            min-width:100px;
+        }
+
+        .company_image{
+            width:300px;
+            height:auto;
+        }
+
+        .zebra{
+            width:100%;
+         }
+        .zebra th,td{
+            text-align: left;
+            padding:5px;
+            min-width:300px;
         }

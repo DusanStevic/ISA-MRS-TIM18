@@ -1,4 +1,5 @@
-﻿<head>
+﻿<html>
+<head>
   <title>Index</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +10,7 @@
   <!--  <script type="text/javascript" src="js/displayCompanies.js"></script> -->
   <script type="text/javascript" src="js/login.js"></script>
   <script type="text/javascript" src="js/authorization.js"></script>
+  <script type="text/javascript" src="js/displayCompanies.js"></script>
   <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
@@ -28,30 +30,41 @@
   </div>
 </nav>
 
-<div class="tab">
-	<form id = "searchCompany">
-		<table class="tab_table">
-			<tr>
-                <td>Display:</td>
-                <td><input type="radio" name="type" value="airline" />Airlines</td>
-                <td><input type="radio" name="type" value="hotel" checked/>Hotels</td>
-                <td><input type="radio" name="type" value="rac" />Rent-A-Car services</td>
-			</tr>
-		</table>
-	</form>
-</div>
-
-<div class="white_middle_container">
-	<table class="content_table" id="companiesInfo">
-            
-     </table>
+<div class="blue_middle_container">
+	<table class="middle_table">
+        <tr>
+            <td>
+                <table>
+                    <tr><td><h1>Welcome to Skynet!</h1></td></tr>
+                    <tr><td><p>To start the search on our site, choose whether you want to search information about airline companies, hotels or rent-a-car services registered on our site.</p></td></tr>
+                    <tr><td><p>If you want to have the possibility to book flights, hotel rooms and vehicles, as well as to access our full offer, create your account.</p></td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table class="middle_table">
+                    <tr>
+                        <td><div class="hover_image"><a href="companiesDisplay.html" id="airlineSearch"><img src="images/plane.png" class="hover_image" /></a></div></td>
+                        <td><div class="hover_image"><a href="companiesDisplay.html" id="hotelSearch"><img src="images/hotel.png" class="hover_image" /></a></div></td>
+                        <td><div class="hover_image"><a href="companiesDisplay.html" id="racSearch"><img src="images/rac.png" class="hover_image" /></a></div></td>
+                    </tr>
+                    <tr>
+                        <td class="central"><h4><b>Airline</b></h4></td>
+                        <td class="central"><h4><b>Hotel</b></h4></td>
+                        <td class="central"><h4><b>Rent-A-Car Service</b></h4></td>
+                    </tr>
+                </table>
+            </td>
+        </tr> 
+    </table>
 </div>
 
     <div id="modal" class="modal">
-        <div class="modal-content">
+        <div class="ombre_div">
             <span class="close">&times;</span>
             <form id ="loginForm">
-                <table>
+                <table class="ombre_table">
                     <tr>
                         <td><h3>Username: </h3></td>
                     </tr>

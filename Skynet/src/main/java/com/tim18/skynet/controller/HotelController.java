@@ -74,6 +74,9 @@ public class HotelController {
 	
 	@RequestMapping(value = "/api/hotels", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Hotel> getAll() {
+		for(Hotel h : hotelService.findAll()){
+			System.out.println(h.getName());
+		}
 		return hotelService.findAll();
 	}
 	
