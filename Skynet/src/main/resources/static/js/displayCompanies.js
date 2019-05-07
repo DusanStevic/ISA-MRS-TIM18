@@ -87,7 +87,7 @@ function findRACs(){
         type: 'GET',
         url: '/api/racs',
         contentType: 'application/json',
-        success: displayData
+        success: displayData1
     })
 }
 
@@ -100,6 +100,22 @@ function displayData(data){
 				+'<tr><td><h4>' + data.address+'</h4></td></tr>'
 				+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
 				+'<td><table><tr><td><h3>Price from:<b> 30$</b></h3>(Per night)<td></tr><tr><td><a href="#" id="moreInfoHotel" name="'+data.id+'">More informations</a></td></tr></table></td>');
+		var tr2=$('<tr></tr>');
+		tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
+		$('#dataDisplay').append(tr1);
+		$('#dataDisplay').append(tr2);
+	})
+}
+
+function displayData1(data){
+	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	$.each(list, function(index, data){
+		var tr1=$('<tr></tr>');
+		tr1.append('<td><img src="'+data.image+'" class="small_image"/></td>'
+				+'<td><table class="min"><tr><td><h3>'+data.name+'</h3></td></tr>'
+				+'<tr><td><h4>' + data.address+'</h4></td></tr>'
+				+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
+				+'<td><a href="#" id="moreInfoHotel" name="'+data.id+'">More informations</a></td></tr></table></td>');
 		var tr2=$('<tr></tr>');
 		tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
 		$('#dataDisplay').append(tr1);
