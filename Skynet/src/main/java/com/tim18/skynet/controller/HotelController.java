@@ -85,8 +85,8 @@ public class HotelController {
 		return hotelService.save(hotel);
 	}
 	
-	@RequestMapping(value = "api/hotels/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Hotel> getRAC(@PathVariable(value = "id") Long hotelId) {
+	@RequestMapping(value = "/api/hotels/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Hotel> getHotel(@PathVariable(value = "id") Long hotelId) {
 		Hotel hotel = hotelService.findOne(hotelId);
 
 		if (hotel == null) {

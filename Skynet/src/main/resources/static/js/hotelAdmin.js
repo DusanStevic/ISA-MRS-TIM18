@@ -8,7 +8,6 @@ $(window).on("load",function(){
 		checkFirstTime();
 	}
 	else{
-		checkFirstTime();
 	}
 })
 
@@ -338,93 +337,6 @@ $(document).on('click','#viewRoom',function(e){
             window.location.href = "roomInfo.html";
         }
     })
-})
-
-$(window).on("load",function(){
-	if (window.location.href.match('roomInfo.html') != null) {
-		var image = localStorage.getItem("image");
-		var beds = localStorage.getItem("beds");
-		var price = localStorage.getItem("price");
-		var desc = localStorage.getItem("desc");
-    	var tr1=$('<tr></tr>');
-        tr1.append('<td><img src="'+image+'" class="image" /></td>'
-        		+'<td>'+
-                '<div class="rating">' +
-                '<span class="heading">User Rating</span>'+
-                '<span class="fa fa-star"></span>' +
-                '<span class="fa fa-star"></span>' +
-                '<span class="fa fa-star"></span>' +
-                '<span class="fa fa-star"></span>' +
-                '<span class="fa fa-star"></span>' +
-                '<p>0 average based on 0 reviews.</p>' +
-                '<hr style="border:3px solid #f1f1f1">' +
-                '<div class="row">' +
-                 '   <div class="side">' +
-                  '      <div>5 star</div>' +
-                   ' </div>' +
-                    '<div class="middle">' +
-                     '   <div class="bar-container">' +
-                      '      <div class="bar-1"></div>' +
-                       ' </div>' +
-                    '</div>' +
-                    '<div class="side right">' +
-                     '   <div>0</div>' +
-                    '</div>' +
-                    '<div class="side">' +
-                     '   <div>4 star</div>' +
-                    '</div>' +
-                    '<div class="middle">' +
-                     '   <div class="bar-container">' +
-                      '      <div class="bar-1"></div>' +
-                       ' </div>' +
-                    '</div>' +
-                    '<div class="side right">' +
-                     '   <div>0</div>' +
-                    '</div>' +
-                    '<div class="side">' +
-                     '   <div>3 star</div>' +
-                    '</div>' +
-                    '<div class="middle">' +
-                    '    <div class="bar-container">' +
-                     '       <div class="bar-1"></div>' +
-                     '   </div>' +
-                    '</div>' +
-                    '<div class="side right">' +
-                     '   <div>0</div>' +
-                    '</div>' +
-                    '<div class="side">' +
-                     '   <div>2 star</div>' +
-                    '</div>' +
-                    '<div class="middle">' +
-                    '    <div class="bar-container">' +
-                     '       <div class="bar-1"></div>' +
-                     '   </div>' +
-                    '</div>' +
-                    '<div class="side right">' +
-                     '   <div>0</div>' +
-                    '</div>' +
-                    '<div class="side">' +
-                     '   <div>1 star</div>' +
-                    '</div>' +
-                    '<div class="middle">' +
-                     '   <div class="bar-container"> '+
-                      '      <div class="bar-1"></div>' +
-                       ' </div>' +
-                    '</div>' +
-                    '<div class="side right">' +
-                     '   <div>0</div>' +
-                    '</div>' +
-                '</div>' +
-            '</div>' +
-        '</td>');
-        var tr2=$('<tr></tr>');
-        tr2.append('<td><table class="info_table"><tr><td><b>Price per night: '
-        		+price+'$</b></td></tr>'
-        		+'<tr><td><b>Number of beds: '+beds+'</b></td></tr>'
-        		+'<tr><td rowspan="2">'+desc+'</td></tr></table></td>');
-        $('#roomInfo').append(tr1);
-        $('#roomInfo').append(tr2);
-	}
 })
 
 $(document).on('click','#edit',function(e){

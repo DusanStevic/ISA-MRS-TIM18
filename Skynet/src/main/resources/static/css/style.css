@@ -245,11 +245,11 @@ table.mainTable thead th:first-child {
         }
 
         /* Style the tab */
-        .tab {
+        .tab {  
             position:absolute;
             overflow: hidden;
             border: 1px solid #ccc;
-            background-color: #660066;
+            background-color: #f1f1f1;
             left: 10%;
             right:10%;
             min-height: 53px;
@@ -274,17 +274,17 @@ table.mainTable thead th:first-child {
                 padding: 14px 16px;
                 transition: 0.3s;
                 font-size: 17px;
-                color:white;
+                color:black;
             }
 
                 /* Change background color of buttons on hover */
                 .tab button:hover {
-                    background-color: #993399;
+                    background-color: #ddd;
                 }
 
                 /* Create an active/current tablink class */
                 .tab button.active {
-                    background-color: #993399;
+                    background-color: #ccc;
                 }
 
         /* Style the tab content */
@@ -449,14 +449,6 @@ table.mainTable thead th:first-child {
         .ombre_table a{
         	color:white;
         }
-        
-        .ombre_right{
-        	background: linear-gradient(to top, #33ccff 0%, #660066 100%);
-        	width:55%;
-            right:0em;
-            top:5%;
-            position:relative;
-        }
 
         .small_image{
             width:250px;
@@ -546,4 +538,41 @@ table.mainTable thead th:first-child {
             text-align: left;
             padding:5px;
             min-width:300px;
+        }
+
+        .ombre_tab{
+            display: none;
+        }
+
+        .ombre_table button{
+            color:black;
+            min-width:50px;
+
+        }
+
+        .submit_button{}
+        .submit_button input{
+            color:black;
+            width:50px;
+            padding:1px;
+        }
+
+        .left_table{
+            width:45%;
+            left:30%;
+            position:relative;
+            height:100%;
+            overflow:scroll;
+        }
+
+        .left_table_image{
+            width:100%;
+            height:auto;
+        }
+
+        .ombre_top{
+        	background: linear-gradient(to top, #ffffff  0%, #33ccff 100%);
+        	width:100%;
+            top:0%;
+            position:relative;
         }
