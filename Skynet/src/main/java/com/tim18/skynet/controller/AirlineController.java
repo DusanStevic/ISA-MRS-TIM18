@@ -42,7 +42,7 @@ public class AirlineController {
 	
 
 	
-	@RequestMapping(value = "api/airlines", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/api/airlines", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Airline> getAllAirlines() {
 		return airlineService.findAll();
 	}

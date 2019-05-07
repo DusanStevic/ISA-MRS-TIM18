@@ -31,7 +31,7 @@ public class RACController {
 	}
 	
 
-	@RequestMapping(value = "api/racs", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/api/racs", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<RentACar> getAll() {
 		return racService.findAll();
 	}

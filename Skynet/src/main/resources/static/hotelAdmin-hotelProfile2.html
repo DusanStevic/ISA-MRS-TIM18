@@ -1,4 +1,4 @@
-﻿<html>
+<html>
 <head>
     <title>Hotel profile</title>
     <meta charset="utf-8">
@@ -42,23 +42,16 @@
     </div>
 
     <div id="Rooms" class="tabcontent">
-        <table class="content_table" id="roomsDisp">
-
+        <table class="left_table" id="roomsDisp">
+			
         </table>
-        <form id="newRoomForm">
-	        <table class="new_room_table">
-	            <tr><td align="center"><h1>Add new Room:</h1></td></tr>
-	            <tr><td><h3>Room image:</h3></td></tr>
-	            <tr><td><input type="file" id="roomImg"/></td></tr>
-	            <tr><td><h3>Number of beds:</h3></td></tr>
-	            <tr><td><input type="text" id="beds"/></td></tr>
-	            <tr><td><h3>Price per night:</h3></td></tr>
-	            <tr><td><input type="text" id="price"/></td></tr>
-	            <tr><td><h3>Room description:</h3></td></tr>
-	            <tr><td><textarea id="roomDesc"></textarea></td></tr>
-	            <tr><td><input type="submit" value="Add room"/></td></tr>
-	        </table>
-        </form>
+        <div class="ombre_right">
+	        <form id="searchRooms">
+		        <table class="ombre_table">
+		        	
+		        </table>
+	        </form>
+        </div>
     </div>
    
 
@@ -101,48 +94,6 @@
             </form>
         </div>
     </div> 
-    
-    <div id="modal2" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <form id ="editRoomForm">
-                <table>
-                	<tr>
-                        <td><input type="hidden" id="editId"/></td>
-                    </tr>
-                    <tr>
-                        <td><h3>Image: </h3></td>
-                    </tr>
-                    <tr>
-                        <td><input type="file" id="editRoomImage"/></td>
-                    </tr>
-                    <tr>
-                        <td><h3>Number of beds: </h3></td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" id="editBeds"/></td>
-                    </tr>
-                    <tr>
-                        <td><h3>Price per night:</h3></td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" id="editPrice"/></td>
-                    </tr>
-                    <tr>
-                        <td><h3>Description: </h3></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <textarea id="editRoomDesc"></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="submit" value="Save changes" /></td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-    </div>
     
     <div id="modal3" class="modal">
         <div class="modal-content">
