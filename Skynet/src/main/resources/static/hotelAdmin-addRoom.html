@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sys admin - home page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="hotelAdmin-home.html"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>
+            </div>
+            <ul class="nav navbar-nav"></ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="hotelAdmin-home.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                <li><a href="hotelAdmin-hotelProfile.html"><span class="glyphicon glyphicon-bed"></span> Hotel's Profile</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+                <li><a href="index.html"><span class="glyphicon glyphicon-log-in"></span>Log out</a></li>
+
+            </ul>
+        </div>
+    </nav>
+
+    
+    
+    <form id="newRoomForm">
+        <div class="ombre_div ombre_tab" id="view1">
+            <table class="ombre_table">
+                <tr><td><h1>Adding new room:</h1></td></tr>
+                <tr><td><h4>Number of beds:</h4></td></tr>
+                <tr><td><input type="text" id="beds" /></td></tr>
+                <tr><td><h4>Price per night:</h4></td></tr>
+                <tr><td><input type="text" id="price" /></td></tr>
+                <tr><td><button type="button" id="goToDescription">Next</button></td></tr>
+            </table>
+        </div>
+        <div class="ombre_div ombre_tab" id="view2">
+            <table class="ombre_table">
+                <tr><td><h1>Describe room:</h1></td></tr>
+                <tr><td><h4>Room description:</h4></td></tr>
+                <tr><td><textarea id="roomDesc"></textarea></td></tr>
+                <tr><td><h4>What does this room offer?</h4></td></tr>
+                <tr><td><p>Click <u><a href="#" id="newRoomOffer">here</a></u> to specify what this room offers (balcony, wi-fi...) or select existing offers:</p></td></tr>
+                <tr><td><div class="submit_button"><table id="roomOffers"><tr><td><input type="checkbox" name="offers" /><b>Wi-fi network</b></td></tr></table></div></td></tr>
+                <tr><td><div class="submit_button"><button type="button" id="goToBasic">Prev</button><input type="submit" id="goToImage" value="Next"></div></td></tr>
+            </table>
+        </div>
+    </form>
+    <form id="roomImage">
+        <div class="ombre_div ombre_tab" id="view3">
+            <table class="ombre_table">
+                <tr><td><h1>Room image:</h1></td></tr>
+                <tr><td><h4>If you want, you can add image of room (optional):</h4></td></tr>
+                <tr><td><input type="file" id="file" /></td></tr>
+                <tr><td><div class="submit_button"><button type="button" id="goToDescription">Prev</button><input type="submit" value="Finish"></div></td></tr>
+            </table>
+        </div>
+    </form>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="editOfferForm">
+                <table>
+                    <tr>
+                        <td><h3>Specify room offer: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="offerName" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" value="Add offer" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var page3 = document.getElementById("view1");
+            page3.style.display = "block";
+        });
+
+        $(document).on('click', "#goToDescription", function (e) {
+            var page1 = document.getElementById("view1");
+            var page2 = document.getElementById("view3");
+            page1.style.display = "none";
+            page2.style.display = "none";
+            var page3 = document.getElementById("view2");
+            page3.style.display = "block";
+            e.preventDefault();
+        });
+
+        $(document).on('click', "#goToBasic", function (e) {
+            var page1 = document.getElementById("view2");
+            var page2 = document.getElementById("view3");
+            page1.style.display = "none";
+            page2.style.display = "none";
+            var page3 = document.getElementById("view1");
+            page3.style.display = "block";
+            e.preventDefault();
+        });
+
+        $(document).on('click', "#goToImage", function (e) {
+            var page1 = document.getElementById("view1");
+            var page2 = document.getElementById("view2");
+            page1.style.display = "none";
+            page2.style.display = "none";
+            var page3 = document.getElementById("view3");
+            page3.style.display = "block";
+            e.preventDefault();
+        });
+
+        $(document).on('click', "#newRoomOffer", function (e) {
+            var modal = document.getElementById('modal');
+            var span = document.getElementsByClassName("close")[0];
+            modal.style.display = "block";
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+            e.preventDefault();
+        });
+
+        $(document).on('submit', "#editOfferForm", function (e) {
+            var modal = document.getElementById('modal');
+            var off_name = $('#offerName').val();
+            if (off_name != "") {
+                var tr = $('<tr></tr>');
+                tr.append('<td><input type="checkbox" name="offers" checked /><b>' + off_name + '</b></td>');
+                $('#roomOffers').append(tr);
+            }
+            modal.style.display = "none";
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

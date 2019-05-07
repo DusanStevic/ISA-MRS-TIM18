@@ -49,7 +49,7 @@ public class RoomController {
 		return rooms;
 	}
 	
-	@RequestMapping( value="/api/getRooms/{hotel_id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping( value="/api/getRooms/{hotel_id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Room> getHotelRooms(@PathVariable(value = "hotel_id") Long hotel_id) {
 		List<Room> rooms = new ArrayList<Room>();
 		for(Room r : roomService.findAll()){
@@ -60,7 +60,7 @@ public class RoomController {
 		return rooms;
 	}
 	
-	@RequestMapping( value="/api/getRoom/{room_id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping( value="/api/getRoom/{room_id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Room getRoom(@PathVariable(value = "room_id") Long room_id) {
 		for(Room r : roomService.findAll()){
 			if(r.getId() == room_id){
