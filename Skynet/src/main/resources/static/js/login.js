@@ -26,7 +26,7 @@ $(document).on('submit', "#loginForm", function(e){
 					//strana za avio
 				} else if (data.userRoleName == "ROLE_RENTACAR_ADMIN") {
 					console.log('Role is rentacardmin');
-					//strana za rac
+					window.location.href = "racAdmin-home.html";
 				} 
 				else if (data.userRoleName=="ROLE_USER"){
 					window.location.href = "user-home.html";
