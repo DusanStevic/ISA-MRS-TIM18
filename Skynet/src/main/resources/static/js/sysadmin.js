@@ -1,5 +1,31 @@
-$(window).on("load",function(){
-	if (window.location.href.match('sysAdmin-addAirlineAdmin.html') != null) {
+$(document).on('click', "#airline", function(e){
+	localStorage.setItem("page", "addAirline");
+})
+
+$(document).on('click', "#hotel", function(e){
+	localStorage.setItem("page", "addHotel");
+})
+
+$(document).on('click', "#rac", function(e){
+	localStorage.setItem("page", "addRac");
+})
+
+$(document).on('click', "#airlineAdmin", function(e){
+	localStorage.setItem("page", "addAirlineAdmin");
+})
+
+$(document).on('click', "#hotelAdmin", function(e){
+	localStorage.setItem("page", "addHotelAdmin");
+})
+
+$(document).on('click', "#racAdmin", function(e){
+	localStorage.setItem("page", "addRacAdmin");
+})
+
+$(document).ready(function(){
+	var page = localStorage.getItem("page");
+	if (page == "addAirlineAdmin") {
+		generateAirlineAdminForm();
 		$.ajax({
 	        type: 'GET',
 	        url: '/api/airlines',
@@ -7,7 +33,8 @@ $(window).on("load",function(){
 	        success: fillAirlines
 	    })
 	}
-	else if (window.location.href.match('sysAdmin-addHotelAdmin.html') != null) {
+	else if (page == "addHotelAdmin") {
+		generateHotelAdminForm();
 		$.ajax({
 	        type: 'GET',
 	        url: '/api/hotels',
@@ -15,7 +42,8 @@ $(window).on("load",function(){
 	        success: fillHotels
 	    })
 	}
-	else if (window.location.href.match('sysAdmin-addRACAdmin.html') != null) {
+	else if (page == "addRacAdmin") {
+		generateRACAdminForm();
 		$.ajax({
 	        type: 'GET',
 	        url: '/api/racs',
@@ -23,18 +51,136 @@ $(window).on("load",function(){
 	        success: fillRACs
 	    })
 	}
-	else if (window.location.href.match('sysAdmin-viewAdmins.html') != null) {
-		$.ajax({
-	        type: 'GET',
-	        url: '/api/admins',
-	        contentType: 'application/json',
-	        success: fillAdmins
-	    })
+	else if(page == "addHotel"){
+		generateHotelForm();
 	}
-	else{
-		
+	else if(page == "addAirline"){
+		generateAirlineForm();
+	}
+	else if(page == "addRac"){
+		generateRACForm();
 	}
 })
+
+function generateAirlineForm(){
+	var form = '<form id="addAirlineForm">'
+        	+'<table id="roomInfo" class="ombre_table">'
+        	+'<tr><th><h1>Add informations about airline:</h1></th></tr>'
+        	+'<tr><td>Name:</td></tr>'
+        	+'<tr><td><input type="text" id="name" required /></td></tr>'
+        	+'<tr><td>Address:</td></tr>'
+        	+'<tr><td><input type="text" id="adress" required /></td></tr>'
+        	+'<tr><td><p>Description:</p></td></tr>'
+        	+'<tr><td><textarea id="promo"></textarea></td></tr>'
+        	+'<tr><td><input type="submit" value="Add airline"></td></tr>'
+        	+'</table>'
+        	+'</form>';
+	$('#addForm').append(form);
+}
+
+function generateHotelForm(){
+	var form = '<form id="addHotelForm">'
+    	+'<table id="roomInfo" class="ombre_table">'
+    	+'<tr><th><h1>Add informations about hotel:</h1></th></tr>'
+    	+'<tr><td>Name:</td></tr>'
+    	+'<tr><td><input type="text" id="name" required /></td></tr>'
+    	+'<tr><td>Address:</td></tr>'
+    	+'<tr><td><input type="text" id="adress" required /></td></tr>'
+    	+'<tr><td><p>Description:</p></td></tr>'
+    	+'<tr><td><textarea id="promo"></textarea></td></tr>'
+    	+'<tr><td><input type="submit" value="Add hotel"></td></tr>'
+    	+'</table>'
+    	+'</form>';
+	$('#addForm').append(form);
+}
+
+function generateRACForm(){
+	var form = '<form id="addRACForm">'
+    	+'<table id="roomInfo" class="ombre_table">'
+    	+'<tr><th><h1>Add informations about RAC:</h1></th></tr>'
+    	+'<tr><td>Name:</td></tr>'
+    	+'<tr><td><input type="text" id="name" required /></td></tr>'
+    	+'<tr><td>Address:</td></tr>'
+    	+'<tr><td><input type="text" id="adress" required /></td></tr>'
+    	+'<tr><td><p>Description:</p></td></tr>'
+    	+'<tr><td><textarea id="promo"></textarea></td></tr>'
+    	+'<tr><td><input type="submit" value="Add Rent-A-Car"></td></tr>'
+    	+'</table>'
+    	+'</form>';
+	$('#addForm').append(form);
+}
+
+function generateAirlineAdminForm(){
+	var form = '<form id = "addAirlineAdminForm">'
+        +'<table id="roomInfo" class="ombre_table">'
+        +'<tr><td><h1>Add new airline admin:</h1></td></tr>'
+        +'<tr><td>Email:</td></tr>'
+        +'<tr><td><input type="text" id="email" required /></td></tr>'
+        +'<tr><td>Name:</td></tr>'
+        +'<tr><td><input type="text" id="name" required /></td></tr>'
+        +'<tr><td><p>Surname:</p></td></tr>'
+        +'<tr><td><input type="text" id="surname" required /></td></tr>'
+        +'<tr><td>Username:</td></tr>'
+        +'<tr><td><input type="text" id="username" required /></td></tr>'
+        +'<tr><td>Password:</td></tr>'
+        +'<tr><td><input type="password" id="password" required /></td></tr>'
+        +'<tr><td>Confirm password:</td></tr>'
+        +'<tr><td><input type="password" id="passwordConfirm" required /></td></tr>'
+        +'<tr><td>Airline name:</td></tr>'
+        +'<tr><td><select id="airlines"></select></td></tr>'
+        +'<tr><td><input type="submit" value="Register admin"></td></tr>'
+        +'</table>'
+        +'</form>';
+	$('#addForm').append(form);
+}
+
+function generateHotelAdminForm(){
+	var form = '<form id = "addHotelAdminForm">'
+        +'<table id="roomInfo" class="ombre_table">'
+        +'<tr><td><h1>Add new hotel admin:</h1></td></tr>'
+        +'<tr><td>Email:</td></tr>'
+        +'<tr><td><input type="text" id="email" required /></td></tr>'
+        +'<tr><td>Name:</td></tr>'
+        +'<tr><td><input type="text" id="name" required /></td></tr>'
+        +'<tr><td><p>Surname:</p></td></tr>'
+        +'<tr><td><input type="text" id="surname" required /></td></tr>'
+        +'<tr><td>Username:</td></tr>'
+        +'<tr><td><input type="text" id="username" required /></td></tr>'
+        +'<tr><td>Password:</td></tr>'
+        +'<tr><td><input type="password" id="password" required /></td></tr>'
+        +'<tr><td>Confirm password:</td></tr>'
+        +'<tr><td><input type="password" id="passwordConfirm" required /></td></tr>'
+        +'<tr><td>Hotel name:</td></tr>'
+        +'<tr><td><select id="hotels"></select></td></tr>'
+        +'<tr><td><input type="submit" value="Register admin"></td></tr>'
+        +'</table>'
+        +'</form>';
+	$('#addForm').append(form);
+}
+
+function generateRACAdminForm(){
+	var form = '<form id = "addRACAdminForm">'
+        +'<table id="roomInfo" class="ombre_table">'
+        +'<tr><td><h1>Add new RAC admin:</h1></td></tr>'
+        +'<tr><td>Email:</td></tr>'
+        +'<tr><td><input type="text" id="email" required /></td></tr>'
+        +'<tr><td>Name:</td></tr>'
+        +'<tr><td><input type="text" id="name" required /></td></tr>'
+        +'<tr><td><p>Surname:</p></td></tr>'
+        +'<tr><td><input type="text" id="surname" required /></td></tr>'
+        +'<tr><td>Username:</td></tr>'
+        +'<tr><td><input type="text" id="username" required /></td></tr>'
+        +'<tr><td>Password:</td></tr>'
+        +'<tr><td><input type="password" id="password" required /></td></tr>'
+        +'<tr><td>Confirm password:</td></tr>'
+        +'<tr><td><input type="password" id="passwordConfirm" required /></td></tr>'
+        +'<tr><td>Rent-A-Car name:</td></tr>'
+        +'<tr><td><select id="racs"></select></td></tr>'
+        +'<tr><td><input type="submit" value="Register admin"></td></tr>'
+        +'</table>'
+        +'</form>';
+	$('#addForm').append(form);
+}
 
 function fillHotels(data){
 	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
@@ -58,19 +204,8 @@ function fillAirlines(data){
 		var opt=$('<option value="'+airline.id+'">'+airline.name+'</option>');
 		$('#airlines').append(opt);
 	})
-}
-
-function fillAdmins(data){
-	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
-	$.each(list, function(index, admin){
-		var tr=$('<tr></tr>');
-		var blocking = "Block";
-		if(admin.enabled == false){
-			blocking = "Unblock";
-		}
-		tr.append('<td>'+admin.username+'</td><td>'+admin.name+'</td><td>'+admin.surname+'</td><td>'+admin.email+'</td>'+'<td>'+admin.company+'</td>'+'<td><a href="#" name="'+admin.id+'" id="blockAdmin">'+blocking+'</a></td>')
-		$('#adminsInfo').append(tr);
-	})
+	var li=$('<li><a href="sysAdmin-home" id="logout"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>');
+	$('#menu').append(li);
 }
 
 $(document).on('click', "#blockAdmin", function(e){

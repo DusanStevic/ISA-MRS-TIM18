@@ -29,7 +29,7 @@ public class Hotel {
 	private String image;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	List<Room> rooms = new ArrayList<Room>();
 	
 	public Hotel() {
@@ -51,6 +51,16 @@ public class Hotel {
 		this.name = name;
 		this.address = address;
 		this.description = description;
+		this.rooms = rooms;
+	}
+
+	public Hotel(Long id, String name, String address, String description, String image, List<Room> rooms) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.address = address;
+		this.description = description;
+		this.image = image;
 		this.rooms = rooms;
 	}
 

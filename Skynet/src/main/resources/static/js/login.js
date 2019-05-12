@@ -21,7 +21,7 @@ $(document).on('submit', "#loginForm", function(e){
 				setJwtToken(TOKEN_KEY, data.accessToken);
 				console.log(data.userRoleName)
 				if (data.userRoleName == "ROLE_HOTEL_ADMIN") {
-					window.location.href = "hotelAdmin-home.html";
+					window.location.href = "hotelAdmin-hotelProfile.html";
 				} else if (data.userRoleName == "ROLE_AIRLINE_ADMIN") {
 					//strana za avio
 				} else if (data.userRoleName == "ROLE_RENTACAR_ADMIN") {

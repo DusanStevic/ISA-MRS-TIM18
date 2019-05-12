@@ -414,7 +414,7 @@ table.mainTable thead th:first-child {
         }
         
         .ombre_div{
-        	background: linear-gradient(to top, #33ccff 0%, #660066 100%);
+        	background: linear-gradient(to bottom, #005963 0%, #66ccff 100%);
         	width:50%;
         	left:25em;
             right:25em;
@@ -444,6 +444,7 @@ table.mainTable thead th:first-child {
         .ombre_table textarea{
             width:500px;
             height:250px;
+            color:black;
         }
         
         .ombre_table a{

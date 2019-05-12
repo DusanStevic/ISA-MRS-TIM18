@@ -31,7 +31,7 @@ public class Room {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Hotel hotel;
 	
-	@ManyToMany(mappedBy = "rooms")
+	@ManyToMany(mappedBy = "rooms", cascade = CascadeType.REFRESH)
 	List<RoomOffer> roomOffers = new ArrayList<RoomOffer>(); 
 
 	public Room(double price, String description, int bedNumber, String image, Hotel hotel) {
@@ -51,6 +51,17 @@ public class Room {
 		this.description = room.getDescription();
 	}
 	
+	public Room(double price, String description, int bedNumber, String image, Hotel hotel,
+			List<RoomOffer> roomOffers) {
+		super();
+		this.price = price;
+		this.description = description;
+		this.bedNumber = bedNumber;
+		this.image = image;
+		this.hotel = hotel;
+		this.roomOffers = roomOffers;
+	}
+
 	public Room() {
 		super();
 	}

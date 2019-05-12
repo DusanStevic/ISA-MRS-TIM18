@@ -2,10 +2,8 @@ var TOKEN_KEY = 'jwtToken';
 
 $(window).on("load",function(){
 	if (window.location.href.match('hotelAdmin-hotelProfile.html') != null) {
-		getHotel();
-	}
-	else if (window.location.href.match('hotelAdmin-home.html') != null) {
 		checkFirstTime();
+		getHotel();
 	}
 	else{
 	}
