@@ -3,6 +3,7 @@ package com.tim18.skynet.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ public class RoomOffer {
 	@Column(nullable = false)
 	private String offer;
 	
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "offering", joinColumns = @JoinColumn(name="room_id", referencedColumnName="id"),
                inverseJoinColumns = @JoinColumn(name="offer_id", referencedColumnName="id"))
 	List<Room> rooms = new ArrayList<Room>();

@@ -1,66 +1,62 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿<html>
 <head>
-    <title>Sys admin - home</title>
+    <title>System admin - home</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="js/sysadmin.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <!-- <script type="text/javascript" src="js/displayCompanies.js"></script> -->
+    <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript" src="js/authorization.js"></script>
+    <script type="text/javascript" src="js/sysadmin.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>
+                <a class="navbar-brand" href="sysAdmin-home.html"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>
             </div>
             <ul class="nav navbar-nav"></ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="sysAdmin-home.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                <li>
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-briefcase"></span> Companies<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="sysAdmin-addHotel.html" id="addHotel"> Add hotel </a></li>
-                        <li><a href="sysAdmin-addAirline.html" id="addAirline"> Add airline </a></li>
-                        <li><a href="sysAdmin-addRAC.html" id="addRAC"> Add Rent-A-Car service </a></li>
-                        <li><a href="#" id="viewCompanies"> View companies </a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> Admins<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="sysAdmin-addHotelAdmin.html" id="addHotelAdmin"> Add hotel admin </a></li>
-                        <li><a href="sysAdmin-addAirlineAdmin.html" id="addAirlineAdmin"> Add airline admin </a></li>
-                        <li><a href="sysAdmin-addRACAdmin.html" id="addRACAdmin"> Add Rent-A-Car service admin </a></li>
-                        <li><a href="sysAdmin-viewAdmins.html" id="viewAdmins"> View admins </a></li>
-                    </ul>
-                </li>
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span>Log out</a></li>
+                <li><a href="#login" id="logout"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
             </ul>
         </div>
     </nav>
-        <div class="tab">
-	<form id = "searchCompany">
-		<table class="tab_table">
-			<tr>
-                <td>Display:</td>
-                <td><input type="radio" name="type" value="airline" />Airlines</td>
-                <td><input type="radio" name="type" value="hotel" checked/>Hotels</td>
-                <td><input type="radio" name="type" value="rac" />Rent-A-Car services</td>
-			</tr>
-		</table>
-	</form>
-</div>
 
-<div class="white_middle_container">
-	<table class="content_table" id="companiesInfo">
-            
-     </table>
-</div>
+    <div class="blue_middle_container">
+        <table class="middle_table">
+            <tr><td><h1>Welcome to Skynet!</h1></td></tr>
+            <tr><td>As system administrator you can add rent-a-car services, airlines and hotels as well as their administrators.</td></tr>
+            <tr>
+                <td>
+                    <table class="middle_table">
+                        <tr>
+                            <td><div class="hover_image"><a href="sysAdmin.html" id="airline"><img src="images/addPlane.png" class="hover_image" /></a></div></td>
+                            <td><div class="hover_image"><a href="sysAdmin.html" id="hotel"><img src="images/addHotel.png" class="hover_image" /></a></div></td>
+                            <td><div class="hover_image"><a href="sysAdmin.html" id="rac"><img src="images/addRac.png" class="hover_image" /></a></div></td>
+                        </tr>
+                        <tr>
+                            <td class="central"><h4><b>Add airline</b></h4></td>
+                            <td class="central"><h4><b>Add hotel</b></h4></td>
+                            <td class="central"><h4><b>Add RAC Service</b></h4></td>
+                        </tr>
+                        <tr>
+                            <td><div class="hover_image"><a href="sysAdmin.html" id="airlineAdmin"><img src="images/addAadmin.png" class="hover_image" /></a></div></td>
+                            <td><div class="hover_image"><a href="sysAdmin.html" id="hotelAdmin"><img src="images/addHadmin.png" class="hover_image" /></a></div></td>
+                            <td><div class="hover_image"><a href="sysAdmin.html" id="racAdmin"><img src="images/addRadmin.png" class="hover_image" /></a></div></td>
+                        </tr>
+                        <tr>
+                            <td class="central"><h4><b>Add airline administrator</b></h4></td>
+                            <td class="central"><h4><b>Add hotel administrator</b></h4></td>
+                            <td class="central"><h4><b>Add RAC administrator</b></h4></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
