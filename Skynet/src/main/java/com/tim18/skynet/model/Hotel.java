@@ -32,6 +32,10 @@ public class Hotel {
 	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	List<Room> rooms = new ArrayList<Room>();
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	List<HotelOffer> hotelOffers = new ArrayList<HotelOffer>();
+	
 	public Hotel() {
 		super();
 	}
@@ -54,7 +58,7 @@ public class Hotel {
 		this.rooms = rooms;
 	}
 
-	public Hotel(Long id, String name, String address, String description, String image, List<Room> rooms) {
+	public Hotel(Long id, String name, String address, String description, String image, List<Room> rooms, List<HotelOffer> hotelOffers) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -62,7 +66,20 @@ public class Hotel {
 		this.description = description;
 		this.image = image;
 		this.rooms = rooms;
+		this.hotelOffers = hotelOffers;
 	}
+	
+	
+
+	public List<HotelOffer> getHotelOffers() {
+		return hotelOffers;
+	}
+
+
+	public void setHotelOffers(List<HotelOffer> hotelOffers) {
+		this.hotelOffers = hotelOffers;
+	}
+
 
 	public String getImage() {
 		return image;

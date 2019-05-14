@@ -4,6 +4,7 @@ $(window).on("load",function(){
 		$("#roomsDisp").empty();
 		displayHotelProfile();
 		findRooms();
+		printHotelOffers();
 	}
 	else if (window.location.href.match('roomInfo.html') != null){
 		var roomID = localStorage.getItem("roomID");
@@ -105,6 +106,27 @@ $(window).on("load",function(){
         })
 	}
 })
+
+function printHotelOffers(){
+	var id = localStorage.getItem("hotelId1");
+	$.ajax({
+		type:'GET',
+		url:'/api/getHotelOffers/'+id,
+		contentType:'application/json',
+		dataType:'json',
+		success:function(data){
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			$.each(list, function(index, offer){
+				var tr1 = $('<tr></tr>');
+				tr1.append('<td><h2>'+offer.name+'</h2></td>');
+				var tr2 = $('<tr></tr>');
+				tr2.append('<td><p>'+offer.description+'</p></td>'+'<td><h1>'+offer.price+'$</h1></td>');
+				$('#hotelOffers').append(tr1);
+				$('#hotelOffers').append(tr2);
+			});
+		}
+	});
+}
 
 function displayHotelProfile(){
 	var id = localStorage.getItem("hotelId1");

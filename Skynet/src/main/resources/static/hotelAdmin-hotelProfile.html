@@ -49,7 +49,8 @@
    
 
     <div id="Other_offers" class="tabcontent">
-        <table class="content_table"></table>
+        <table class="table85" id="hotelOffers">
+        </table>
     </div>
 
     <div id="modal" class="modal">
@@ -143,6 +144,37 @@
                     </tr>
                     <tr>
                     	<td><input type="submit" value="Upload"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    
+    <div id="modal4" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close4">&times;</span>
+            <form id="addHotelOfferForm">
+                <table>
+                	<tr>
+                        <td><h3>Name of hotel offer: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="hotelOfferName" /></td>
+                    </tr>
+                    <tr>
+                        <td><h3>Price of hotel offer: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="hotelOfferPrice" /></td>
+                    </tr>
+                    <tr>
+                        <td><h3>Hotel offer description: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><textarea id="hotelOfferDesc" ></textarea></td>
+                    </tr>
+                    <tr>
+                    	<td><input type="submit" value="Add hotel offer"/></td>
                     </tr>
                 </table>
             </form>
