@@ -5,7 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.dto.RoomDTO;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
@@ -35,8 +38,10 @@ public class RoomController {
 
 	@RequestMapping( value="/api/room",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
 	public Room createRoom(@Valid @RequestBody Room room) {
+		System.out.println("Usao sam.");
 		HotelAdmin user = (HotelAdmin) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		room.setHotel(user.getHotel());
+		System.out.println("Sacuvana soba.");
 		return roomService.save(room);
 		
 	}
@@ -81,6 +86,13 @@ public class RoomController {
 			}
 		}
 		return null;
+	}
+	
+	@RequestMapping(value = "/api/addRoomImage/{room_id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Room> editHotelImage(@RequestBody ImageDTO image, @PathVariable(value = "room_id") Long room_id) {
+		Room room = roomService.findOne(room_id);
+		room.setImage(image.getUrl());
+		return new ResponseEntity<>(roomService.save(room), HttpStatus.OK);
 	}
 	
 	@RequestMapping( value="/api/deleteRoom/{room_id}",method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)

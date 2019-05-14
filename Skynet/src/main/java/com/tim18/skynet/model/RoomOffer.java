@@ -12,6 +12,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class RoomOffer {
 	@Id
@@ -20,14 +22,19 @@ public class RoomOffer {
 	@Column(nullable = false)
 	private String offer;
 	
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.REFRESH)
-    @JoinTable(name = "offering", joinColumns = @JoinColumn(name="room_id", referencedColumnName="id"),
-               inverseJoinColumns = @JoinColumn(name="offer_id", referencedColumnName="id"))
+    @JoinTable(name = "offering", joinColumns = @JoinColumn(name="offer_id", referencedColumnName="id"),
+               inverseJoinColumns = @JoinColumn(name="room_id", referencedColumnName="id"))
 	List<Room> rooms = new ArrayList<Room>();
 	
 	public RoomOffer(String offer) {
 		super();
 		this.offer = offer;
+	}
+	
+	public RoomOffer() {
+		super();
 	}
 
 	public long getId() {
