@@ -46,6 +46,7 @@ function getHotel() {
 				} else {
 					displayHotel(data);
 					getRooms();
+					printHotelOffers();
 				}
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
@@ -469,6 +470,85 @@ $(document).on('click', "#newRoomOffer", function (e) {
     e.preventDefault();
 });
 
+$(document).on('click', "#addHotelOffer", function (e) {
+    var modal = document.getElementById('modal4');
+    var span = document.getElementById("close4");
+    modal.style.display = "block";
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    e.preventDefault();
+});
+
+$(document).on('submit', "#addHotelOfferForm", function (e) {
+	e.preventDefault();
+	var name = $('#hotelOfferName').val();
+	var price = $('#hotelOfferPrice').val();
+	var desc = $('#hotelOfferDesc').val();
+	
+	$.ajax({
+		type:'POST',
+		url:'/api/addHotelOffer',
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		contentType:'application/json',
+		dataType:'json',
+		data:inputToHotelOffer(name, price, desc),
+		success:function(offer){
+			var tr1 = $('<tr></tr>');
+			tr1.append('<td><h2>'+offer.name+'</h2></td>');
+			var tr2 = $('<tr></tr>');
+			tr2.append('<td><h3>'+offer.description+'</h3></td>'+'<td><h1>'+offer.price+'$</h1></td><td><a href="#" id="deleteOffer" name="'+offer.id+'">Delete offer</a></td>');
+			$('#hotelOffers').append(tr1);
+			$('#hotelOffers').append(tr2);
+			e.preventDefault();
+		}
+	});
+});
+
+$(document).on('click', "#deleteOffer", function (e) {
+	var token = getJwtToken(TOKEN_KEY);
+	var id=$(this).attr("name");
+	$.ajax({
+		type:'DELETE',
+		url:'/api/deleteHotelOffer/'+id,
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		contentType:'application/json',
+		dataType:'json',
+		success:function(offer){
+		}
+	});
+	location.reload();
+})
+
+function printHotelOffers(){
+	var tr = $('<tr></tr>');
+	tr.append('<td></td><td><input type="button" value="Add hotel offer" id="addHotelOffer" /></td>');
+	$('#hotelOffers').append(tr);
+	$.ajax({
+		type:'GET',
+		url:'/api/getHotelOffers',
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		contentType:'application/json',
+		dataType:'json',
+		success:function(data){
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			$.each(list, function(index, offer){
+				var tr1 = $('<tr></tr>');
+				tr1.append('<td><h2>'+offer.name+'</h2></td>');
+				var tr2 = $('<tr></tr>');
+				tr2.append('<td><p>'+offer.description+'</p></td>'+'<td><h1>'+offer.price+'$</h1></td><td><a href="#" id="deleteOffer" name="'+offer.id+'">Delete offer</a></td>');
+				$('#hotelOffers').append(tr1);
+				$('#hotelOffers').append(tr2);
+			});
+		}
+	});
+}
+
 $(document).on('submit', "#editOfferForm", function (e) {
     var modal = document.getElementById('modal');
     var off_name = $('#offerName').val();
@@ -521,5 +601,13 @@ function inputToCompany(name, adress, desc, image){
 function inputToOffers(offers){
 	return JSON.stringify({
 		"roomOffers":offers,
+	})
+}
+
+function inputToHotelOffer(name, price, desc){
+	return JSON.stringify({
+		"name":name,
+		"price":price,
+		"description":desc,
 	})
 }

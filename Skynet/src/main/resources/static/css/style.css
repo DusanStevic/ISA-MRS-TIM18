@@ -577,3 +577,12 @@ table.mainTable thead th:first-child {
             top:0%;
             position:relative;
         }
+        
+        .table85{
+        	left: 2%;
+            position:relative;
+        }
+        
+        .table85 tr{
+        	max-width: 95%;
+        }
