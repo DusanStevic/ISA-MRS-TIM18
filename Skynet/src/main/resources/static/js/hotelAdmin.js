@@ -195,43 +195,6 @@ function displayRooms(data){
 	}
 }
 
-$(document).on('submit', "#newRoomForm", function(e){
-	e.preventDefault();
-	var token = getJwtToken(TOKEN_KEY);
-	var image = "images/room20.jpg";
-	var beds = $('#beds').val();
-	var price = $('#price').val();
-	var description = $('#roomDesc').val();
-	if(image == "" || beds == "" || price == "" || description == ""){
-		alert("All fields must be filled!");
-		return;
-	}
-	if(isNaN(beds) || isNaN(price)){
-		alert("Number of beds and price must be numbers!");
-		return;
-	}
-	$.ajax({
-		type:'POST',
-		url:'/api/room',
-		headers : createAuthorizationTokenHeader(TOKEN_KEY),
-		contentType:'application/json',
-		dataType:'json',
-		data:inputToHotelRoom(image, beds, price, description),
-		success:function(data){
-			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
-			$.each(list, function(index, room){
-				var tr=$('<tr></tr>');
-				tr.append('<td><img src='+room.image+' class="room_display"/></td>');
-				tr.append('<td><table><tr><td><h3>Price per night: '+room.price+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr>'+
-				'<tr><td><a href="#" id="viewRoom" name="'+room.id+'">More details</a></td></tr>'+
-				'<tr><td><a href="#" id="editRoom" name="'+room.id+'">Edit room</a></td></tr>'+
-				'<tr><td><a href="#" id="deleteRoom" name="'+room.id+'">Delete room</a></td></tr></table></td>');
-				$('#roomsDisp').append(tr);
-			})
-		}
-	})
-})
-
 $(document).on('submit','#editRoomForm',function(){
 	var token = getJwtToken(TOKEN_KEY);
 	var id = $('#editId').val();
@@ -327,6 +290,7 @@ $(document).on('click','#viewRoom',function(e){
         success: function(data){
             var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
             $.each(list, function(index, room){
+            	localStorage.setItem("roomID", room.id);
             	localStorage.setItem("image", room.image);
             	localStorage.setItem("beds", room.bedNumber);
             	localStorage.setItem("price", room.price);
@@ -335,6 +299,19 @@ $(document).on('click','#viewRoom',function(e){
             window.location.href = "roomInfo.html";
         }
     })
+})
+
+$(document).on('submit', "#roomImage", function(event){
+	 event.preventDefault();
+	 var formElement = this;
+	 var field = $("#file").val();
+	 if(field != ""){
+		 var formData = new FormData(formElement);
+		 var id = localStorage.getItem("roomID");
+		 uploadImage(formElement, formData, "/api/addRoomImage/"+id);
+	 }
+	 event.preventDefault();
+	 window.location.href = "hotelAdmin-hotelProfile.html";
 })
 
 $(document).on('click','#edit',function(e){
@@ -397,7 +374,112 @@ $(document).on('submit', "#uploadImageForm", function(event){
 	 event.preventDefault();
 })
 
+$(document).on('click', "#goToDescription", function (e) {
+    var page1 = document.getElementById("view1");
+    var page2 = document.getElementById("view3");
+    page1.style.display = "none";
+    page2.style.display = "none";
+    var page3 = document.getElementById("view2");
+    page3.style.display = "block";
+    e.preventDefault();
+});
 
+$(document).on('click', "#goToBasic", function (e) {
+    var page1 = document.getElementById("view2");
+    var page2 = document.getElementById("view3");
+    page1.style.display = "none";
+    page2.style.display = "none";
+    var page3 = document.getElementById("view1");
+    page3.style.display = "block";
+    e.preventDefault();
+});
+
+$(document).on('submit', "#newRoomForm", function(e){
+    var page1 = document.getElementById("view1");
+    var page2 = document.getElementById("view2");
+    page1.style.display = "none";
+    page2.style.display = "none";
+    var page3 = document.getElementById("view3");
+    page3.style.display = "block";
+    e.preventDefault();
+    console.log("Usao sam");
+	var token = getJwtToken(TOKEN_KEY);
+	var image = "images/room.png";
+	var beds = $('#beds').val();
+	var price = $('#price').val();
+	var description = $('#roomDesc').val();
+	if(beds == "" || price == "" || description == ""){
+		alert("All fields must be filled!");
+		return;
+	}
+	if(isNaN(beds) || isNaN(price)){
+		alert("Number of beds and price must be numbers!");
+		return;
+	}
+	$.ajax({
+		type:'POST',
+		url:'/api/room',
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		contentType:'application/json',
+		dataType:'json',
+		data:inputToHotelRoom(image, beds, price, description),
+		success:function(data){
+			e.preventDefault();
+			localStorage.setItem("roomID", data.id);
+			setRoomOffers();
+		}
+	})
+});
+
+function setRoomOffers(){
+	var token = getJwtToken(TOKEN_KEY);
+	var offers = document.getElementsByClassName('offers');
+	var string_offers = [];
+	$("input:checkbox[name=choice]:checked").each(function(){
+		string_offers.push($(this).val());
+	});
+	console.log(string_offers);
+
+	var id2 = localStorage.getItem("roomID");
+	$.ajax({
+		type:'POST',
+		url:'/api/setRoomOffers/'+id2,
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		contentType:'application/json',
+		dataType:'json',
+		data:inputToOffers(string_offers),
+		success:function(data){
+
+		}
+	})
+}
+
+$(document).on('click', "#newRoomOffer", function (e) {
+    var modal = document.getElementById('modal');
+    var span = document.getElementsByClassName("close")[0];
+    modal.style.display = "block";
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    e.preventDefault();
+});
+
+$(document).on('submit', "#editOfferForm", function (e) {
+    var modal = document.getElementById('modal');
+    var off_name = $('#offerName').val();
+    if (off_name != "") {
+        var tr = $('<tr></tr>');
+        tr.append('<td><input type="checkbox" class="offers" name="choice" checked value="'+off_name+'"/><b>' + off_name + '</b></td>');
+        $('#roomOffers').append(tr);
+    }
+    modal.style.display = "none";
+    e.preventDefault();
+});
 
 function inputToHotelRoom(image, beds, price, desc){
 	return JSON.stringify({
@@ -433,5 +515,11 @@ function inputToCompany(name, adress, desc, image){
 		"adress":adress,
 		"description":desc,
 		"image": image,
+	})
+}
+
+function inputToOffers(offers){
+	return JSON.stringify({
+		"roomOffers":offers,
 	})
 }

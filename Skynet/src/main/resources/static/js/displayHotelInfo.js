@@ -6,6 +6,7 @@ $(window).on("load",function(){
 		findRooms();
 	}
 	else if (window.location.href.match('roomInfo.html') != null){
+		var roomID = localStorage.getItem("roomID");
 		var image = localStorage.getItem("image");
 		var beds = localStorage.getItem("beds");
 		var price = localStorage.getItem("price");
@@ -88,6 +89,20 @@ $(window).on("load",function(){
         		+'<tr><td rowspan="2">'+desc+'</td></tr></table></td>');
         $('#roomInfo').append(tr1);
         $('#roomInfo').append(tr2);
+        var tr3=$('<tr></tr>');
+        $.ajax({
+            type: 'GET',
+            url: '/api/getRoomOffers/'+roomID,
+            contentType: 'text/plain',
+            success: function(data){
+            	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+                $.each(list, function(index, offer){
+                	var tro=$('<tr></tr>');
+                	tro.append('<td>'+offer.offer+'</td>');
+                	$('#roomInfo').append(tro);
+                })
+            }
+        })
 	}
 })
 
@@ -219,6 +234,7 @@ $(document).on('click','#viewRoom',function(e){
         success: function(data){
             var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
             $.each(list, function(index, room){
+            	localStorage.setItem("roomID", room.id);
             	localStorage.setItem("image", room.image);
             	localStorage.setItem("beds", room.bedNumber);
             	localStorage.setItem("price", room.price);
