@@ -1,11 +1,16 @@
 package com.tim18.skynet.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column; 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Airline implements Serializable{
@@ -24,6 +29,12 @@ public class Airline implements Serializable{
 	private String description;
 	@Column(nullable = false)
 	private String image;
+	
+	@OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Destination> destinations = new HashSet<Destination>();
+	
+	@OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Flight>  flights = new  HashSet<Flight>();
 	
 	public Airline() {
 		super();
@@ -79,6 +90,30 @@ public class Airline implements Serializable{
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+
+
+	public Set<Destination> getDestinations() {
+		return destinations;
+	}
+
+
+
+	public void setDestinations(Set<Destination> destinations) {
+		this.destinations = destinations;
+	}
+
+
+
+	public Set<Flight> getFlights() {
+		return flights;
+	}
+
+
+
+	public void setFlights(Set<Flight> flights) {
+		this.flights = flights;
 	}
 
 
