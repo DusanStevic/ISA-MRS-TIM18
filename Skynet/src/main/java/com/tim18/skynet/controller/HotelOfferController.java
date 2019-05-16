@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tim18.skynet.dto.HotelOfferDTO;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.HotelOffer;
@@ -52,6 +53,27 @@ public class HotelOfferController {
 	public List<HotelOffer> getHotelOffersID(@PathVariable(value = "id") Long id){
 		Hotel hotel = hotelService.findOne(id);
 		return hotel.getHotelOffers();
+	}
+	
+	@RequestMapping(value = "/api/getHotelOffer/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public HotelOffer getHotelOfferID(@PathVariable(value = "id") Long id){
+		HotelOffer hotel = hotelOfferService.findOne(id);
+		return hotel;
+	}
+	
+	@RequestMapping(value = "/api/editHotelOffer", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public HotelOffer editHotelOffers(@RequestBody HotelOfferDTO hotelOfferDTO){
+		HotelOffer ho = hotelOfferService.findOne(hotelOfferDTO.getId());
+		if(hotelOfferDTO.getName() != ""){
+			ho.setName(hotelOfferDTO.getName());
+		}
+		if(hotelOfferDTO.getDescription() != ""){
+			ho.setDescription(hotelOfferDTO.getDescription());
+		}
+		if(hotelOfferDTO.getPrice() > 0){
+			ho.setPrice(hotelOfferDTO.getPrice());
+		}
+		return hotelOfferService.save(ho);
 	}
 	
 	@RequestMapping(value = "/api/deleteHotelOffer/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)

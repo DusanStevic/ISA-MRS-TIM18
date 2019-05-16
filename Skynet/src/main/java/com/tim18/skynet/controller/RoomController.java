@@ -1,5 +1,6 @@
 package com.tim18.skynet.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.dto.RoomDTO;
+import com.tim18.skynet.dto.RoomOffersDTO;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.Room;
+import com.tim18.skynet.model.RoomOffer;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
 import com.tim18.skynet.service.impl.HotelServiceImpl;
 import com.tim18.skynet.service.impl.RoomServiceImpl;
@@ -50,6 +53,42 @@ public class RoomController {
 	public List<Room> getRooms() {
 		HotelAdmin user = (HotelAdmin) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		return user.getHotel().getRooms();
+	}
+	
+	@RequestMapping( value="/api/searchRooms",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Room> searchRooms(@RequestBody RoomOffersDTO roomOffers) {
+		HotelAdmin user = (HotelAdmin) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		List<Room> rooms = new ArrayList<Room>();
+		for(Room r : user.getHotel().getRooms()){
+			boolean containsAll = true;
+			for(RoomOffer ro : r.getRoomOffers()){
+				if(roomOffers.getRoomOffers().contains(ro.getOffer()) == false){
+					containsAll = false;
+				}
+			}
+			if(containsAll){
+				rooms.add(r);
+			}
+		}
+		return rooms;
+	}
+	
+	@RequestMapping( value="/api/searchRooms/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
+	public List<Room> searchRoomsID(@PathVariable(value = "id") Long id,@Valid @RequestBody RoomOffersDTO roomOffers) {
+		Hotel hotel = hotelService.findOne(id);
+		List<Room> rooms = new ArrayList<Room>();
+		for(Room r : hotel.getRooms()){
+			boolean containsAll = true;
+			for(RoomOffer ro : r.getRoomOffers()){
+				if(roomOffers.getRoomOffers().contains(ro.getOffer()) == false){
+					containsAll = false;
+				}
+			}
+			if(containsAll){
+				rooms.add(r);
+			}
+		}
+		return rooms;
 	}
 	
 	@RequestMapping( value="/api/getRooms/{hotel_id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
