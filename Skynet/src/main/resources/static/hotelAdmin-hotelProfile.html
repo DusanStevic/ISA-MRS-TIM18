@@ -42,6 +42,12 @@
     </div>
 
     <div id="Rooms" class="tabcontent">
+    	<form id="searchRoomsForm">
+	    	<table class="criteria_table" id="offersCriteria">
+	    		<tr><td><h2>Make your search easier!</h2></td></tr>
+	    		<tr><td><p>Choose what will your room offer:</p></td></tr>
+	        </table>
+        </form>
         <table class="content_table" id="roomsDisp">
 
         </table>
@@ -175,6 +181,37 @@
                     </tr>
                     <tr>
                     	<td><input type="submit" value="Add hotel offer"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    
+    <div id="modal5" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close5">&times;</span>
+            <form id="editOfferForm">
+                <table>
+                	<tr>
+                        <td><h3>Name of hotel offer: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="hotelOfferNameEdit" /></td>
+                    </tr>
+                    <tr>
+                        <td><h3>Price of hotel offer: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="hotelOfferPriceEdit" /></td>
+                    </tr>
+                    <tr>
+                        <td><h3>Hotel offer description: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><textarea id="hotelOfferDescEdit" ></textarea></td>
+                    </tr>
+                    <tr>
+                    	<td><input type="submit" value="Edit hotel offer"/></td>
                     </tr>
                 </table>
             </form>

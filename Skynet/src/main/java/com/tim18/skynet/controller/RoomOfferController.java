@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tim18.skynet.dto.RoomOffersDTO;
+import com.tim18.skynet.model.Hotel;
+import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.Room;
 import com.tim18.skynet.model.RoomOffer;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
@@ -66,5 +69,39 @@ public class RoomOfferController {
 		long room_id1 = Long.parseLong(room_id);
 		Room room = roomService.findOne(room_id1);
 		return room.getRoomOffers();
+	}
+	
+	@RequestMapping( value="/api/getHotelRoomOffers",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<RoomOffer> getHotelRoomOffers(){
+		HotelAdmin user = (HotelAdmin) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		Hotel hotel = user.getHotel();
+		List<RoomOffer> offers = new ArrayList<RoomOffer>();
+		for(Room room : hotel.getRooms()){
+			for(RoomOffer ro : room.getRoomOffers()){
+				if(offers.contains(ro) == false){
+					offers.add(ro);
+				}
+			}
+		}
+		return offers;
+	}
+	
+	@RequestMapping( value="/api/getHotelRoomOffers/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<RoomOffer> getHotelRoomOffersID(@PathVariable(value = "id") Long id){
+		Hotel hotel = hotelService.findOne(id);
+		List<RoomOffer> offers = new ArrayList<RoomOffer>();
+		for(Room room : hotel.getRooms()){
+			for(RoomOffer ro : room.getRoomOffers()){
+				if(offers.contains(ro) == false){
+					offers.add(ro);
+				}
+			}
+		}
+		return offers;
+	}
+	
+	@RequestMapping( value="/api/getAllRoomOffers",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<RoomOffer> getAllRoomOffersID(){
+		return roomOfferService.findAll();
 	}
 }

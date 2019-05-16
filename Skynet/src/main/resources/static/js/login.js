@@ -1,16 +1,13 @@
 var TOKEN_KEY = 'jwtToken';
 
 $(document).on('submit', "#loginForm", function(e){
-	console.log('login called');
-
+	e.preventDefault();
 	var username = $("#username").val();
 	var password = $("#password").val();
-	
-	var next_window;
 
 	$.ajax({
 		dataType : 'json',
-		url : '/auth/login',
+		url : 'http://localhost:8080/auth/login',
 		type : 'POST',
 		contentType : 'application/json',
 		data : inputToUser(username, password),
