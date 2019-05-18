@@ -40,8 +40,15 @@ public class UserController {
 	@Autowired
 	private CustomUserDetailsService userInfoService;
 	
+	
 	@GetMapping(value = "/api/getRegUser", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> getLogged() {
+		User user = (User) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/api/viewUserProfile", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<User> viewUserProfile() {
 		User user = (User) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
