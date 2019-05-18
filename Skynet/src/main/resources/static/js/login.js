@@ -20,13 +20,13 @@ $(document).on('submit', "#loginForm", function(e){
 				if (data.userRoleName == "ROLE_HOTEL_ADMIN") {
 					window.location.href = "hotelAdmin-hotelProfile.html";
 				} else if (data.userRoleName == "ROLE_AIRLINE_ADMIN") {
-					//strana za avio
+					window.location.href = "AirlineAdministrator.html"
 				} else if (data.userRoleName == "ROLE_RENTACAR_ADMIN") {
 					console.log('Role is rentacardmin');
 					window.location.href = "racAdmin-home.html";
 				} 
 				else if (data.userRoleName=="ROLE_USER"){
-					window.location.href = "user-home.html";
+					window.location.href = "RegisteredUser.html";
 				}else{
 					window.location.href="sysAdmin-home.html";
 				}
