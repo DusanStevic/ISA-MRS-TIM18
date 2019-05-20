@@ -10,6 +10,13 @@ public class UserTokenState {
 		this.expiresIn = null;
 		this.setUserRoleName(null);
 	}
+	
+	
+	public UserTokenState(String accessToken, long expiresIn) {
+        this.accessToken = accessToken;
+        this.expiresIn = expiresIn;
+    }
+	
 
 	public UserTokenState(String accessToken, long expiresIn, UserRoleName userType) {
 		this.accessToken = accessToken;

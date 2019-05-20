@@ -14,11 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tim18.skynet.model.Airline;
 import com.tim18.skynet.model.AirlineAdmin;
-import com.tim18.skynet.dto.AdminDTO;
 import com.tim18.skynet.service.impl.AirlineAdminServiceImpl;
-import com.tim18.skynet.service.impl.AirlineServiceImpl;
 
 @RestController
 //@RequestMapping(value="api/airlineAdmins")
