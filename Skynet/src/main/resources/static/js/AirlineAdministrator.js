@@ -78,26 +78,7 @@ function prikazPodatakaZaIzmenu(data){
 	
 	
 	
-	/*if (data.stanje == 'BLOKIRANO'){
-		$('.main').empty();
-		$('.main').append('Vas nalog je blokiran');
-	}
-	else{
-		var tabela = $('<table></table>');
-		tabela.append('<tr><td> Lozinka:</td><td>' +  '<input type = "password" name = "lozinka" value = "'+ data.lozinka + '"></td></tr>');
-		tabela.append('<tr><td> Ime:</td><td>' +  '<input type = "text" name = "ime" value = "'+ data.ime + '"</td></tr>');
-		tabela.append('<tr><td> Prezime:</td><td>' +  '<input type = "text" name = "prezime" value = "'+ data.prezime + '"></td></tr>');
-		tabela.append('<tr><td> Telfon:</td><td>' +  '<input type = "text" name = "telefon" value = "'+ data.telefon + '"></td></tr>');
-		tabela.append('<tr><td> Email:</td><td>' +  '<input type = "text" name = "email" value = "'+ data.email + '"></td></tr>');
-		tabela.append( '<tr><td> Nova slika:</td>' + '<td><input type="file" name = "slika" id = "slika" accept="image/*"> </td></tr>');
-		tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji izmene" ></td></tr>');
-		var forma = $('<form class = "posaljiIzmeneZaProfil"></form>');
-		forma.append(tabela);
-		$('.main').empty();
-		$('.main').append('<img src = "'+ data.slika + '" width= "411px" height= "321">');
-		$('.main').append('<h1>Izmena profila</h1>')
-		$('.main').append(forma)	
-	}*/
+	
 	
 }
 
@@ -150,64 +131,7 @@ function formToJSON_profilIZ(password,name,surname,  email) {
 
 
 
-$(document)
-		.on(
-				"submit",
-				"#form4",
-				function(e) {
-					e.preventDefault();
-					console.log('ULETEO SAM U JS');
-					var username = document
-							.getElementById("airlineAdminUsernameEdit").value;
-					var password1 = document
-							.getElementById("airlineAdminPassword1Edit").value;
-					var password2 = document
-							.getElementById("airlineAdminPassword2Edit").value;
-					var firstName = document
-							.getElementById("airlineAdminFirstNameEdit").value;
-					var lastName = document
-							.getElementById("airlineAdminLastNameEdit").value;
-					var email = document
-							.getElementById("airlineAdminEmailEdit").value;
-					
-					if (username == "" || password1 == "" || password2 == ""
-							|| firstName == "" || lastName == "" || email == ""
-						) {
-						alert('At least one field is blank, please fill it up with proper information!');
-					} else if (password1 != password2) {
-						alert("Password must match, try again!");
-					} else {
-						$
-								.ajax({
-									type : 'PUT',
-									url : "http://localhost:8080/api/editUser",
-									headers : createAuthorizationTokenHeader(TOKEN_KEY),
-									contentType : 'application/json',
-									dataType : "json",
-									data : airlineAdminEditToJSON(username,
-											password1, firstName, lastName,
-											email),
-									success : function(data) {
-										console.log('ULETEO SAM U SUCCESS');
-										if (data) {
-											setJwtToken(TOKEN_KEY,
-													data.accessToken);
-											alert("Successful editing, congratulations!");
-										} else {
-											alert("Error while editing!");
-										}
 
-									},
-									error : function(jqXHR, textStatus,
-											errorThrown) {
-										alert(jqXHR.status);
-										alert(textStatus);
-										alert(errorThrown);
-
-									}
-								})
-					}
-				});
 
 
 

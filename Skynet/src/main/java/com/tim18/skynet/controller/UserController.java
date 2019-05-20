@@ -82,7 +82,7 @@ public class UserController {
 			user.setSurname(userFromFront.getSurname());
 			user.setEmail(userFromFront.getEmail());
 		
-			
+	
 			User korisnik = userService.save(user);
 			
 			
