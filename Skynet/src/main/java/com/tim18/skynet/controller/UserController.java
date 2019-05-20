@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,8 @@ import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.RACAdmin;
 import com.tim18.skynet.model.User;
+import com.tim18.skynet.model.UserRoleName;
+import com.tim18.skynet.model.UserTokenState;
 import com.tim18.skynet.security.TokenHelper;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
 import com.tim18.skynet.service.impl.UserServiceImpl;
@@ -47,11 +51,61 @@ public class UserController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
+	/*FUNKCIJA ZA PREGLED PROFILA SVIH KORISNIKA*/
 	@GetMapping(value = "/api/viewUserProfile", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyAuthority('ROLE_SYSTEM_ADMIN','ROLE_USER','ROLE_AIRLINE_ADMIN','ROLE_RENTACAR_ADMIN','ROLE_HOTEL_ADMIN')")
 	public ResponseEntity<User> viewUserProfile() {
-		User user = (User) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		System.out.println("STA JE STIGLO SA FRONTA1"+SecurityContextHolder.getContext().getAuthentication().getName());
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		User user = (User) userService.findOneByUsername(username);
+		if (user!=null) {
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		}
+		return null;
 	}
+	
+	/*FUNKCIJA ZA IZMENU PROFILA SVIH KORISNIKA*/
+	@PutMapping(value = "/api/updateUserProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyAuthority('ROLE_SYSTEM_ADMIN','ROLE_USER','ROLE_AIRLINE_ADMIN','ROLE_RENTACAR_ADMIN','ROLE_HOTEL_ADMIN')")
+	public ResponseEntity<?> updateUserProfile(@RequestBody User userFromFront) {
+		System.out.println("ULETEO SAM U EDITOVANJE KORISNIKA");
+		System.out.println("STA JE STIGLO SA FRONTA1"+userFromFront.toString());
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		User user = (User) userService.findOneByUsername(username);
+		if (user!=null) {
+			System.out.println("STA JE STIGLO SA FRONTA2"+userFromFront.toString());
+			user.setPassword(this.userInfoService.encodePassword(userFromFront.getPassword()));
+			user.setName(userFromFront.getName());
+			user.setSurname(userFromFront.getSurname());
+			user.setEmail(userFromFront.getEmail());
+		
+			
+			User korisnik = userService.save(user);
+			
+			
+			System.out.println("POSLE PROMENA:"+korisnik.toString());
+
+		
+
+	
+			String jwt = tokenUtils.generateToken(user.getUsername());
+			int expiresIn = tokenUtils.getExpiredIn();
+		
+
+			return new ResponseEntity<>(new UserTokenState(jwt, expiresIn), HttpStatus.OK);
+			
+		}
+		return null;
+	
+		
+	}
+	
+	
+	
+	
 	
 	
 	
