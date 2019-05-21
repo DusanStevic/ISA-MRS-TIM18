@@ -258,12 +258,12 @@ function prikazLetova(data){
 	$.each(list, function(index, let_){
 		var tr = $('<tr></tr>');
 		
-		tr.append('<td>'+ let_.startDestination.name + '</td>');
-		tr.append('<td>'+ let_.endDestination.name + '</td>');
+		tr.append('<td>'+ let_.startDestination + '</td>');
+		tr.append('<td>'+ let_.endDestination + '</td>');
 		tr.append('<td>'+ let_.cenaKarte + '</td>');
 		tr.append('<td>'+ let_.modelAviona + '</td>');
-		tr.append('<td>'+ let_.startDate + '</td>');
-		tr.append('<td>'+ let_.endDate + '</td>');
+		tr.append('<td>'+ let_.startDate_str + '</td>');
+		tr.append('<td>'+ let_.endDate_str + '</td>');
 		tr.append('<td>'+ let_.klasaAviona + '</td>');
 		var forma = $('<form id = "rezervacija"></form>')
 		forma.append('<input type = "hidden" value="' + let_.brLeta +'">');
