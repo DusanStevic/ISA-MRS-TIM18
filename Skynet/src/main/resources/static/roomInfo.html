@@ -12,6 +12,7 @@
     <script type="text/javascript" src="js/authorization.js"></script>
     <script type="text/javascript" src="js/hotelAdmin.js"></script>
     <script type="text/javascript" src="js/displayHotelInfo.js"></script>
+    <script type="text/javascript" src="js/uploadFile.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-inverse">
@@ -33,12 +34,26 @@
         <button onclick="goBack()" class="tablinks">Back</button>
     </div>
 
-    <div class="blue_middle_container">
+    <div class="blue_middle_container_scroll">
         <table class="content_table" id="roomInfo">
             
         </table>
+        <table class="criteria_table_width" id="roomInfo2">
+        	
+        </table>
     </div>
-
+	<div id="roomModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeRoom">&times;</span>
+            <form enctype="multipart/form-data" id="roomImage" name="roomImage">
+	            <table class="ombre_table">
+	                <tr><td><h1>Room image:</h1></td></tr>
+	                <tr><td><input type="file" name="file" id="fileIM"/></td></tr>
+	                <tr><td><div class="submit_button"><input type="submit" value="Finish"></div></td></tr>
+	            </table>
+    		</form>
+        </div>
+    </div>
     <script>
         function goBack() {
             window.history.back();

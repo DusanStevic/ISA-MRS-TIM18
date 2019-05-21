@@ -22,6 +22,12 @@ $(document).on('click', "#racAdmin", function(e){
 	localStorage.setItem("page", "addRacAdmin");
 })
 
+$(document).on('click', "#logout", function(e){
+	removeJwtToken(TOKEN_KEY);
+	window.location.href = "index.html";
+    e.preventDefault();
+})
+
 $(document).ready(function(){
 	var page = localStorage.getItem("page");
 	if (page == "addAirlineAdmin") {

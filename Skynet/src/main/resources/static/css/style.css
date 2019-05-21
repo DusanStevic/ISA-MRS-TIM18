@@ -414,7 +414,7 @@ table.mainTable thead th:first-child {
         }
         
         .ombre_div{
-        	background: linear-gradient(to bottom, #005963 0%, #66ccff 100%);
+        	background: linear-gradient(to bottom, #005963 0%, #12b0cc 100%);
         	width:50%;
         	left:25em;
             right:25em;
@@ -443,7 +443,7 @@ table.mainTable thead th:first-child {
         }
         .ombre_table textarea{
             width:500px;
-            height:250px;
+            height:150px;
             color:black;
         }
         
@@ -467,6 +467,17 @@ table.mainTable thead th:first-child {
             left: 10%;
             right:10%;
             overflow:hidden;
+            background-color:white;
+            border-top: none;
+            min-height:550px;
+        }
+        
+        .blue_middle_container_scroll {
+            position:absolute;
+            top:19%;
+            left: 10%;
+            right:10%;
+            overflow:scroll;
             background-color:white;
             border-top: none;
             min-height:550px;
@@ -579,19 +590,56 @@ table.mainTable thead th:first-child {
         }
         
         .table85{
-        	left: 2%;
-            position:relative;
+        	left:13%;
+        	right:13%;
+        	top:10%;
+            position:absolute;
+            max-width: 74%;
+            background-color:#eff1f4;
         }
         
         .table85 tr{
         	max-width: 95%;
         }
         
+        .table85 hr{
+        	border-color:black;
+        }
+        
         .criteria_table{
-        	color:black;
+        	color:white;
         	position:absolute;
         	right:0px;
-        	max-width:25%;
-        	background: linear-gradient(to bottom, #ffffff 0%, #33ccff 100%);
+        	max-width:30%;
+        	background: linear-gradient(to bottom, #005963 0%, #12b0cc 100%);
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+        
+        .criteria_table input{
+        	color:black;
+        }
+        
+        .criteria_table select{
+        	color:black;
+        	width:95%;
+         }
+        
+        .criteria_table_width{
+        	color:white;
+        	position:absolute;
+        	right:0px;
+        	width:45%;
+        	background: linear-gradient(to bottom, #005963 0%, #12b0cc 100%);
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+        
+        .criteria_table_width input{
+        	color:black;
+        }
+        
+        .addOffRight{
+        	position:absolute;
+        	top:0px;
+        	right:0px;
+        	width:auto;
         }

@@ -1,11 +1,37 @@
 var TOKEN_KEY = 'jwtToken';
 
-$(window).on("load",function(){
+$(window).on("load",function(e){
 	if (window.location.href.match('hotelAdmin-hotelProfile.html') != null) {
 		checkFirstTime();
+		var tab = localStorage.getItem("tab");
+		if(tab == null || tab == undefined || tab == ""){
+			document.getElementById("defaultOpen").click();
+		}
+		else{
+			document.getElementById(tab).click();
+		}
 		getHotel();
 	}
-	else{
+	else if(window.location.href.match('hotelAdmin-changeRoom.html') != null){
+		$.ajax({
+	        type: 'GET',
+	        url: '/api/getRoom/'+localStorage.getItem("roomID"),
+	        headers : createAuthorizationTokenHeader(TOKEN_KEY),
+	        contentType: 'text/plain',
+	        success: function(data){
+	            var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	            $.each(list, function(index, room){
+	            	$('#editId').val(room.id);
+	            	$('#editBeds').val(room.bedNumber);
+	            	$('#editPrice').val(room.price);
+	            	$('#editRoomDesc').val(room.description);
+	            	fillAddRoomOffers(room.roomOffers);
+	            })
+	        }
+	    })
+	}
+	else if(window.location.href.match('userProfile.html') != null){
+		getHotelAdmin();
 	}
 })
 
@@ -32,6 +58,38 @@ function getHotelAdmin() {
 	}
 }
 
+function fillAddRoomOffers(selected){
+	console.log(selected);
+	$.ajax({
+		type : 'GET',
+		url : "/api/getAllRoomOffers",
+		success : function(data) {
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			$.each(list, function(index, offer){
+				var list2 = selected == null ? [] : (selected instanceof Array ? selected : [ selected ]);
+				var checked = false;
+				$.each(list2, function(index2, check){
+					if(check.offer == offer.offer){
+						checked = true;
+					}
+				})
+				var tr = $('<tr></tr>');
+				if(checked == true){
+					tr.append('<td><input type="checkbox" class="offers" value="'+offer.offer+'" name="choice" checked/><b>'+offer.offer+'</b></td>');
+				}
+				else{
+					tr.append('<td><input type="checkbox" class="offers" value="'+offer.offer+'" name="choice"/><b>'+offer.offer+'</b></td>');
+				}
+				$('#roomOffers').append(tr);
+			})
+		},
+		error : function() {
+			alert('Some error occurred. Please try again later.');
+		}
+
+	})
+}
+
 function getHotel() {
 	var token = getJwtToken(TOKEN_KEY);
 	if (token) {
@@ -45,9 +103,24 @@ function getHotel() {
 					alert('Error while finding loged one!');
 				} else {
 					displayHotel(data);
-					displayCriteria();
-					getRooms();
 					printHotelOffers();
+					var search;
+					var s1 = localStorage.getItem("searchCriteria");
+					if(s1 != "" && s1 != null && s1 != undefined){
+						search = JSON.parse(localStorage.getItem("searchCriteria"));
+					}
+					else{
+						search = null;
+					}
+					console.log(search);
+					if(search != null && search != undefined && search != ""){
+						displayChoosenCriteria(search);
+						displayCriteria(search);
+					}
+					else{
+						getRooms();
+						displayCriteria(null);
+					}
 				}
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
@@ -61,13 +134,19 @@ function getHotel() {
 }
 
 function getRooms() {
+	var sort = localStorage.getItem("sort");
+	if(sort == undefined || sort == null || sort == ""){
+		sort = "1";
+		console.log(sort);
+	}
 	var token = getJwtToken(TOKEN_KEY);
 	if (token) {
 		$.ajax({
-			type : 'GET',
+			type : 'POST',
 			url : "/api/getRooms",
 			headers : createAuthorizationTokenHeader(TOKEN_KEY),
 			dataType : "json",
+			data: inputToSort(sort),
 			success : function(data) {
 				if (data == null) {
 					alert('Error while finding loged one!');
@@ -86,8 +165,62 @@ function getRooms() {
 }
 
 function displayAdmin(data){
-	
+	$('#userInfo').append('<table class="ombre_table">'+
+			'<tr><td><input type="hidden" id="adminID" value="'+data.id+'"/></td></tr>'+
+            '<tr><td><h1>Your profile:</h1></td></tr>'+
+            '<tr><td><h4>Name:</h4></td><td><h4>'+data.name+'</h4></td></tr>'+
+            '<tr><td><h4>Surname:</h4></td><td><h4>'+data.surname+'</h4></td></tr>'+
+            '<tr><td><h4>Username:</h4></td><td><h4>'+data.username+'</h4></td></tr>'+
+            '<tr><td><h4>Email:</h4></td><td><h4>'+data.email+'</h4></td></tr>'+
+            '<tr><td colspan="2"><input type="button" id="editAdminProfile" value="Edit profile"/></td></tr></table>');
+	$('#nameEdit').val(data.name);
+	$('#surnameEdit').val(data.surname);
+	$('#usernameEdit').val(data.username);
+	$('#emailEdit').val(data.email);
 }
+
+$(document).on('click','#editAdminProfile',function(e){
+	var modal = document.getElementById('HAModal');
+    var span = document.getElementById("closeAdmin");
+    modal.style.display = "block";
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+})
+
+$(document).on('submit','#editHAInfo',function(e){
+	var id = $('#adminID').val();
+	var name = $('#nameEdit').val();
+	var surname = $('#surnameEdit').val();
+	var username = $('#usernameEdit').val();
+	var email = $('#emailEdit').val();
+	if(name == "" || surname == "" || username == "" || email == ""){
+		alert("All fields must be filled!");
+		return;
+	}
+	var oldPass = $('#passwordEdit').val();
+	var newPass = $('#newPasswordEdit').val();
+	if(oldPass == "" && newPass != "" || oldPass != "" && newPass == ""){
+		alert("Please enter old and new password correctly!");
+		return;
+	}
+	$.ajax({
+		type : 'PUT',
+		url : "/api/hadmins",
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		dataType : "json",
+		data: inputToUser(email, name, surname, username, newPass, id),
+		success : function(data) {
+			setJwtToken(TOKEN_KEY, data.accessToken);
+			location.reload();
+		},
+	})
+})
 
 function displayHotel(data){
 	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
@@ -189,6 +322,7 @@ function displayRooms(data){
 			var tr=$('<tr></tr>');
 			tr.append('<td><img src='+room.image+' class="room_display"/></td>');
 			tr.append('<td><table><tr><td><h3>Price per night: '+room.price+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr>'+
+			'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
 			'<tr><td><a href="#" id="viewRoom" name="'+room.id+'">More details</a></td></tr>'+
 			'<tr><td><a href="#" id="editRoom" name="'+room.id+'">Edit room</a></td></tr>'+
 			'<tr><td><a href="#" id="deleteRoom" name="'+room.id+'">Delete room</a></td></tr></table></td>');
@@ -197,7 +331,7 @@ function displayRooms(data){
 	}
 }
 
-function displayCriteria(){
+function displayCriteria(string_offers){
 	var token = getJwtToken(TOKEN_KEY);
 	if (token) {
 		$.ajax({
@@ -208,10 +342,25 @@ function displayCriteria(){
 			success : function(data) {
 				var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 	            $.each(list, function(index, criteria){
+	            	var checked = false;
+	            	var list2 = string_offers == null ? [] : (string_offers instanceof Array ? string_offers : [ string_offers ]);
+	            	$.each(list2, function(index2, selected){
+	            		if(selected == criteria.offer){
+	            			checked = true;
+	            		}
+	            	})
 	            	var of1 = $('<tr></tr>');
-					of1.append('<td><input type="checkbox" value="'+criteria.offer+'" name="criteria"/><b>'+criteria.offer+'</b></td>');
+	            	if(checked == true){
+	            		of1.append('<td><input type="checkbox" value="'+criteria.offer+'" class="offers" name="criteria" checked/><b>'+criteria.offer+'</b></td>');
+	            	}
+	            	else{
+	            		of1.append('<td><input type="checkbox" value="'+criteria.offer+'" class="offers" name="criteria"/><b>'+criteria.offer+'</b></td>');
+	            	}
 					$('#offersCriteria').append(of1);
 	            })
+	            var sort = $('<tr></tr>');
+				sort.append('<td></br><b>Sort by:</b></br> <select id="sortRooms"><option value="1">Price (lowest to highest)</option><option value="2">Price (highest to lowest)</option><option value="3">Rating (highest to lowest)</option></select></td>');
+				$('#offersCriteria').append(sort);
 	            var search = $('<tr></tr>');
 				search.append('<td><div><input type="submit" value="Search"></div></td>');
 				$('#offersCriteria').append(search);
@@ -224,31 +373,48 @@ function displayCriteria(){
 	
 		})
 	}
-	
 }
 
 $(document).on('submit','#searchRoomsForm',function(e){
+	e.preventDefault();
 	var token = getJwtToken(TOKEN_KEY);
 	var string_offers = [];
 	$("input:checkbox[name=criteria]:checked").each(function(){
 		string_offers.push($(this).val());
 	});
-	console.log(string_offers);
+	var sort = $("#sortRooms :selected").val();
+	localStorage.setItem("sort", sort);
+	if(string_offers.length > 0){
+		localStorage.setItem('searchCriteria', JSON.stringify(string_offers));
+		displayChoosenCriteria(string_offers);
+	}
+	else{
+		localStorage.setItem('searchCriteria', "");
+		$("#roomsDisp").empty();
+		getRooms();
+	}
+})
+
+function displayChoosenCriteria(string_offers){
+	var sort = localStorage.getItem("sort");
+	if(sort == undefined || sort == null || sort == ""){
+		sort = "1";
+	}
 	$.ajax({
-		type:'GET',
-		url:'/api/searchRooms',
+		type:'POST',
+		url:'/api/searchForRooms',
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',
-		data:inputToOffers(string_offers),
+		data:inputToOffersSort(string_offers, sort),
 		success:function(data){
-			e.preventDefault();
 			$("#roomsDisp").empty();
 			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 			$.each(list, function(index, room){
 				var tr=$('<tr></tr>');
 				tr.append('<td><img src='+room.image+' class="room_display"/></td>');
 				tr.append('<td><table><tr><td><h3>Price per night: '+room.price+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr>'+
+				'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
 				'<tr><td><a href="#" id="viewRoom" name="'+room.id+'">More details</a></td></tr>'+
 				'<tr><td><a href="#" id="editRoom" name="'+room.id+'">Edit room</a></td></tr>'+
 				'<tr><td><a href="#" id="deleteRoom" name="'+room.id+'">Delete room</a></td></tr></table></td>');
@@ -256,9 +422,9 @@ $(document).on('submit','#searchRoomsForm',function(e){
 			})
 		}
 	})
-})
+}
 
-$(document).on('submit','#editRoomForm',function(){
+$(document).on('submit','#updateRoom',function(){
 	var token = getJwtToken(TOKEN_KEY);
 	var id = $('#editId').val();
 	var beds = $('#editBeds').val();
@@ -281,37 +447,14 @@ $(document).on('submit','#editRoomForm',function(){
 			location.reload();
 		}
 	})
+	setRoomOffers();
 })
 
 $(document).on('click','#editRoom',function(e){
 	var token = getJwtToken(TOKEN_KEY);
     var id=$(this).attr("name");
-    $.ajax({
-        type: 'GET',
-        url: '/api/getRoom/'+id,
-        headers : createAuthorizationTokenHeader(TOKEN_KEY),
-        contentType: 'text/plain',
-        success: function(data){
-            var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
-            $.each(list, function(index, room){
-            	$('#editId').val(room.id);
-            	$('#editBeds').val(room.bedNumber);
-            	$('#editPrice').val(room.price);
-            	$('#editRoomDesc').val(room.description);
-            })
-        }
-    })
-    var modal = document.getElementById('modal2');
-	var span = document.getElementsByClassName("close")[0];
-	modal.style.display = "block";
-	span.onclick = function () {
-        modal.style.display = "none";
-    }
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+    localStorage.setItem("roomID", id);
+    window.location.href = "hotelAdmin-changeRoom.html";
 })
 
 $(document).on('click','#uploadImage',function(e){
@@ -358,6 +501,7 @@ $(document).on('click','#viewRoom',function(e){
             	localStorage.setItem("beds", room.bedNumber);
             	localStorage.setItem("price", room.price);
             	localStorage.setItem("desc", room.description);
+            	localStorage.setItem("isAdmin", "true");
             })
             window.location.href = "roomInfo.html";
         }
@@ -564,9 +708,12 @@ $(document).on('submit', "#addHotelOfferForm", function (e) {
 			var tr1 = $('<tr></tr>');
 			tr1.append('<td><h2>'+offer.name+'</h2></td>');
 			var tr2 = $('<tr></tr>');
-			tr2.append('<td><p>'+offer.description+'</p></td>'+'<td><h1>'+offer.price+'$</h1></td><td><a href="#" id="deleteOffer" name="'+offer.id+'">Delete offer</a></td>'+'<td><a href="#" id="editOffer" name="'+offer.id+'">Edit offer</a></td>');
+			tr2.append('<td><p>'+offer.description+'</p></td>'+'<td><h1>'+offer.price+'$</h1></td>');
+			var tr3 = $('<tr></tr>'); 
+			tr3.append('<td><input type="button" id="deleteOffer" name="'+offer.id+'" value="Delete offer"/>'+'<input type="button" id="editOffer" name="'+offer.id+'" value="Edit offer"/></td>');
 			$('#hotelOffers').append(tr1);
 			$('#hotelOffers').append(tr2);
+			$('#hotelOffers').append(tr3);
 			e.preventDefault();
 		}
 	});
@@ -646,9 +793,7 @@ $(document).on('click', "#editOffer", function (e) {
 })
 
 function printHotelOffers(){
-	var tr = $('<tr></tr>');
-	tr.append('<td></td><td><input type="button" value="Add hotel offer" id="addHotelOffer" /></td>');
-	$('#hotelOffers').append(tr);
+	$('#Other_offers').append('<input class="addOffRight" type="button" value="Add hotel offer" id="addHotelOffer" />');
 	$.ajax({
 		type:'GET',
 		url:'/api/getHotelOffers',
@@ -659,11 +804,17 @@ function printHotelOffers(){
 			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 			$.each(list, function(index, offer){
 				var tr1 = $('<tr></tr>');
-				tr1.append('<td><h2>'+offer.name+'</h2></td>');
+				tr1.append('<td><h2>'+offer.name+'</h2></td><td></td>');
 				var tr2 = $('<tr></tr>');
-				tr2.append('<td><p>'+offer.description+'</p></td>'+'<td><h1>'+offer.price+'$</h1></td><td><a href="#" id="deleteOffer" name="'+offer.id+'">Delete offer</a></td>'+'<td><a href="#" id="editOffer" name="'+offer.id+'">Edit offer</a></td>');
+				tr2.append('<td><p>'+offer.description+'</p></td>'+'<td align="right"><h1>'+offer.price+'$</h1></td>');
+				var tr3 = $('<tr></tr>'); 
+				tr3.append('<td><input type="button" id="deleteOffer" name="'+offer.id+'" value="Delete offer"/>'+'<input type="button" id="editOffer" name="'+offer.id+'" value="Edit offer"/></td><td></td>');
+				var tr4=$('<tr></tr>');
+				tr4.append('<td><hr /></td><td><hr /></td>');
 				$('#hotelOffers').append(tr1);
 				$('#hotelOffers').append(tr2);
+				$('#hotelOffers').append(tr3);
+				$('#hotelOffers').append(tr4);
 			});
 		}
 	});
@@ -678,6 +829,12 @@ $(document).on('submit', "#editOfferForm", function (e) {
         $('#roomOffers').append(tr);
     }
     modal.style.display = "none";
+    e.preventDefault();
+});
+
+$(document).on('click', "#logout", function (e) {
+	removeJwtToken(TOKEN_KEY);
+	window.location.href = "index.html";
     e.preventDefault();
 });
 
@@ -724,6 +881,13 @@ function inputToOffers(offers){
 	})
 }
 
+function inputToOffersSort(string_offers, sort){
+	return JSON.stringify({
+		"roomOffers":string_offers,
+		"sort": sort,
+	})
+}
+
 function inputToHotelOffer(name, price, desc){
 	return JSON.stringify({
 		"name":name,
@@ -738,5 +902,23 @@ function inputToHotelOfferDTO(name, desc, price, id){
 		"name":name,
 		"price":price,
 		"description":desc,
+	})
+}
+
+function inputToSort(sort){
+	return JSON.stringify({
+		"sort":sort,
+		"roomOffers":null,
+	})
+}
+
+function inputToUser(email, name, surname, username, password, id){
+	return JSON.stringify({
+		"adminId":id,
+		"firstName":name,
+		"lastName":surname,
+		"username":username,
+		"password":password,
+		"email":email,
 	})
 }

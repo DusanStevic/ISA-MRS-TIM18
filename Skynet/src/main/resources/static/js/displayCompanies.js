@@ -14,6 +14,9 @@ $(document).on('click','#racSearch',function(){
 $(document).ready(function(){
 	var page = localStorage.getItem("page");
 	if(page == "hotel"){
+		localStorage.setItem("tab", "");
+		localStorage.setItem('searchCriteria', "");
+		var admin = localStorage.setItem("isAdmin", "");
 		generateHotelSearch();
 		findHotels();
 	}
