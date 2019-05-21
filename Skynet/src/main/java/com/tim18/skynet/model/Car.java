@@ -1,8 +1,8 @@
 package com.tim18.skynet.model;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -43,8 +43,9 @@ public class Car {
 	private Branch branch;
 	
 	
-	@OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<CarReservation> vehicleReservations = new HashSet<CarReservation>();
+	@JsonIgnore
+	@OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	List<CarReservation> reservations = new ArrayList<CarReservation>();
 
 	public Car() {
 	}
@@ -135,10 +136,6 @@ public class Car {
 		return image;
 	}
 
-	public Set<CarReservation> getVehicleReservations() {
-		return vehicleReservations;
-	}
-
 	public void setPassenggers(Integer passenggers) {
 		this.passenggers = passenggers;
 	}
@@ -149,10 +146,6 @@ public class Car {
 
 	public void setImage(String image) {
 		this.image = image;
-	}
-
-	public void setVehicleReservations(Set<CarReservation> vehicleReservations) {
-		this.vehicleReservations = vehicleReservations;
 	}
 
 }

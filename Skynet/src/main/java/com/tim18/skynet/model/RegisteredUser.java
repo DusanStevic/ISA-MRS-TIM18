@@ -1,5 +1,6 @@
 package com.tim18.skynet.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -7,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,23 +33,8 @@ public class RegisteredUser extends User {
 	@OneToMany(mappedBy = "reciever")
 	private Set<FriendRequest> receivedRequests = new HashSet<FriendRequest>();
 
-	
-	@OneToMany(mappedBy="vehicle_user",fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-	private Set<CarReservation> vehicleReservations = new HashSet<CarReservation>();
-	
-	
-	
-
-	
-	public Set<CarReservation> getVehicleReservations() {
-		return vehicleReservations;
-	}
-
-
-
-	public void setVehicleReservations(Set<CarReservation> vehicleReservations) {
-		this.vehicleReservations = vehicleReservations;
-	}
+	@ManyToMany(mappedBy = "passangers", cascade = CascadeType.REFRESH)
+	List<Reservation> reservations = new ArrayList<Reservation>(); 
 	
 	public RegisteredUser() {
 		// TODO Auto-generated constructor stub

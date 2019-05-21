@@ -189,7 +189,7 @@ public class CarController {
 
 			return new ResponseEntity<>(veh, HttpStatus.OK);
 		}
-
+		/*
 		@PreAuthorize("hasRole('ROLE_RENTACAR_ADMIN')")
 		@DeleteMapping(value = "/vehicles/{id}")
 		public ResponseEntity<Void> deleteVehicle(@PathVariable("id") Long id) {
@@ -213,7 +213,7 @@ public class CarController {
 			return new ResponseEntity<>(vehicle.getVehicleReservations(),
 					HttpStatus.OK);
 		}
-
+		
 		@PostMapping(value = "/vehicles/{id}/reservations", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<CarReservation> addReservation(@PathVariable("id") Long id,
 				@RequestBody CarReservationDTO vehResdto) {
@@ -246,8 +246,7 @@ public class CarController {
 
 			return new ResponseEntity<>(vehicleReservation, HttpStatus.OK);
 		}
+		*/
 	}
-
-	
 	
 	

@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tim18.skynet.dto.RoomDTO;
@@ -34,6 +35,10 @@ public class Room {
 	
 	@ManyToMany(mappedBy = "rooms", cascade = CascadeType.REFRESH)
 	List<RoomOffer> roomOffers = new ArrayList<RoomOffer>(); 
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "reservedRoom", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	List<RoomReservation> reservations = new ArrayList<RoomReservation>();
 
 	public Room(double price, String description, int bedNumber, String image, Hotel hotel) {
 		super();
@@ -61,6 +66,19 @@ public class Room {
 		this.image = image;
 		this.hotel = hotel;
 		this.roomOffers = roomOffers;
+	}
+
+	public Room(long id, double price, String description, int bedNumber, String image, Hotel hotel,
+			List<RoomOffer> roomOffers, List<RoomReservation> reservations) {
+		super();
+		this.id = id;
+		this.price = price;
+		this.description = description;
+		this.bedNumber = bedNumber;
+		this.image = image;
+		this.hotel = hotel;
+		this.roomOffers = roomOffers;
+		this.reservations = reservations;
 	}
 
 	public Room() {
@@ -132,5 +150,13 @@ public class Room {
 
 	public void setRoomOffers(List<RoomOffer> roomOffers) {
 		this.roomOffers = roomOffers;
+	}
+
+	public List<RoomReservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(List<RoomReservation> reservations) {
+		this.reservations = reservations;
 	}
 }

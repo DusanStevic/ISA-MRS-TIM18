@@ -1,5 +1,8 @@
 package com.tim18.skynet.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,6 +32,12 @@ public class HotelOffer {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "hotel_id", referencedColumnName = "id")
 	private Hotel hotel;
+	
+	@JsonIgnore
+	@ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(name = "reservation_hotel_offer", joinColumns = @JoinColumn(name="hotel_offer_id", referencedColumnName="id"),
+               inverseJoinColumns = @JoinColumn(name="room_reserv_id", referencedColumnName="id"))
+	List<RoomReservation> roomReservations = new ArrayList<RoomReservation>();
 
 	public HotelOffer(String name, String description, double price, Hotel hotel) {
 		super();
@@ -78,5 +89,13 @@ public class HotelOffer {
 
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
+	}
+
+	public List<RoomReservation> getRoomReservations() {
+		return roomReservations;
+	}
+
+	public void setRoomReservations(List<RoomReservation> roomReservations) {
+		this.roomReservations = roomReservations;
 	}
 }

@@ -3,11 +3,13 @@ package com.tim18.skynet.model;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,16 +20,22 @@ public class CarReservation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Car vehicle;
-
-	@ManyToOne
-	private RegisteredUser vehicle_user;
-
+	@Column(nullable = false)
 	private Date checkInDate;
+	@Column(nullable = false)
 	private Date checkOutDate;
+	@Column(nullable = false)
 	private Double totalPrice;
+
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "reserved_car", referencedColumnName = "id")
+	private Car vehicle;
+	
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "reservation_id", referencedColumnName = "id")
+	private Reservation reservation;
 
 	public CarReservation() {
 	}
@@ -38,15 +46,6 @@ public class CarReservation {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	@JsonIgnore
-	public RegisteredUser getUser() {
-		return vehicle_user;
-	}
-
-	public void setUser(RegisteredUser vehicle_user) {
-		this.vehicle_user = vehicle_user;
 	}
 
 	public Date getCheckInDate() {
@@ -80,5 +79,13 @@ public class CarReservation {
 
 	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public Reservation getReservation() {
+		return reservation;
+	}
+
+	public void setReservation(Reservation reservation) {
+		this.reservation = reservation;
 	}
 }
