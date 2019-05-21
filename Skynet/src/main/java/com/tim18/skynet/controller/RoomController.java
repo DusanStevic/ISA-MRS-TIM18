@@ -1,6 +1,7 @@
 package com.tim18.skynet.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tim18.skynet.comparator.RoomPriceComparator;
+import com.tim18.skynet.comparator.RoomPriceComparatorHighToLow;
 import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.dto.RoomDTO;
 import com.tim18.skynet.dto.RoomOffersDTO;
@@ -41,60 +44,92 @@ public class RoomController {
 
 	@RequestMapping( value="/api/room",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
 	public Room createRoom(@Valid @RequestBody Room room) {
-		System.out.println("Usao sam.");
 		HotelAdmin user = (HotelAdmin) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		room.setHotel(user.getHotel());
-		System.out.println("Sacuvana soba.");
 		return roomService.save(room);
 		
 	}
 	
-	@RequestMapping( value="/api/getRooms",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
-	public List<Room> getRooms() {
+	@RequestMapping( value="/api/getRooms",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
+	public List<Room> getRooms(@Valid @RequestBody RoomOffersDTO sort) {
 		HotelAdmin user = (HotelAdmin) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		return user.getHotel().getRooms();
+		System.out.println(sort.getSort());
+		if(sort.getSort().equals("1")){
+			return sortRoomsLowToHigh(user.getHotel().getRooms());
+		}
+		else{
+			return sortRoomsHighToLow(user.getHotel().getRooms());
+		}
 	}
 	
-	@RequestMapping( value="/api/searchRooms",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Room> searchRooms(@RequestBody RoomOffersDTO roomOffers) {
+	@RequestMapping( value="/api/searchForRooms",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
+	public List<Room> searchRooms( @Valid @RequestBody RoomOffersDTO roomOffers) {
+		System.out.println(roomOffers.getSort());
 		HotelAdmin user = (HotelAdmin) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		if(roomOffers.getRoomOffers().isEmpty()){
+			return user.getHotel().getRooms();
+		}
 		List<Room> rooms = new ArrayList<Room>();
 		for(Room r : user.getHotel().getRooms()){
 			boolean containsAll = true;
-			for(RoomOffer ro : r.getRoomOffers()){
-				if(roomOffers.getRoomOffers().contains(ro.getOffer()) == false){
-					containsAll = false;
+			if(r.getRoomOffers().size() > 0){
+				for(String off : roomOffers.getRoomOffers()){
+					if(r.containsOffer(off) == false){
+						containsAll = false;
+						break;
+					}
+				}
+				if(containsAll){
+					rooms.add(r);
 				}
 			}
-			if(containsAll){
-				rooms.add(r);
-			}
 		}
-		return rooms;
+		if(roomOffers.getSort().equals("1")){
+			return sortRoomsLowToHigh(rooms);
+		}
+		else{
+			return sortRoomsHighToLow(rooms);
+		}
 	}
 	
-	@RequestMapping( value="/api/searchRooms/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
-	public List<Room> searchRoomsID(@PathVariable(value = "id") Long id,@Valid @RequestBody RoomOffersDTO roomOffers) {
+	@RequestMapping( value="/api/searchRooms/{id}",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
+	public List<Room> searchRoomsID(@PathVariable(value = "id") Long id, @Valid @RequestBody RoomOffersDTO roomOffers) {
 		Hotel hotel = hotelService.findOne(id);
+		if(roomOffers.getRoomOffers().isEmpty()){
+			return hotel.getRooms();
+		}
 		List<Room> rooms = new ArrayList<Room>();
 		for(Room r : hotel.getRooms()){
 			boolean containsAll = true;
-			for(RoomOffer ro : r.getRoomOffers()){
-				if(roomOffers.getRoomOffers().contains(ro.getOffer()) == false){
-					containsAll = false;
+			if(r.getRoomOffers().size() > 0){
+				for(String off : roomOffers.getRoomOffers()){
+					if(r.containsOffer(off) == false){
+						containsAll = false;
+						break;
+					}
+				}
+				if(containsAll){
+					rooms.add(r);
 				}
 			}
-			if(containsAll){
-				rooms.add(r);
-			}
 		}
-		return rooms;
+		if(roomOffers.getSort().equals("1")){
+			return sortRoomsLowToHigh(rooms);
+		}
+		else{
+			return sortRoomsHighToLow(rooms);
+		}
 	}
 	
-	@RequestMapping( value="/api/getRooms/{hotel_id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Room> getHotelRooms(@PathVariable(value = "hotel_id") Long hotel_id) {
+	@RequestMapping( value="/api/getRooms/{hotel_id}",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public List<Room> getHotelRooms(@PathVariable(value = "hotel_id") Long hotel_id, @Valid @RequestBody RoomOffersDTO roomOffers) {
 		Hotel hotel = hotelService.findOne(hotel_id);
-		return hotel.getRooms();
+		if(roomOffers.getSort().equals("1")){
+			return sortRoomsLowToHigh(hotel.getRooms());
+		}
+		else{
+			return sortRoomsHighToLow(hotel.getRooms());
+		}
 	}
 	
 	@RequestMapping( value="/api/getRoom/{room_id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -109,14 +144,10 @@ public class RoomController {
 		for(Room r : user.getHotel().getRooms()){
 			if(r.getId() == room.getId()){
 				if(room.getBeds() != r.getBedNumber() && room.getBeds() > 0){
-					System.out.println("ovde sam "+ room.getBeds());
 					r.setBedNumber(room.getBeds());
 				}
 				if(room.getPrice() != r.getPrice() && room.getPrice() > 0){
 					r.setPrice(room.getPrice());
-				}
-				if(room.getImage().equals(r.getImage()) == false && room.getImage().equals("") == false){
-					r.setImage(room.getImage());
 				}
 				if(room.getDescription().equals(r.getDescription()) == false && room.getDescription().equals("") == false){
 					r.setDescription(room.getDescription());
@@ -125,6 +156,18 @@ public class RoomController {
 			}
 		}
 		return null;
+	}
+	
+	public List<Room> sortRoomsLowToHigh(List<Room> rooms){
+		RoomPriceComparator comparator = new RoomPriceComparator();
+		Collections.sort(rooms, comparator);
+		return rooms;
+	}
+	
+	public List<Room> sortRoomsHighToLow(List<Room> rooms){
+		RoomPriceComparatorHighToLow comparator = new RoomPriceComparatorHighToLow();
+		Collections.sort(rooms, comparator);
+		return rooms;
 	}
 	
 	@RequestMapping(value = "/api/addRoomImage/{room_id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)

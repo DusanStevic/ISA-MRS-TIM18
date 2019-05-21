@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tim18.skynet.dto.RoomDTO;
 
 @Entity
@@ -64,6 +65,17 @@ public class Room {
 
 	public Room() {
 		super();
+	}
+	
+	@JsonIgnore
+	public boolean containsOffer(String offer){
+		boolean contains = false;
+		for(RoomOffer ro : this.roomOffers){
+			if(ro.getOffer().equals(offer)){
+				contains = true;
+			}
+		}
+		return contains;
 	}
 
 	public long getId() {

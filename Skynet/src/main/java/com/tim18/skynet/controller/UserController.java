@@ -1,5 +1,6 @@
 package com.tim18.skynet.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tim18.skynet.dto.AdminDTO;
+import com.tim18.skynet.dto.UserDTO;
 import com.tim18.skynet.model.AirlineAdmin;
-import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.RACAdmin;
 import com.tim18.skynet.model.User;
@@ -105,7 +106,40 @@ public class UserController {
 	
 	
 	
-	
+	@RequestMapping(value = "/api/hadmins", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserTokenState> updateHadmin(
+			@Valid @RequestBody UserDTO u) {
+
+		User ha =(User) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		if(u.getFirstName().equals("") == false){
+			ha.setName(u.getFirstName());
+		}
+		if(u.getLastName().equals("") == false){
+			ha.setSurname(u.getLastName());
+		}
+		if(u.getUsername().equals("") == false){
+			if(ha.getUsername().equals(u.getUsername()) == false){
+				if (this.userInfoService.usernameTaken(u.getUsername())) {
+					return new ResponseEntity<>(null, HttpStatus.OK);
+				}
+				else{
+					ha.setUsername(u.getUsername());
+				}
+			}
+		}
+		if(u.getEmail().equals("") == false){
+			ha.setEmail(u.getEmail());
+		}
+		if(u.getPassword().equals("") == false){
+			ha.setPassword(this.userInfoService.encodePassword(u.getPassword()));
+			ha.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
+		}
+		this.userInfoService.saveUser(ha);
+		String jwt = tokenUtils.generateToken(ha.getUsername());
+		int expiresIn = tokenUtils.getExpiredIn();
+		UserRoleName userType = null;
+		return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, userType), HttpStatus.OK);
+	}
 	
 	
 	

@@ -46,17 +46,22 @@ public class RoomOfferController {
 		for(String ro : roomOffers.getRoomOffers()){
 			RoomOffer offer = roomOfferService.findByOffer(ro);
 			if(offer != null){
-				newOffers.add(offer);
-				offer.getRooms().add(room);
-				roomOfferService.save(offer);
-				System.out.println("Sacuvan: " + offer.getOffer());
+				if(room.containsOffer(offer.getOffer()) == false){
+					newOffers.add(offer);
+					offer.getRooms().add(room);
+					roomOfferService.save(offer);
+				}
 			}
 			else{
 				offer = new RoomOffer(ro);
 				offer.getRooms().add(room);
 				newOffers.add(offer);
 				roomOfferService.save(offer);
-				System.out.println("Sacuvan: " + offer.getOffer());
+			}
+		}
+		for(RoomOffer rof : room.getRoomOffers()){
+			if(roomOffers.getRoomOffers().contains(rof.getOffer()) == false){
+				rof.getRooms().remove(room);
 			}
 		}
 		room.setRoomOffers(newOffers);
