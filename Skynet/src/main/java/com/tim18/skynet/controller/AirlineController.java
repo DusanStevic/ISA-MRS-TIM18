@@ -130,8 +130,9 @@ public class AirlineController {
 			DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
 			String companyName = "";
 			for (Flight f : flights) {
+				System.out.println("LET KOJI JE PRONADJEN U BAZI:"+f.toString());
 				companyName = getCompanyNameForFlight(f);
-				System.out.println("\t>>>" + f.getEndDestination().getName());
+				System.out.println("IME AEROKOMPANIJE KOJA SPROVODI LET:"+companyName);
 				if ((f.getStartDestination().getName().equals(search.getStartDestination())
 						|| search.getStartDestination().equals(""))
 						&& (f.getEndDestination().getName().equals(search.getEndDestination())
