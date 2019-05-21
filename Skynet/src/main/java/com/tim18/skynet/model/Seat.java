@@ -1,10 +1,18 @@
 package com.tim18.skynet.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "seat")
@@ -31,6 +39,10 @@ public class Seat {
     
     @Column(name = "unavailable", unique = false, nullable = false)
    	private boolean unavailable;
+    
+    @JsonIgnore
+	@OneToMany(mappedBy = "reservedSeat", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	List<SeatReservation> reservations = new ArrayList<SeatReservation>();
 	
 	
 	public Seat() {
@@ -46,6 +58,16 @@ public class Seat {
 		this.travelClassa = travelClassa;
 		this.active = false;
 		this.unavailable = false;
+	}
+
+
+	public List<SeatReservation> getReservations() {
+		return reservations;
+	}
+
+
+	public void setReservations(List<SeatReservation> reservations) {
+		this.reservations = reservations;
 	}
 
 

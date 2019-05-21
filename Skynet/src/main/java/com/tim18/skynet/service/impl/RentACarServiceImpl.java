@@ -71,7 +71,7 @@ public class RentACarServiceImpl implements RentACarService {
 
 		List<RentACar> available = new ArrayList<RentACar>();
 		boolean find = false;
-		
+		/*
 		for (RentACar rentACar : racs) {
 			find = false;
 			for (Car veh : rentACar.getVehicles()) {
@@ -86,7 +86,7 @@ public class RentACarServiceImpl implements RentACarService {
 				}
 			}
 		}
-
+	*/
 		return available;
 	}
 
