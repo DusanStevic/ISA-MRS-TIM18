@@ -193,6 +193,19 @@ public class Flight {
 
 
 
+
+
+	@Override
+	public String toString() {
+		return "Flight [id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", flightDuration="
+				+ flightDuration + ", flightLength=" + flightLength + ", seats=" + seats + ", startDestination="
+				+ startDestination + ", endDestination=" + endDestination + ", businessPrice=" + businessPrice
+				+ ", economicPrice=" + economicPrice + ", firstClassPrice=" + firstClassPrice + "]";
+	}
+
+
+
+
 	
 
 	
