@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.tim18.skynet.model.Branch;
 
-public interface BranchRepository extends JpaRepository<Branch, Long>{
+
+public interface BranchRepository extends JpaRepository<Branch, Long> {
 
 }

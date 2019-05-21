@@ -8,6 +8,6 @@ public interface RentACarService {
 	public RentACar save(RentACar rac);
 	public RentACar findOne(Long id);
 	public List<RentACar> findAll();
-	public void remove(Long id);
+	public void delete(Long id);
 }
 

@@ -1,9 +1,12 @@
 package com.tim18.skynet.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +32,22 @@ public class RegisteredUser extends User {
 	private Set<FriendRequest> receivedRequests = new HashSet<FriendRequest>();
 
 	
+	@OneToMany(mappedBy="vehicle_user",fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+	private Set<CarReservation> vehicleReservations = new HashSet<CarReservation>();
+	
+	
+	
 
+	
+	public Set<CarReservation> getVehicleReservations() {
+		return vehicleReservations;
+	}
+
+
+
+	public void setVehicleReservations(Set<CarReservation> vehicleReservations) {
+		this.vehicleReservations = vehicleReservations;
+	}
 	
 	public RegisteredUser() {
 		// TODO Auto-generated constructor stub
@@ -86,6 +104,8 @@ public class RegisteredUser extends User {
 		// TODO Auto-generated method stub
 		return true;
 	}
+
+
 
 
 
