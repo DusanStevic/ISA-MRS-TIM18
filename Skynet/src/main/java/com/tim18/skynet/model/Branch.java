@@ -1,14 +1,14 @@
 package com.tim18.skynet.model;
 
-import java.util.HashSet; 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -17,20 +17,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Branch {
-	
+
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false)
+
 	private String name;
-	@Column(nullable = false)
+
 	private String address;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	private RentACar rac;
 
 	@OneToMany(mappedBy = "branch", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Car> cars = new HashSet<Car>();
+	private Set<Car> vehicles = new HashSet<Car>();
 
 	public Branch() {
 	}
@@ -53,11 +53,15 @@ public class Branch {
 	}
 
 	public Set<Car> getVehicles() {
-		return cars;
+		return vehicles;
 	}
 
-	public void setVehicles(Set<Car> car) {
-		this.cars = car;
+	public void addVehicle(Car veh) {
+		this.vehicles.add(veh);
+	}
+
+	public void setVehicles(Set<Car> vehicles) {
+		this.vehicles = vehicles;
 	}
 
 	@Override

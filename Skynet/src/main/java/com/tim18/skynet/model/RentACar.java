@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.jsonwebtoken.lang.Objects;
+
 @Entity
 public class RentACar {
 	@Id
@@ -27,9 +29,57 @@ public class RentACar {
 	@Column(nullable = false)
 	private String image;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "rac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Branch> branchs = new HashSet<Branch>();
+	@OneToMany(mappedBy = "rac", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<Branch> branches = new HashSet<Branch>();
+
+	@OneToMany(mappedBy = "racservice", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<RACSpecialOffer> specialOffers = new HashSet<RACSpecialOffer>();
+		
+
+
+		public Set<Branch> getBranches() {
+			return branches;
+		}
+		
+		@JsonIgnore
+		public Set<Car> getVehicles() {
+			Set<Car> vehs = new HashSet<Car>();
+			
+			for (Branch branch : this.branches) {
+				for (Car vehicle : branch.getVehicles()) {
+					vehs.add(vehicle);
+				}
+			}
+			return vehs;
+		}
+
+		public void setBranches(Set<Branch> branches) {
+			this.branches = branches;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hashCode(id);
+		}
+
+		@Override
+		public String toString() {
+			return "Rent a car [id=" + id + "]";
+		}
+
+		public void addBranch(Branch b) {
+			this.branches.add(b);
+		}
+
+		public Set<RACSpecialOffer> getSpecialOffers() {
+			return specialOffers;
+		}
+
+		public void setSpecialOffers(Set<RACSpecialOffer> specialOffers) {
+			this.specialOffers = specialOffers;
+		}
+	
+
 
 	public RentACar(Long id, String name, String address, String description, Set<Branch> branchs) {
 		super();
@@ -37,7 +87,7 @@ public class RentACar {
 		this.name = name;
 		this.address = address;
 		this.description = description;
-		this.branchs = branchs;
+		this.branches = branchs;
 	}
 	
 	public RentACar(String name, String address, String description, String image) {
@@ -55,7 +105,7 @@ public class RentACar {
 		this.address = address;
 		this.description = description;
 		this.image = image;
-		this.branchs = branchs;
+		this.branches = branchs;
 	}
 
 
@@ -67,10 +117,10 @@ public class RentACar {
 		this.id = id;
 	}
 	public Set<Branch> getBranchs() {
-		return branchs;
+		return branches;
 	}
 	public void setBranchs(Set<Branch> branchs) {
-		this.branchs = branchs;
+		this.branches = branchs;
 	}
 	public String getName() {
 		return name;
