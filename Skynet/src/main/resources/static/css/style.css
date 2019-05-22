@@ -11,7 +11,7 @@ body{
 
 .main{
 	margin: auto;
-	width: 1200px;
+	swidth: 1200px;
 	font-size: 20px;
 }
 
@@ -424,6 +424,35 @@ table.mainTable thead th:first-child {
             color:white;
             overflow:hidden;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+        
+        .ombre_div_66{
+        	background: linear-gradient(to bottom, #005963 0%, #12b0cc 100%);
+        	width:60%;
+        	left:20%;
+            right:20%;
+            top:5%;
+            position:relative;
+            padding:50px;
+            color:white;
+            overflow:hidden;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+        
+        .ombre_table_flight{
+            font:25px;
+            color:white;
+            overflow:hidden;
+        }
+        
+        .ombre_table_flight td{
+        	font:25px;
+        }
+
+        .ombre_table_flight input, select{
+            width:350px;
+            padding:5px;
+            color:black;
         }
         
         .ombre_table{

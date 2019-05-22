@@ -326,7 +326,7 @@ $(document).on('submit', "#addAirlineForm", function(e){
 	var name = $('#name').val();
 	var address = $('#adress').val();
 	var desc = $('#promo').val();
-	var image = "images/airplane.png";
+	var image = "images/plane.png";
 	if(name == "" || address == "" || desc == "" || image == ""){
 		alert("All fields must be filled!");
 		return;

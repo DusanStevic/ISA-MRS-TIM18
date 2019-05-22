@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tim18.skynet.dto.DestinationBean;
 import com.tim18.skynet.dto.FlightBean;
+import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.model.Airline;
 import com.tim18.skynet.model.AirlineAdmin;
 import com.tim18.skynet.model.Destination;
 import com.tim18.skynet.model.Flight;
+import com.tim18.skynet.model.Hotel;
+import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.Seat;
 import com.tim18.skynet.service.AirlineAdminService;
 import com.tim18.skynet.service.impl.AirlineServiceImpl;
@@ -58,6 +62,17 @@ public class AirlineController {
 	
 	private static SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	private static SimpleDateFormat sdf2 = new SimpleDateFormat("dd.MM.yyyy. HH:mm");
+	
+	@GetMapping(value = "/api/getAirline", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Airline> getAirline() {
+		AirlineAdmin user = (AirlineAdmin) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		Airline airline = user.getAirline();
+		if (airline != null) {
+			return new ResponseEntity<>(airline, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 	
 	
 	//Method for adding new flight
@@ -117,7 +132,15 @@ public class AirlineController {
 		}
 		
 		
-		
+		@RequestMapping(value = "/api/editAirlineImage", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<Airline> editAirlineImage(@RequestBody ImageDTO image) {
+			AirlineAdmin user = (AirlineAdmin) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+			Airline airline = user.getAirline();
+			System.out.println(image.getUrl());
+			airline.setImage(image.getUrl());
+			user.setAirline(airline);
+			return new ResponseEntity<>(airlineService.save(airline), HttpStatus.OK);
+		}
 		
 		
 		@RequestMapping(value = "/api/flightSearch", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

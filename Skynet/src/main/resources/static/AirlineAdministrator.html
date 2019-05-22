@@ -1,29 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Airline Administrator</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<!--   <link href="js/toastr.min.css" rel="stylesheet"/> -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-<!--   <script type="text/javascript" src ="js/administrator.js"></script>
-  <script type="text/javascript" src ="js/admin_funkcionalnosti.js"></script>
-  <script type="text/javascript" src ="js/profil.js"></script> -->
-  
-  
-  
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<title>Airline Administrator</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/authorization.js"></script>
+<script type="text/javascript" src="js/changePassword.js"></script>
 <script type="text/javascript" src="js/AirlineAdministrator.js"></script>
-  <!-- <script type="text/javascript" src="js/toastr.min.js"></script> -->
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <link rel = "stylesheet" type = "text/css" href = "css/style.css" >
-  
-  
-  
-  
+<script type="text/javascript" src="js/uploadFile.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<link rel = "stylesheet" type = "text/css" href = "css/style.css" >
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -31,67 +22,26 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="AirlineAdministrator.html"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>
     </div>
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="AirlineAdministrator.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <span class="glyphicon glyphicon-user"></span> Profile<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-         
-          <li><a href = "#" id = "viewUserProfile_button" > View user profile </a></li>
-		  <li><a href = "#" id = "izmenaProfila_btn" > Edit user profile </a></li>
-		 
-          
-        </ul>
-      </li>
-      <li>
-      	<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-briefcase"></span> Company<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-        	<li><a href="sysAdmin-addHotel.html" id="addHotel"> View company profile </a></li>
-            <li><a href="sysAdmin-addHotel.html" id="addHotel"> Edit company profile </a></li>
-            <li><a href="#" id="viewCompanies"> View companies </a></li>
-        </ul>
-      </li>
-      
-      
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <span class="glyphicon glyphicon-globe"></span> Destinations<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href = "#" id = "destinacije_btn" > View destinations </a></li>
-		  <li><a href = "#" id = "dodajDest_btn" > Add destinations </a></li>
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <span class="glyphicon glyphicon-plane"></span> Flights<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href = "#" id = "letovi_btn"> View flights </a></li>
-		  <li><a href = "#" id = "dodajLet_btn" > Add flights </a></li> 
-        </ul>
-      </li>
-      
-      
-      <li> <a href = "#" id = "korisnici_btn" > <span class="glyphicon glyphicon-list-alt"></span> Korisnici</a></li>
-      <li> <a href = "#" id = "pretraga_btn"><span class="glyphicon glyphicon-search"></span> Pretraga</a></li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <span class="glyphicon glyphicon-stats"></span> Reports<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-        
-		  <li><a href = "#" id = "dodajDest_btn" > Dnevni izvestaj </a></li>
-		  <li><a href = "#" id = "destinacije_btn" > Mesecni Izvestaj </a></li>
-		  <li><a href = "#" id = "dodajDest_btn" > Godisnji izvestaj </a></li>
-		  <li><a href = "#" id = "destinacije_btn" > Prodate karte </a></li>
-          
-        </ul>
-      </li>
-      
-
-    </ul>
+    
     <ul class="nav navbar-nav navbar-right">
-      
-      <li> <a id = "logout_button" href = ""><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+    	<li><a href="#" id = "airlineProfile"><span class="glyphicon glyphicon-briefcase"></span> Airline's Profile</a></li>
+	    <li><a href="#" id = "dodajDest_btn"><span class="glyphicon glyphicon-globe"></span> Add Destination</a></li>
+	    <li><a href="#" id = "dodajLet_btn"><span class="glyphicon glyphicon-plane"></span> Add Flight</a></li>
+	    <li><a href="#" id = "viewUserProfile_button"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+	    <li class="dropdown">
+	        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+	        <span class="glyphicon glyphicon-stats"></span> Reports<span class="caret"></span></a>
+	        <ul class="dropdown-menu">
+				  <li><a href = "#" id = "dailyReport_btn" > Daily Report </a></li>
+				  <li><a href = "#" id = "monthlyReport_btn" > Monthly Report </a></li>
+				  <li><a href = "#" id = "annualReport_btn" > Annual Report </a></li>
+				  <li><a href = "#" id = "soldTickets_btn" > Sold Tickets </a></li>
+	        </ul>
+        </li>
+	    <li><a href="#" id="logout_button"><span class="glyphicon glyphicon-log-out"></span>Log out</a></li>
+    </ul>
+    
+    <ul class="nav navbar-nav">
     </ul>
   </div>
 </nav>
@@ -108,7 +58,7 @@
 
 	
 	
-	<div class = "main">
+	<div id = "main">
 	
 	</div>	
 </body>
