@@ -3,6 +3,259 @@
  */
 var TOKEN_KEY = 'jwtToken';
 
+$(document).ready(function(e){
+	checkFirstTime();
+	getAirline();
+})
+
+function getAirline() {
+	var token = getJwtToken(TOKEN_KEY);
+	if (token) {
+		$.ajax({
+			type : 'GET',
+			url : "/api/getAirline",
+			headers : createAuthorizationTokenHeader(TOKEN_KEY),
+			dataType : "json",
+			success : function(data) {
+				if (data == null) {
+					alert('Error while finding logged one!');
+				} else {
+					displayAirline(data);
+				}
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR.status);
+				alert(textStatus);
+				alert(errorThrown);
+			}
+		})
+	}
+}
+
+function displayAirline(data){
+	$('#main').empty();
+	var tab = '<div class="tab">'+
+        '<button class="tablinks" onclick="openCity(event, \'Home\')" id="defaultOpen">About</button>'+
+        '<button class="tablinks" onclick="openCity(event, \'Destinations\')" id="roomsOpen">Destinations</button>'+
+        '<button class="tablinks" onclick="openCity(event, \'Flights\')" id="offersOpen">Flights</button>'+
+    '</div>'+
+    '<div class="tabcontent" id="Home">'+
+        '<table class="content_table" id="airlineInfo">'+ 
+        '</table>'+
+    '</div>'+
+    '<div id="Destinations" class="tabcontent">'+
+        '<table class="table85" id="destinationsDisp">'+
+        '</table>'+
+    '</div>'+
+		'<div id="Flights" class="tabcontent">'+
+        '<table class="content_table" id="flightsDisp">'+
+        '</table>'+
+    '</div>';
+	$('#main').append(tab);
+	
+	var modal = '<div id="modal" class="modal">'+
+			        '<div class="ombre_div">'+
+				    '<span class="close" id="close">&times;</span>'+
+				    '<form enctype="multipart/form-data" id="uploadImageForm" name="uploadImageForm">'+
+				        '<table class="ombre_table">'+
+				        	'<tr>'+
+				                '<td><h3>Image: </h3></td>'+
+				            '</tr>'+
+				            '<tr>'+
+				                '<td><input type="file" name="file" /></td>'+
+				            '</tr>'+
+				            '<tr>'+
+				            	'<td><input type="submit" value="Upload"/></td>'+
+				            '</tr>'+
+				        '</table>'+
+				    '</form>'+
+				'</div>'+
+				'</div>';
+	$('#main').append(modal);
+	
+	var modal2 = '<div id="modal2" class="modal">'+
+        '<div class="ombre_div">'+
+	    '<span class="close" id="close2">&times;</span>'+
+	    '<form id="editHotelForm">'+
+	        '<table class="ombre_table">'+
+	        	'<tr>'+
+	                '<td><input type="hidden" id="airlineId"/></td>'+
+	            '</tr>'+
+	            '<tr>'+
+	                '<td><h3>Name: </h3></td>'+
+	            '</tr>'+
+	            '<tr>'+
+	                '<td><input type="text" id="airlineName"/></td>'+
+	            '</tr>'+
+	            '<tr>'+
+	                '<td><h3>Address: </h3></td>'+
+	            '</tr>'+
+	            '<tr>'+
+	                '<td><input type="text" id="airlineAdress"/></td>'+
+	            '</tr>'+
+	            '<tr>'+
+	                '<td><h3>Description: </h3></td>'+
+	            '</tr>'+
+	            '<tr>'+
+	                '<td>'+
+	                    '<textarea id="hotelDesc"></textarea>'+
+	                '</td>'+
+	            '</tr>'+
+	            '<tr>'+
+	                '<td><input type="submit" value="Save changes" /></td>'+
+	           '</tr>'+
+	        '</table>'+
+	    '</form>'+
+	'</div>'+
+	'</div>';
+	
+	$('#main').append(modal2);
+	
+	document.getElementById("defaultOpen").click();
+	
+	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	$.each(list, function(index, airline){
+		//localStorage.setItem("airlineid", airline.id);
+		var tr1=$('<tr></tr>');
+		tr1.append('<td><h2>' + airline.name + '</h2></td>');
+		tr1.append('<td><div class="edit_input"><input type="button" value="Edit info" id="edit" /></div></td><td></td>');
+		var tr2=$('<tr></tr>');
+		tr2.append('<td><h4>'+ airline.address +'</h4></td>');
+		var tr3=$('<tr></tr>');
+		tr3.append('<td colspan="2"><div class="middle_container"><p>'+ airline.description +'</p></div></td>');
+		var tr4=$('<tr></tr>');
+		tr4.append('<td><div><img src='+ airline.image + ' class="image" /></div></td>');
+		tr4.append('<td>'+
+                '<div class="rating">' +
+                '<span class="heading">User Rating</span>'+
+                '<span class="fa fa-star"></span>' +
+                '<span class="fa fa-star"></span>' +
+                '<span class="fa fa-star"></span>' +
+                '<span class="fa fa-star"></span>' +
+                '<span class="fa fa-star"></span>' +
+                '<p>0 average based on 0 reviews.</p>' +
+                '<hr style="border:3px solid #f1f1f1">' +
+                '<div class="row">' +
+                 '   <div class="side">' +
+                  '      <div>5 star</div>' +
+                   ' </div>' +
+                    '<div class="middle">' +
+                     '   <div class="bar-container">' +
+                      '      <div class="bar-1"></div>' +
+                       ' </div>' +
+                    '</div>' +
+                    '<div class="side right">' +
+                     '   <div>0</div>' +
+                    '</div>' +
+                    '<div class="side">' +
+                     '   <div>4 star</div>' +
+                    '</div>' +
+                    '<div class="middle">' +
+                     '   <div class="bar-container">' +
+                      '      <div class="bar-1"></div>' +
+                       ' </div>' +
+                    '</div>' +
+                    '<div class="side right">' +
+                     '   <div>0</div>' +
+                    '</div>' +
+                    '<div class="side">' +
+                     '   <div>3 star</div>' +
+                    '</div>' +
+                    '<div class="middle">' +
+                    '    <div class="bar-container">' +
+                     '       <div class="bar-1"></div>' +
+                     '   </div>' +
+                    '</div>' +
+                    '<div class="side right">' +
+                     '   <div>0</div>' +
+                    '</div>' +
+                    '<div class="side">' +
+                     '   <div>2 star</div>' +
+                    '</div>' +
+                    '<div class="middle">' +
+                    '    <div class="bar-container">' +
+                     '       <div class="bar-1"></div>' +
+                     '   </div>' +
+                    '</div>' +
+                    '<div class="side right">' +
+                     '   <div>0</div>' +
+                    '</div>' +
+                    '<div class="side">' +
+                     '   <div>1 star</div>' +
+                    '</div>' +
+                    '<div class="middle">' +
+                     '   <div class="bar-container"> '+
+                      '      <div class="bar-1"></div>' +
+                       ' </div>' +
+                    '</div>' +
+                    '<div class="side right">' +
+                     '   <div>0</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</td>');
+		var tr5=$('<tr></tr>');
+		tr5.append('<td><div class="edit_input"><input type="button" value="Upload image" id="uploadImage" /></div></td>');
+		$('#airlineInfo').append(tr1);
+		$('#airlineInfo').append(tr2);
+		$('#airlineInfo').append(tr3);
+		$('#airlineInfo').append(tr4);
+		$('#airlineInfo').append(tr5);
+		
+	})
+	getDestinations();
+}
+
+function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+$(document).on('click','#edit',function(e){
+    var modal = document.getElementById('modal2');
+	var span = document.getElementById("close2");
+	modal.style.display = "block";
+	span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+})
+
+$(document).on('click','#uploadImage',function(e){
+    var modal = document.getElementById('modal');
+	var span = document.getElementById("close");
+	modal.style.display = "block";
+	span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+})
+
+$(document).on('submit', "#uploadImageForm", function(event){
+	 event.preventDefault();
+	 var formElement = this;
+	 var formData = new FormData(formElement);
+	 uploadImage(formElement, formData, "/api/editAirlineImage");
+	 event.preventDefault();
+})
+
 /*LOGOUT AIRLINE ADMINISTRATORA*/
 $(document).on('click', '#logout_button', function(e) {
 	e.preventDefault();
@@ -26,20 +279,23 @@ $(document).on('click', '#viewUserProfile_button', function(e){
 })
 
 
+$(document).on('click', '#airlineProfile', function(e){
+	e.preventDefault();
+	getAirline();
+})
+
 function viewUserProfile(user){
-	
-	
-		$('.main').empty();
-		//$('.main').append('<img src = "'+ korisnik.slika + '" width= "409px" height= "318">');
-		$('.main').append('<h1>' +"View user profile"+ '</h1>' );
-		var tabela1 = $('<table></table>');
+		$('#main').empty();
+		//$('#main').append('<img src = "'+ korisnik.slika + '" width= "409px" height= "318">');
+		$('#main').append('<div class="ombre_div" id="userProfile"></div>' );
+		$('#userProfile').append('<h1>' +"View user profile"+ '</h1>' );
+		var tabela1 = $('<table class="ombre_table"></table>');
 		tabela1.append('<tr><td> Name:</td><td>' +  user.name +'</td></tr>');
 		tabela1.append('<tr><td> Surname:</td><td>' +  user.surname +'</td></tr>');
 		tabela1.append('<tr><td> Username:</td><td>' +  user.username +'</td></tr>');
 		tabela1.append('<tr><td> Email:</td><td>' +  user.email +'</td></tr>');
-		
-		$('.main').append(tabela1);
-	
+		tabela1.append('<tr><td colspan="2"><input type="button" id="izmenaProfila_btn" value="Edit Profile"/></td></tr>');
+		$('#userProfile').append(tabela1);
 }
 
 /*UPDATE PROFILA AIRLINE ADMINISTRATORA*/
@@ -57,29 +313,26 @@ $(document).on('click', '#izmenaProfila_btn', function(e){
 	});	
 })
 
+
 function prikazPodatakaZaIzmenu(data){
-	var tabela = $('<table></table>');
-	tabela.append('<tr><td> Ime:</td><td>' +  '<input type = "text" name = "name" value = "'+ data.name + '"</td></tr>');
-	tabela.append('<tr><td> Prezime:</td><td>' +  '<input type = "text" name = "surname" value = "'+ data.surname + '"></td></tr>');
+	var tabela = $('<table class="ombre_table"></table>');
+	tabela.append('<tr><td> Ime:</td></tr>' +  '<tr><td><input type = "text" name = "name" value = "'+ data.name + '"</td></tr>');
+	tabela.append('<tr><td> Prezime:</td></tr>' +  '<tr><td><input type = "text" name = "surname" value = "'+ data.surname + '"></td></tr>');
 	
 	//tabela.append('<tr><td> Korisnicko ime:</td><td>' +  '<input type = "text" name = "username" value = "'+ data.username + '"></td></tr>');
-	tabela.append('<tr><td> Lozinka:</td><td>' +  '<input type = "password" name = "password" value = "'+ data.password + '"></td></tr>');
+	tabela.append('<tr><td> Lozinka:</td></tr>' +  '<tr><td><input type = "password" name = "password" value = "'+ data.password + '"></td></tr>');
 	
-	tabela.append('<tr><td> Email:</td><td>' +  '<input type = "text" name = "email" value = "'+ data.email + '"></td></tr>');
+	tabela.append('<tr><td> Email:</td></tr><tr><td>' +  '<input type = "text" name = "email" value = "'+ data.email + '"></td></tr>');
 	//tabela.append( '<tr><td> Nova slika:</td>' + '<td><input type="file" name = "slika" id = "slika" accept="image/*"> </td></tr>');
-	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji izmene" ></td></tr>');
+	tabela.append('<tr><td></td></tr><tr><td>' +  '<input type = "submit" value = "Posalji izmene" ></td></tr>');
 	var forma = $('<form class = "posaljiIzmeneZaProfil"></form>');
 	//forma.append('<input type = "hidden" value="' + data.id +'">');
 	forma.append(tabela);
-	$('.main').empty();
+	$('#main').empty();
 	//$('.main').append('<img src = "'+ data.slika + '" width= "411px" height= "321">');
-	$('.main').append('<h1>Izmena profila</h1>')
-	$('.main').append(forma)
-	
-	
-	
-	
-	
+	$('#main').append('<div class="ombre_div" id="changeProfile"></div>' );
+	$('#changeProfile').append('<h1>Change your informations:</h1>');
+	$('#changeProfile').append(forma);	
 }
 
 $(document).on('submit', '.posaljiIzmeneZaProfil', function(e){
@@ -102,9 +355,9 @@ $(document).on('submit', '.posaljiIzmeneZaProfil', function(e){
 		contentType: 'application/json',
 		data: formToJSON_profilIZ(password,name,surname,  email),
 		success : function(data){
-			$('.main').empty();
+			$('#main').empty();
 			setJwtToken(TOKEN_KEY, data.accessToken);
-        	$('.main').append('<p>Uspesno ste izmenili podatke.</p>');
+        	$('#main').append('<p>Uspesno ste izmenili podatke.</p>');
 			/*if (file == undefined){
 				$('.main').empty();
 	        	$('.main').append('<p>Uspesno ste izmenili podatke.</p>');
@@ -138,10 +391,10 @@ function formToJSON_profilIZ(password,name,surname,  email) {
 /*DODAVANJE NOVE DESTINACJE*/
 $(document).on('click', '#dodajDest_btn', function(e){
 	e.preventDefault();
-	var tabela = $('<table></table>');
-	tabela.append('<tr><td> Naziv destinacije:</td><td>' +  '<input type = "text" name = "name" ></td></tr>');
-	tabela.append('<tr><td> Koordinate destinacije:</td><td>' +  '<input type = "text" name = "coordinates" ></td></tr>');
-	tabela.append('<tr><td> Opis destinacije:</td><td>' +  '<input type = "text" name = "description" ></td></tr>');
+	var tabela = $('<table class="ombre_table"></table>');
+	tabela.append('<tr><td> Name of destination:</td></tr><tr><td>' +  '<input type = "text" name = "name" ></td></tr>');
+	tabela.append('<tr><td> Destination coordinates:</td></tr><tr><td>' +  '<input type = "text" name = "coordinates" ></td></tr>');
+	tabela.append('<tr><td> Destination description:</td></tr><tr><td>' +  '<input type = "text" name = "description" ></td></tr>');
 	
 	
 	/*tabela.append('<tr><td> Naziv destinacije:</td><td>' +  '<input type = "text" name = "nazivDestinacije" ></td></tr>');
@@ -154,12 +407,13 @@ $(document).on('click', '#dodajDest_btn', function(e){
 			+ '<option>Arhivirana</option>'
 			+'</select></td></tr>');
 	tabela.append( '<tr><td> Slika destinacije:</td>' + '<td><input type="file" name = "slika" id = "slika" accept="image/*"> </td></tr>');*/
-	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
+	tabela.append('<tr><td></td></tr><tr><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
 	var forma = $('<form id = "dodajDestForma" enctype="multipart/form-data"></form>');
 	forma.append(tabela);
-	$('.main').empty();
-	$('.main').append('<h1>Nova destinacija</h1>')
-	$('.main').append(forma)
+	$('#main').empty();
+	$('#main').append('<div class="ombre_div" id="addDestinationForm"></div>')
+	$('#addDestinationForm').append('<h1>New Destination</h1>');
+	$('#addDestinationForm').append(forma);
 })
 
 $(document).on('submit', '#dodajDestForma', function(e){
@@ -225,8 +479,7 @@ function formToJSON_dest(name, coordinates,  description){
 }
 
 /*PRIKAZ DESTINACIJA*/
-$(document).on('click', '#destinacije_btn', function(e){
-	e.preventDefault();
+function getDestinations(){
 	$.ajax({
 		type : 'GET',
 		url : "http://localhost:8080/api/getDestinations",
@@ -237,19 +490,19 @@ $(document).on('click', '#destinacije_btn', function(e){
 			alert("AJAX ERROR: " + errorThrown);
 		}
 	});	
-})
+}
 
 function prikazDestinacija(data){
 	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
-	var tabela = $('<table class = "mainTable"></table>')
+	//var tabela = $('<table class = "mainTable"></table>')
 	/*zagalvlje tabele*/
-	var tr_h = $('<tr></tr>');
+	/*var tr_h = $('<tr></tr>');
 		
 		tr_h.append('<th>Naziv destinacije</th>');
 		tr_h.append('<th>Opis destinacije</th>');
 		tr_h.append('<th>Koordinate destinacije</th>');
 		tr_h.append('<th></th>');
-		
+		*/
 		/*tr_h.append('<th>Naziv destinacije</th>');
 		tr_h.append('<th>Drzava</th>');
 		tr_h.append('<th>Naziv aerodroma</th>');
@@ -258,17 +511,17 @@ function prikazDestinacija(data){
 		tr_h.append('<th>Stanje destinacije</th>');
 		tr_h.append('<th></th>');
 		tr_h.append('<th></th>');*/
+	/*
 	var t_head = $('<thead></thead>');
 	t_head.append(tr_h);
 	tabela.append(t_head);
-	/*telo tabele*/
+	//telo tabele
 	var t_body = $('<tbody></tbody>')
-	$.each(list, function(index, destinacija){
 		var tr = $('<tr></tr>');
 		tr.append('<td>'+ destinacija.name + '</td>');
 		tr.append('<td>'+ destinacija.description + '</td>');
 		tr.append('<td>'+ destinacija.coordinates + '</td>');
-		
+		*/
 		/*tr.append('<td>'+ '<img src= "' + destinacija.slikaDestinacije + '" alt = "nisam nasao" width= "261px" height= "121">' + '</td>');
 		tr.append('<td>'+ destinacija.nazivDestinacije + '</td>');
 		tr.append('<td>'+ destinacija.drzava + '</td>');
@@ -285,9 +538,10 @@ function prikazDestinacija(data){
 		else{
 			forma.append('<input type = "submit" id = "arhiviranje_' + destinacija.nazivDestinacije +'" value = "Arhiviraj">')
 		}*/
+	/*
 		var forma2 = $('<form class = "izmenaDestinacije"></form>')
 		forma2.append('<input type = "hidden" value="' + destinacija.id +'">');
-		forma2.append('<input type = "submit" value = "Izmena">')
+		forma2.append('<input type = "submit" value = "Izmena">');
 		//var td = $('<td></td>');
 		var td2 = $('<td></td>');
 		//td.append(forma);
@@ -295,15 +549,30 @@ function prikazDestinacija(data){
 		//tr.append(td);
 		tr.append(td2);
 		t_body.append(tr);
+	*/
+	$.each(list, function(index, destinacija){
+		var tr1 = $('<tr></tr>');
+		tr1.append('<td><h2>'+destinacija.name+'</h2></td><td></td>');
+		var tr2 = $('<tr></tr>');
+		tr2.append('<td><p>'+destinacija.description+'</p></td>'+'<td align="right"><h3>Coordinates: '+destinacija.coordinates+'</h3></td>');
+		var forma2 = $('<tr><td><input type = "button" name="' + destinacija.id +'" class="izmenaDestinacije" value="Edit destination"></td></tr>');
+		var tr4=$('<tr></tr>');
+		tr4.append('<td><hr /></td><td><hr /></td>');
+		$('#destinationsDisp').append(tr1);
+		$('#destinationsDisp').append(tr2);
+		$('#destinationsDisp').append(forma2);
+		$('#destinationsDisp').append(tr4);
 	});
+	/*
 	tabela.append(t_body);
-	$('.main').empty();
-	$('.main').append(tabela);
+	$('#main').empty();
+	$('#main').append(tabela);
+	*/
 }
 /*IZMENA DESTINACIJA*/
-$(document).on('submit', '.izmenaDestinacije', function(e){	
+$(document).on('click', '.izmenaDestinacije', function(e){	
 	e.preventDefault();
-	var id = $(this).find('input[type=hidden]').val(); 
+	var id = $(this).attr("name");
 	//var adresa = '../Projekat/rest/admini/pronadjiDestinaciju/' + nazivDest;
 	var adresa = "http://localhost:8080/api/getDestination/" + id;
 	
@@ -320,21 +589,22 @@ $(document).on('submit', '.izmenaDestinacije', function(e){
 })
 
 function prikazDestinacijeZaIzmenu(data){
-	var tabela = $('<table></table>');
-	tabela.append('<tr><td> Naziv destinacije:</td><td>' +  '<input type = "text" name = "name" value = "'+ data.name + '"></td></tr>');
-	tabela.append('<tr><td> Opis destinacije:</td><td>' +  '<input type = "text" name = "description" value = "'+ data.description + '"</td></tr>');
-	tabela.append('<tr><td> Koordinate destinacije:</td><td>' +  '<input type = "text" name = "coordinates" value = "'+ data.coordinates + '"></td></tr>');
+	var tabela = $('<table class="ombre_table"></table>');
+	tabela.append('<tr><td> Naziv destinacije:</td></tr><tr><td>' +  '<input type = "text" name = "name" value = "'+ data.name + '"></td></tr>');
+	tabela.append('<tr><td> Opis destinacije:</td></tr><tr><td>' +  '<input type = "text" name = "description" value = "'+ data.description + '"</td></tr>');
+	tabela.append('<tr><td> Koordinate destinacije:</td></tr><tr><td>' +  '<input type = "text" name = "coordinates" value = "'+ data.coordinates + '"></td></tr>');
 	//tabela.append('<tr><td> Kod aerodroma:</td><td>' +  '<input type = "text" name = "kodAerodroma" value = "'+ data.kodAerodroma + '"></td></tr>');
 	//tabela.append('<tr><td> Lokacija:</td><td>' +  '<input type = "text" name = "lokacija" value = "'+ data.lokacija + '"></td></tr>');
 	//tabela.append( '<tr><td> Nova slika:</td>' + '<td><input type="file" name = "slika" id = "slika" accept="image/*"> </td></tr>');
-	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji izmene" ></td></tr>');
+	tabela.append('<tr><td>' +  '<input type = "submit" value = "Posalji izmene" ></td></tr>');
 	var forma = $('<form class = "posaljiIzmeneZaDestinaciju"></form>');
 	forma.append('<input type = "hidden" value="' + data.id +'">');
 	forma.append(tabela);
-	$('.main').empty();
+	$('#main').empty();
+	$('#main').append('<div class="ombre_div" id="destinationEdit"></div>');
 	//$('.main').append('<img src = "'+ data.slikaDestinacije + '"width= "461px" height= "321">');
-	$('.main').append('<h1>Izmena destinacije</h1>')
-	$('.main').append(forma)
+	$('#destinationEdit').append('<h1>Izmena destinacije</h1>');
+	$('#destinationEdit').append(forma);
 }
 
 $(document).on('submit', '.posaljiIzmeneZaDestinaciju', function(e){
@@ -360,8 +630,8 @@ $(document).on('submit', '.posaljiIzmeneZaDestinaciju', function(e){
 		data: formToJSON_destIZ(id,name, description,  coordinates),
 		success : function(data){
 			if (data != null){
-				$('.main').empty();
-				$('.main').append('<p>Uspesno ste izmenili destinaciju.</p>');
+				$('#main').empty();
+				$('#main').append('<p>Uspesno ste izmenili destinaciju.</p>');
 				/*if (file == undefined){
 					$('.main').empty();
 		        	$('.main').append('<p>Uspesno ste izmenili destinaciju.</p>');
@@ -429,7 +699,7 @@ function prikazFormeZaNoviLet(data){
 	var tr2 = $('<tr></tr>');
 	tr2.append('<td> Krajnja destinacija </td>');
 	tr2.append(td2);
-	var tabela = $('<table></table>');
+	var tabela = $('<table class="ombre_table_flight"></table>');
 	tabela.append(tr1);
 	tabela.append(tr2);
 	tabela.append('<tr><td> Datum poletanja:</td> <td><input type = "date" name = "startDate" ></td></tr>');
@@ -460,9 +730,10 @@ function prikazFormeZaNoviLet(data){
 	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
 	var forma = $('<form class = "dodajNoviLet"></form>');
 	forma.append(tabela);
-	$('.main').empty();
-	$('.main').append('<h1>Novi Let</h1>')
-	$('.main').append(forma)
+	$('#main').empty();
+	$('#main').append('<div class="ombre_div_66" id="newFlightForm"></div>')
+	$('#newFlightForm').append('<h1>New Flight</h1>');
+	$('#newFlightForm').append(forma);
 
 }
 
@@ -524,11 +795,11 @@ $(document).on('submit', '.dodajNoviLet', function(e){
 		//data: formToJSON_let(startDestination, endDestination,  economicPrice, businessPrice,firstClassPrice, flightDuration, flightLength, economicCapacity,  buisinesssCapacity, firstClassCapacity,startDate_str,endDate_str),
 		data: formToJSON_let(startDestination, endDestination,  economicPrice, businessPrice,firstClassPrice, flightDuration, flightLength,seats,startDate_str,endDate_str),
 		success : function(data){
-			$('.main').empty();
-        	$('.main').append('<p>Uspesno ste dodali novi let.</p>');
+			$('#main').empty();
+        	$('#main').append('<p>Uspesno ste dodali novi let.</p>');
 			if (data ==  "uspesno"){
-				$('.main').empty();
-	        	$('.main').append('<p>Uspesno ste dodali novi let.</p>');
+				$('#main').empty();
+	        	$('#main').append('<p>Uspesno ste dodali novi let.</p>');
 			}
 			else{
 				alert(data);
