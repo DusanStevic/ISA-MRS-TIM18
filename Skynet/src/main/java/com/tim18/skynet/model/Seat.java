@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,6 +22,18 @@ public class Seat {
 	@Id
 	@GeneratedValue
 	private Long id;
+	
+	/*@ManyToOne
+	@JsonIgnore
+	private Flight flight;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Hotel hotel;*/
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Flight flight;
+	
+	
 	
 	@Column(name = "taken", unique = false, nullable = false)
 	private boolean taken;
@@ -40,9 +53,16 @@ public class Seat {
     @Column(name = "unavailable", unique = false, nullable = false)
    	private boolean unavailable;
     
+    
+    //to do promeni listu u hash set
     @JsonIgnore
 	@OneToMany(mappedBy = "reservedSeat", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	List<SeatReservation> reservations = new ArrayList<SeatReservation>();
+    
+    
+   /* @JsonIgnore
+	@OneToMany(mappedBy = "flight")
+	private Set<FlightReservation> flightReservations = new HashSet<FlightReservation>();*/
 	
 	
 	public Seat() {
@@ -52,6 +72,7 @@ public class Seat {
 	
 	public Seat(boolean taken, int seatRow, int seatColumn, String travelClassa) {
 		super();
+		
 		this.taken = taken;
 		SeatRow = seatRow;
 		SeatColumn = seatColumn;
@@ -131,6 +152,26 @@ public class Seat {
 
 	public void setUnavailable(boolean unavailable) {
 		this.unavailable = unavailable;
+	}
+
+
+
+
+
+	public Flight getFlight() {
+		return flight;
+	}
+
+
+	public void setFlight(Flight flight) {
+		this.flight = flight;
+	}
+	
+	@Override
+	public String toString() {
+		return "Seat [id=" + id + ", flight=" + flight + ", taken=" + taken + ", SeatRow=" + SeatRow + ", SeatColumn="
+				+ SeatColumn + ", travelClassa=" + travelClassa + ", active=" + active + ", unavailable=" + unavailable
+				+ ", reservations=" + reservations + "]";
 	}
 
 

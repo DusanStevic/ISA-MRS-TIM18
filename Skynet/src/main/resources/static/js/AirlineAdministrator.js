@@ -711,16 +711,16 @@ function prikazFormeZaNoviLet(data){
 	tabela.append('<tr><td> Cena karte u eknomskoj klasi:</td> <td><input type = "text" name = "economicPrice" ></td></tr>');
 	tabela.append('<tr><td> Cena karte u biznis klasi:</td> <td><input type = "text" name = "businessPrice" ></td></tr>');
 	tabela.append('<tr><td> Cena karte u prvoj klasi:</td> <td><input type = "text" name = "firstClassPrice" ></td></tr>');
-	tabela.append('<tr><td> Broj mesta:</td> <td><input type = "text" name = "seats" ></td></tr>');
+	//tabela.append('<tr><td> Broj mesta:</td> <td><input type = "text" name = "seats" ></td></tr>');
 	
 	
 	
-	/*tabela.append('<tr><td> Broj redova u ekonomskoj klasi:</td> <td><input type = "text" name = "economicCapacity_rows" ></td></tr>');
+	tabela.append('<tr><td> Broj redova u ekonomskoj klasi:</td> <td><input type = "text" name = "economicCapacity_rows" ></td></tr>');
 	tabela.append('<tr><td> Broj kolona u ekonomskoj klasi:</td> <td><input type = "text" name = "economicCapacity_columns" ></td></tr>');
 	tabela.append('<tr><td> Broj redova u biznis klasi:</td> <td><input type = "text" name = "buisinesssCapacity_rows"> </td></tr>');
 	tabela.append('<tr><td> Broj kolona u biznis klasi:</td> <td><input type = "text" name = "buisinesssCapacity_columns"> </td></tr>');
 	tabela.append('<tr><td> Broj redova u prvoj klasi:</td> <td><input type = "text" name = "firstClassCapacity_rows" ></td></tr>');
-	tabela.append('<tr><td> Broj kolona u prvoj klasi:</td> <td><input type = "text" name = "firstClassCapacity_columns" ></td></tr>');*/
+	tabela.append('<tr><td> Broj kolona u prvoj klasi:</td> <td><input type = "text" name = "firstClassCapacity_columns" ></td></tr>');
 	
 	/*tabela.append('<tr><td> Klasa aviona:</td> <td><select name = "klasaAviona">'
 			+ '<option>Regionalni</option>'
@@ -749,42 +749,42 @@ $(document).on('submit', '.dodajNoviLet', function(e){
 	var flightLength = $(this).find("input[name = flightLength]").val();
 	var seats = $(this).find("input[name = seats]").val();
 	
-	/*var firstClassCapacity_rows = $(this).find("input[name = firstClassCapacity_rows]").val();
+	var firstClassCapacity_rows = $(this).find("input[name = firstClassCapacity_rows]").val();
 	var firstClassCapacity_columns = $(this).find("input[name = firstClassCapacity_columns]").val();
 	var buisinesssCapacity_rows = $(this).find("input[name = buisinesssCapacity_rows]").val();
 	var buisinesssCapacity_columns = $(this).find("input[name = buisinesssCapacity_columns]").val();
 	var economicCapacity_rows = $(this).find("input[name = economicCapacity_rows]").val();
-	var economicCapacity_columns = $(this).find("input[name = economicCapacity_columns]").val();*/
+	var economicCapacity_columns = $(this).find("input[name = economicCapacity_columns]").val();
 	
 	var startDate = $(this).find("input[name = startDate]").val();
 	var startDate_time = $(this).find("input[name = startDate_time]").val();
 	var endDate = $(this).find("input[name = endDate]").val();
 	var endDate_time = $(this).find("input[name = endDate_time]").val();
 	//var klasaAviona = $(this).find("select[name = klasaAviona]").val();
-	/*if (economicPrice == "" || businessPrice == "" || flightDuration == "" || flightLength == "" || economicCapacity_rows == "" || economicCapacity_columns == ""|| buisinesssCapacity_rows == ""||  buisinesssCapacity_columns == ""||  firstClassCapacity_rows == ""||  firstClassCapacity_columns == "" || startDate == "" || startDate_time == "" || endDate == "" || endDate_time == ""){
-		alert("Morate popuniti sva polja!");
-		return false;
-	}*/
-	
-	if (economicPrice == "" || businessPrice == "" || flightDuration == "" || flightLength == "" || seats == ""  || startDate == "" || startDate_time == "" || endDate == "" || endDate_time == ""){
+	if (economicPrice == "" || businessPrice == "" || flightDuration == "" || flightLength == "" || economicCapacity_rows == "" || economicCapacity_columns == ""|| buisinesssCapacity_rows == ""||  buisinesssCapacity_columns == ""||  firstClassCapacity_rows == ""||  firstClassCapacity_columns == "" || startDate == "" || startDate_time == "" || endDate == "" || endDate_time == ""){
 		alert("Morate popuniti sva polja!");
 		return false;
 	}
-	/*if (parseInt(firstClassCapacity_columns) <= 0||parseInt(firstClassCapacity_rows) <= 0||parseInt(buisinesssCapacity_columns) <= 0||parseInt(buisinesssCapacity_rows) <= 0||parseInt(economicCapacity_rows) <= 0 || parseInt(economicCapacity_columns) <= 0 ){
-		alert("Morate uneti pozitivan broj veci od nule!");
+	
+	/*if (economicPrice == "" || businessPrice == "" || flightDuration == "" || flightLength == "" || seats == ""  || startDate == "" || startDate_time == "" || endDate == "" || endDate_time == ""){
+		alert("Morate popuniti sva polja!");
 		return false;
 	}*/
+	if (parseInt(firstClassCapacity_columns) <= 0||parseInt(firstClassCapacity_rows) <= 0||parseInt(buisinesssCapacity_columns) <= 0||parseInt(buisinesssCapacity_rows) <= 0||parseInt(economicCapacity_rows) <= 0 || parseInt(economicCapacity_columns) <= 0 ){
+		alert("Morate uneti pozitivan broj veci od nule!");
+		return false;
+	}
 	var startDate_str = startDate + " " + startDate_time;
 	var endDate_str = endDate + " " + endDate_time;
-	/*var economicCapacity = economicCapacity_rows + "|" + economicCapacity_columns;
+	var economicCapacity = economicCapacity_rows + "|" + economicCapacity_columns;
     var buisinesssCapacity = buisinesssCapacity_rows + "|" + buisinesssCapacity_columns;
-    var firstClassCapacity = firstClassCapacity_rows + "|" + firstClassCapacity_columns;*/
+    var firstClassCapacity = firstClassCapacity_rows + "|" + firstClassCapacity_columns;
 	
 	alert(startDate_str);
 	alert(endDate_str);
-	/*alert(economicCapacity);
+	alert(economicCapacity);
 	alert(buisinesssCapacity);
-	alert(firstClassCapacity);*/
+	alert(firstClassCapacity);
 	
 	$.ajax({
 		type : 'POST',
@@ -792,8 +792,8 @@ $(document).on('submit', '.dodajNoviLet', function(e){
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType: 'application/json',
 		dataType : 'text',
-		//data: formToJSON_let(startDestination, endDestination,  economicPrice, businessPrice,firstClassPrice, flightDuration, flightLength, economicCapacity,  buisinesssCapacity, firstClassCapacity,startDate_str,endDate_str),
-		data: formToJSON_let(startDestination, endDestination,  economicPrice, businessPrice,firstClassPrice, flightDuration, flightLength,seats,startDate_str,endDate_str),
+		data: formToJSON_let(startDestination, endDestination,  economicPrice, businessPrice,firstClassPrice, flightDuration, flightLength, economicCapacity,  buisinesssCapacity, firstClassCapacity,startDate_str,endDate_str),
+		//data: formToJSON_let(startDestination, endDestination,  economicPrice, businessPrice,firstClassPrice, flightDuration, flightLength,seats,startDate_str,endDate_str),
 		success : function(data){
 			$('#main').empty();
         	$('#main').append('<p>Uspesno ste dodali novi let.</p>');
@@ -806,13 +806,13 @@ $(document).on('submit', '.dodajNoviLet', function(e){
 			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown);
+			alert("AJAX ERROR NECE DA MI DODA LET: " + errorThrown);
 		}
 	});	
 	
 })
 
-/*function formToJSON_let(startDestination, endDestination,  economicPrice,businessPrice,firstClassPrice,  flightDuration,flightLength,  economicCapacity,  buisinesssCapacity, firstClassCapacity,startDate_str,endDate_str){
+function formToJSON_let(startDestination, endDestination,  economicPrice,businessPrice,firstClassPrice,  flightDuration,flightLength,  economicCapacity,  buisinesssCapacity, firstClassCapacity,startDate_str,endDate_str){
 	return JSON.stringify({
 		"startDestination" : startDestination,
 		"endDestination" : endDestination,
@@ -827,9 +827,9 @@ $(document).on('submit', '.dodajNoviLet', function(e){
 		"startDate_str" : startDate_str,
 		"endDate_str" : endDate_str
 	});
-}*/
+}
 
-function formToJSON_let(startDestination, endDestination,  economicPrice,businessPrice,firstClassPrice,  flightDuration,flightLength,seats,startDate_str,endDate_str){
+/*function formToJSON_let(startDestination, endDestination,  economicPrice,businessPrice,firstClassPrice,  flightDuration,flightLength,seats,startDate_str,endDate_str){
 	return JSON.stringify({
 		"startDestination" : startDestination,
 		"endDestination" : endDestination,
@@ -842,7 +842,7 @@ function formToJSON_let(startDestination, endDestination,  economicPrice,busines
 		"startDate_str" : startDate_str,
 		"endDate_str" : endDate_str
 	});
-}
+}*/
 
 
 /*function formToJSON_dest(nazivDestinacije, drzava,  nazivAerodroma,  kodAerodoma,  lokacija,  stanjeDestinacije){

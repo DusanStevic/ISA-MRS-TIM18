@@ -1,7 +1,9 @@
 package com.tim18.skynet.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -24,6 +27,10 @@ public class Flight {
 	@GeneratedValue
 	private Long id;
 	
+	@ManyToOne
+	@JsonIgnore
+	private Airline airline;
+	
 	@Column(name = "startDate", unique = false, nullable = false)
 	private Date startDate;
 	
@@ -36,14 +43,32 @@ public class Flight {
 	@Column(name = "flightLength", unique = false, nullable = false)
 	private int flightLength;
 	
-	@Column(name = "seats", unique = false, nullable = false)
-	private int seats;
-	
 	@OneToOne()
 	private Destination startDestination;
 	
 	@OneToOne()
 	private Destination endDestination;
+	
+	@Column(name="rating", nullable = true)
+	private double rating;
+	
+	
+	
+	/*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Seat> seats = new HashSet<Seat>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	List<Room> rooms = new ArrayList<Room>();
+	*/
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "flight", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	//Set<Seat> seats = new HashSet<Seat>();
+	List<Seat> seats = new ArrayList<Seat>();
+	
+	
+	
 	
 	
 	@Column(name = "buisinessPrice", unique = false, nullable = true)
@@ -58,29 +83,25 @@ public class Flight {
 	public Flight() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	
-	
 
 	
-	public Flight(Date startDate, Date endDate, int flightDuration, int flightLength, int seats,
-			Destination startDestination, Destination endDestination, double businessPrice, double economicPrice,
-			double firstClassPrice) {
+	public Flight( Airline airline ,Date startDate, Date endDate, int flightDuration, int flightLength,
+			Destination startDestination, Destination endDestination, List<Seat> seats,
+			double businessPrice, double economicPrice, double firstClassPrice) {
 		super();
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.flightDuration = flightDuration;
 		this.flightLength = flightLength;
-		this.seats = seats;
 		this.startDestination = startDestination;
 		this.endDestination = endDestination;
+		this.seats = seats;
 		this.businessPrice = businessPrice;
 		this.economicPrice = economicPrice;
 		this.firstClassPrice = firstClassPrice;
+		this.airline = airline;
+		this.rating = 0;
 	}
-
-
 
 
 	public Date getStartDate() {
@@ -115,6 +136,21 @@ public class Flight {
 		this.flightLength = flightLength;
 	}
 
+	/*public Set<String> getDestinationsOnTheWay() {
+		return destinationsOnTheWay;
+	}
+
+	public void setDestinationsOnTheWay(Set<String> destinationsOnTheWay) {
+		this.destinationsOnTheWay = destinationsOnTheWay;
+	}
+*/
+	public List<Seat> getSeats() {
+		return seats;
+	}
+
+	public void setSeats(List<Seat> seats) {
+		this.seats = seats;
+	}
 
 	public double getBusinessPrice() {
 		return businessPrice;
@@ -173,38 +209,40 @@ public class Flight {
 	}
 
 
+	
 
 
-
-
-	public int getSeats() {
-		return seats;
+	public double getRating() {
+		return rating;
 	}
 
 
-
-
-
-
-	public void setSeats(int seats) {
-		this.seats = seats;
+	public void setRating(double rating) {
+		this.rating = rating;
 	}
 
 
+	public Airline getAirline() {
+		return airline;
+	}
 
 
+	public void setAirline(Airline airline) {
+		this.airline = airline;
+	}
 
 
 	@Override
 	public String toString() {
-		return "Flight [id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", flightDuration="
-				+ flightDuration + ", flightLength=" + flightLength + ", seats=" + seats + ", startDestination="
-				+ startDestination + ", endDestination=" + endDestination + ", businessPrice=" + businessPrice
-				+ ", economicPrice=" + economicPrice + ", firstClassPrice=" + firstClassPrice + "]";
+		return "Flight [id=" + id + ", airline=" + airline + ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", flightDuration=" + flightDuration + ", flightLength=" + flightLength + ", startDestination="
+				+ startDestination + ", endDestination=" + endDestination + ", rating=" + rating + ", seats=" + seats
+				+ ", businessPrice=" + businessPrice + ", economicPrice=" + economicPrice + ", firstClassPrice="
+				+ firstClassPrice + "]";
 	}
 
 
-
+	
 
 	
 
