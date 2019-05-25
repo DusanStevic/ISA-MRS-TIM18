@@ -33,6 +33,10 @@ public class SeatService {
 	public Seat save(Seat seat) {
 		return repository.save(seat);
 	}
+	
+	public List<Seat> saveAll (List<Seat> seats){
+		return repository.saveAll(seats);
+	}
 
 	public void remove(Long id) {
 		repository.deleteById(id);

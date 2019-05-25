@@ -1,9 +1,9 @@
 package com.tim18.skynet.dto;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.tim18.skynet.model.Flight;
+
 
 
 public class FlightBean {
@@ -17,7 +17,6 @@ public class FlightBean {
 	private Date endDate;
 	private int  flightDuration;
 	private int flightLength;
-	private int seats;
 	private double businessPrice;
 	private double economicPrice;
 	private double firstClassPrice;
@@ -28,8 +27,12 @@ public class FlightBean {
 	private double maxEconomic;
 	private double maxFirstClass;
 	private String flightCompany;
-	
+	private String  economicCapacity;
+	private String buisinesssCapacity;
+	private String firstClassCapacity;
 	private Long id;
+	private Long companyId;
+	private double rate;
 	
 	
 	public FlightBean() {
@@ -37,11 +40,10 @@ public class FlightBean {
 	}
 
 
-	
 	public FlightBean(String startDestination, String endDestination, Date startDate, Date endDate, int flightDuration,
-			int flightLength,int seats, double businessPrice, double economicPrice, double firstClassPrice, double minBusiness,
+			int flightLength, double businessPrice, double economicPrice, double firstClassPrice, double minBusiness,
 			double minEconomic, double minFirstClass, double maxBusiness, double maxEconomic, double maxFirstClass,
-			String flightCompany) {
+			String flightCompany, String economicCapacity, String buisinesssCapacity, String firstClassCapacity, Long companyId) {
 		super();
 		this.startDestination = startDestination;
 		this.endDestination = endDestination;
@@ -49,7 +51,6 @@ public class FlightBean {
 		this.endDate = endDate;
 		this.flightDuration = flightDuration;
 		this.flightLength = flightLength;
-		this.seats = seats;
 		this.businessPrice = businessPrice;
 		this.economicPrice = economicPrice;
 		this.firstClassPrice = firstClassPrice;
@@ -60,7 +61,10 @@ public class FlightBean {
 		this.maxEconomic = maxEconomic;
 		this.maxFirstClass = maxFirstClass;
 		this.flightCompany = flightCompany;
-		
+		this.economicCapacity = economicCapacity;
+		this.buisinesssCapacity = buisinesssCapacity;
+		this.firstClassCapacity = firstClassCapacity;
+		this.companyId = companyId;
 	}
 	
 	public FlightBean(Flight flight, String companyName, String startDate, String endDate) {
@@ -240,6 +244,35 @@ public class FlightBean {
 	}
 
 
+	public String getEconomicCapacity() {
+		return economicCapacity;
+	}
+
+
+	public void setEconomicCapacity(String economicCapacity) {
+		this.economicCapacity = economicCapacity;
+	}
+
+
+	public String getBuisinesssCapacity() {
+		return buisinesssCapacity;
+	}
+
+
+	public void setBuisinesssCapacity(String buisinesssCapacity) {
+		this.buisinesssCapacity = buisinesssCapacity;
+	}
+
+
+	public String getFirstClassCapacity() {
+		return firstClassCapacity;
+	}
+
+
+	public void setFirstClassCapacity(String firstClassCapacity) {
+		this.firstClassCapacity = firstClassCapacity;
+	}
+
 
 	public String getStartDate_str() {
 		return startDate_str;
@@ -271,26 +304,23 @@ public class FlightBean {
 	}
 
 
-	public int getSeats() {
-		return seats;
+	public Long getCompanyId() {
+		return companyId;
 	}
 
 
-	public void setSeats(int seats) {
-		this.seats = seats;
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
 	}
 
 
-	@Override
-	public String toString() {
-		return "FlightBean [startDestination=" + startDestination + ", endDestination=" + endDestination
-				+ ", startDate=" + startDate + ", startDate_str=" + startDate_str + ", endDate_str=" + endDate_str
-				+ ", endDate=" + endDate + ", flightDuration=" + flightDuration + ", flightLength=" + flightLength
-				+ ", seats=" + seats + ", businessPrice=" + businessPrice + ", economicPrice=" + economicPrice
-				+ ", firstClassPrice=" + firstClassPrice + ", minBusiness=" + minBusiness + ", minEconomic="
-				+ minEconomic + ", minFirstClass=" + minFirstClass + ", maxBusiness=" + maxBusiness + ", maxEconomic="
-				+ maxEconomic + ", maxFirstClass=" + maxFirstClass + ", flightCompany=" + flightCompany + ", id=" + id
-				+ "]";
+	public double getRate() {
+		return rate;
+	}
+
+
+	public void setRate(double rate) {
+		this.rate = rate;
 	}
 	
 	

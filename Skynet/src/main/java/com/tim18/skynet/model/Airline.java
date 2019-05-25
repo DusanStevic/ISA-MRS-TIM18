@@ -36,6 +36,9 @@ public class Airline implements Serializable{
 	@OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Flight>  flights = new  HashSet<Flight>();
 	
+	
+	
+	
 	public Airline() {
 		super();
 	}

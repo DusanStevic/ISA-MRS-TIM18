@@ -116,19 +116,45 @@ public class AirlineController {
 				return null;
 			}
 			
+			List<Seat> seats = new ArrayList<Seat>();
+			makeSeats(seats, newFlightInfo.getEconomicCapacity(), "economic");
+			makeSeats(seats, newFlightInfo.getBuisinesssCapacity(), "business");
+			makeSeats(seats, newFlightInfo.getFirstClassCapacity(), "first class");
 			
-			Flight newFlight = new Flight(startDate, endDate, newFlightInfo.getFlightDuration(), newFlightInfo.getFlightLength(),
-					newFlightInfo.getSeats(), startDestination, endDestination,
-					newFlightInfo.getBusinessPrice(), newFlightInfo.getEconomicPrice(),
+			
+			
+			
+			Flight newFlight = new Flight(a, startDate, endDate, newFlightInfo.getFlightDuration(),
+					newFlightInfo.getFlightLength(), startDestination, endDestination,
+					seats, newFlightInfo.getBusinessPrice(), newFlightInfo.getEconomicPrice(), 
 					newFlightInfo.getFirstClassPrice());
-			
-			
 			flightService.save(newFlight);
+			for (Seat seat : seats) {
+				seat.setFlight(newFlight);
+			}
+			
+			seatService.saveAll(seats);
 			a.getFlights().add(newFlight);
 			airlineService.save(a);
 			airlineAdminService.save(airlineAdmin);
 
 			return new ResponseEntity<>(newFlight, HttpStatus.CREATED);
+		}
+		
+		private List<Seat> makeSeats(List<Seat> seats, String capacity, String flightClass) {
+			System.out.println("KAPACITET KOJI JE STIGAO SA FRONTA:"+capacity);
+			int rows = Integer.parseInt(capacity.split("|")[0]);
+			System.out.println("BROJ REDOVA NAKO PARSIRANJA:"+rows);
+			int columns = Integer.parseInt(capacity.split("|")[2]);
+			System.out.println("BROJ KOLONA NAKON PARSIRANJA:"+columns);
+			for (int row = 1; row <= rows; row++) {
+				for (int col = 1; col <= columns; col++) {
+					//Seat s = new Seat(false, row, col, flightClass);
+					//System.out.println("JEDNO SEDISTE U LETU:"+s.getFlight().getAirline().getName());
+					seats.add(new Seat(false, row, col, flightClass));
+				}
+			}
+			return seats;
 		}
 		
 		
