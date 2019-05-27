@@ -26,7 +26,7 @@ $(document).on('click','#makeRes',function(e){
 	$.ajax({
 		type:'POST',
 		url:'/api/roomReservation',
-		//headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',
 		data:inputToRoomReservation(offers, days, roomID, resID),
@@ -116,7 +116,7 @@ function dispHotelOffers(){
 
 function inputToRoomReservation(offers, days, roomID, resID){
 	return JSON.stringify({
-		"roomOffers":offers,
+		"hotelOffers":offers,
 		"days": days,
 		"roomId":roomID,
 		"reservationId":resID,

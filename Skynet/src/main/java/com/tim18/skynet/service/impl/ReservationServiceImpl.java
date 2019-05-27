@@ -2,6 +2,7 @@ package com.tim18.skynet.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tim18.skynet.model.Reservation;
@@ -11,6 +12,7 @@ import com.tim18.skynet.service.ReservationService;
 @Service
 public class ReservationServiceImpl implements ReservationService{
 	
+	@Autowired
 	private ReservationRepository reservationRepository;
 
 	@Override
