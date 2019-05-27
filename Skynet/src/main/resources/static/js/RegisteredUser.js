@@ -341,8 +341,9 @@ $(document).on('submit', '#rezervacija', function(e){
 function prikazLetaZaRezervaciju(data){
 	var tabela = $('<table></table>');
 	//tabela.append('<tr><td> Broj leta:</td><td>'+ data.brLeta + '</td></tr>');
-	tabela.append('<tr><td> Pocetna destinacija:</td><td>'+ data.startDestination.name + '</td></tr>');
-	tabela.append('<tr><td> Krajnja destinacija:</td><td>'+ data.endDestination.name + '</td></tr>');
+	
+	tabela.append('<tr><td> Pocetna destinacija:</td><td>'+ data.startDestination + '</td></tr>');
+	tabela.append('<tr><td> Krajnja destinacija:</td><td>'+ data.endDestination + '</td></tr>');
 	/*tabela.append('<tr><td> Cena:</td><td>'+ data.cenaKarte + '</td></tr>');
 	tabela.append('<tr><td> Datum:</td><td>'+ data.datumLeta + '</td></tr>');
 	tabela.append('<tr><td> Model aviona:</td><td>'+ data.modelAviona + '</td></tr>');
