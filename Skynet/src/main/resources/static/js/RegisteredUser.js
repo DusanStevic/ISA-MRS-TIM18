@@ -549,7 +549,84 @@ function formToJSON_rez(brPutnika, klasa) {
 
 
 /*PRIKAZ REZERVACIJA REGISTERED USERA*/
+/*$(document).on('click', '#mojeRezervacije_btn', function(e){
+	e.preventDefault();
+	$.ajax({
+		type : 'GET',
+		url : '../Projekat/rest/korisnici/korisnikoveRezervacije',
+		dataType: 'json',
+		success : prikazRezervacija,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});	
+})
 
+function prikazRezervacija(data){
+	if (data == null){
+		$('.main').empty();
+		$('.main').append('Vas nalog je blokiran');
+	}
+	else{
+		$('.main').empty();
+		$('.main').append('<h1>Vase rezervacije: <h1>');
+		var tabela = $('<table class = "mainTable" border = "1"></table>')
+		var tr_h = $('<tr></tr>');
+			tr_h.append('<th>Broj rezervacije</th>');
+			tr_h.append('<th>Datum rezervacije</th>');
+			tr_h.append('<th>Klasa</th>');
+			tr_h.append('<th>Broj putnika</th>');
+			tr_h.append('<th>Pocetna destinacija:</th>');
+			tr_h.append('<th>Krajnja destinacija:</th>');
+			tr_h.append('<th>Datum leta:</th>');
+			tr_h.append('<th></th>');
+		tabela.append(tr_h);
+		var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+		$.each(list, function(index, rezervacija){
+			var tr = $('<tr></tr>');
+			tr.append('<td>'+ rezervacija.brRezervacije + '</td>');
+			tr.append('<td>'+ rezervacija.datumIvreme + '</td>');
+			tr.append('<td>'+ rezervacija.klasa + '</td>');
+			tr.append('<td>'+ rezervacija.brPutnika + '</td>');
+			tr.append('<td>'+ rezervacija.pocetnaDest + '</td>');
+			tr.append('<td>'+ rezervacija.krajnjaDest + '</td>');
+			tr.append('<td>'+ rezervacija.datumLeta + '</td>');
+			var forma = $('<form class = "otkazivanjeRezervacije"></form>')
+			forma.append('<input type = "hidden" value="' + rezervacija.brRezervacije +'">');
+			forma.append('<input type = "submit" value = "Otkazi">')
+			var td = $('<td></td>');
+			td.append(forma);
+			tr.append(td);
+			tabela.append(tr);
+		});
+		$('.main').append(tabela);
+	}
+}*/
+
+/*BRISANJE REZERVACIJA REGISTERED USERA*/
+/*$(document).on('submit', '.otkazivanjeRezervacije', function(e){
+	e.preventDefault();
+	var brRez = $(this).find('input[type=hidden]').val();
+	var adresa = '../Projekat/rest/letovi/otkaziRezervaciju/' + brRez;
+	$.ajax({
+		type : 'GET',
+		url : adresa,
+        dataType: 'text',
+        success: function(data){
+        	if (data == 'uspesno'){
+        		$('.main').empty();
+            	$('.main').append('<p>Uspesno ste otkazali rezervaciju.</p>');
+        	}
+        	else{
+        		$('.main').empty();
+            	$('.main').append('<p>' + data + '</p>');
+        	}
+        },
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});
+})*/
 
 
 
