@@ -47,6 +47,11 @@ public class SeatsBean {
 		this.columns = columns;
 	}
 
+	@Override
+	public String toString() {
+		return "SeatsBean [seats=" + seats + ", rows=" + rows + ", columns=" + columns + "]";
+	}
+
 	
 	
 	

@@ -266,7 +266,7 @@ function prikazLetova(data){
 		tr.append('<td>'+ let_.endDate_str + '</td>');
 		tr.append('<td>'+ let_.klasaAviona + '</td>');
 		var forma = $('<form id = "rezervacija"></form>')
-		forma.append('<input type = "hidden" value="' + let_.brLeta +'">');
+		forma.append('<input type = "hidden" value="' + let_.id +'">');
 		forma.append('<input type = "submit" value = "Rezervisi">')
 		var td = $('<td></td>');
 		td.append(forma);
@@ -296,4 +296,128 @@ function formToJSON_pretraga(flightCompany,startDestination,endDestination,start
 		
 	});
 }
+
+
+/*DODAVANJE NOVE REZERVACIJE*/
+
+/*$(document).on('submit', '#filtriranje', function(e){
+	e.preventDefault();
+	var filter = $(this).find('select[name=filter]').val();
+	var adresa = '../Projekat/rest/letovi/filtriranje/' + filter;
+	alert(filter);
+	$.ajax({
+		type : 'GET',
+		url : adresa,
+		dataType: 'json',
+		success : prikazLetova,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});	
+})*/
+
+
+$(document).on('submit', '#rezervacija', function(e){	
+	e.preventDefault();
+	var brLeta = $(this).find('input[type=hidden]').val();
+	alert("OVO JE BROJ LETA KOJI HOCEMO DA REZERVISEMO: " + brLeta);
+	//var adresa = '../Projekat/rest/letovi/pronadjiLet/' + brLeta;
+	var adresa = "http://localhost:8080/api/getFlight/" + brLeta;
+	
+	
+	
+	$.ajax({
+        type : 'GET',
+        url : adresa,
+        headers : createAuthorizationTokenHeader(TOKEN_KEY),
+        dataType: 'json',
+        success: prikazLetaZaRezervaciju,
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});
+})
+
+function prikazLetaZaRezervaciju(data){
+	var tabela = $('<table></table>');
+	//tabela.append('<tr><td> Broj leta:</td><td>'+ data.brLeta + '</td></tr>');
+	tabela.append('<tr><td> Pocetna destinacija:</td><td>'+ data.startDestination.name + '</td></tr>');
+	tabela.append('<tr><td> Krajnja destinacija:</td><td>'+ data.endDestination.name + '</td></tr>');
+	/*tabela.append('<tr><td> Cena:</td><td>'+ data.cenaKarte + '</td></tr>');
+	tabela.append('<tr><td> Datum:</td><td>'+ data.datumLeta + '</td></tr>');
+	tabela.append('<tr><td> Model aviona:</td><td>'+ data.modelAviona + '</td></tr>');
+	tabela.append('<tr><td> Klasa aviona:</td><td>'+ data.klasaAviona + '</td></tr>');*/
+	tabela.append('<tr><td> Broj putnika:</td><td>' +  '<input type = "number" name = "brPutnika"> </td></tr>');
+	tabela.append('<tr><td> Klasa leta:</td> <td><select name = "klasa">'
+			+ '<option>Prva</option>'
+			+ '<option>Biznis</option>'
+			+ '<option>Ekonomska</option>'
+			+'</select></td></tr>');
+	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
+	var forma = $('<form id = "posaljiPodatkeZaRezervaciju"></form>');
+	forma.append(tabela);
+	$('.main').empty();
+	$('.main').append('<h1>Rezervacija leta:</h1>')
+	$('.main').append(forma)
+}
+
+/*$(document).on('submit','#posaljiPodatkeZaRezervaciju', function(e){
+	e.preventDefault();
+	var brPutnika = $(this).find("input[name=brPutnika]").val();
+	var klasa = $(this).find("select[name=klasa]").val();
+	if (brPutnika == "" || klasa == ""){
+		alert("Morate popuniti sva polja!");
+		return false;
+	}
+	if (parseInt(brPutnika) <= 0 ){
+		alert("Morate uneti pozitivan broj veci od nule!");
+		return false;
+	}
+	$.ajax({
+		type : 'POST',
+		url : '../Projekat/rest/letovi/rezervacija',
+		contentType: 'application/json',
+		dataType : 'text',
+		data: formToJSON_rez(brPutnika, klasa),
+		success : function(data){
+			if (data == "uspesno"){
+				$('.main').empty();
+	        	$('.main').append('<p>Uspesno ste rezervisali let.</p>');
+			}
+			else
+			{
+				alert(data)
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});		
+});
+
+
+
+function formToJSON_pretraga(pocetna,krajnja,datum,drzava){
+	return JSON.stringify({
+		"pocetnaDest" : pocetna,
+		"krajnjaDest" : krajnja,
+		"datumLeta" : datum,
+		"drzava": drzava
+	});
+}
+
+function formToJSON_rez(brPutnika, klasa) {
+	return JSON.stringify({
+		"brPutnika" : brPutnika,
+		"klasa" : klasa.toUpperCase()
+	});
+}*/
+
+
+
+/*PRIKAZ REZERVACIJA REGISTERED USERA*/
+
+
+
+
 

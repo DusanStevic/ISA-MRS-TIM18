@@ -169,6 +169,32 @@ public class AirlineController {
 		}
 		
 		
+		
+		@RequestMapping(value = "/api/getFlight/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<FlightBean> getFlight(@PathVariable("id")Long id){
+			System.out.println("ULETEO SAM U PRIKAZ JEDNOG  LETA");
+			
+			
+			Flight f = flightService.findOne(id);
+			if (f == null) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			FlightBean fb = new FlightBean(f, f.getAirline().getName(), sdf2.format(f.getStartDate()),
+					sdf2.format(f.getEndDate()));
+			System.out.println("ONO STO JE PRONADJENO U BAZI"+f.toString());
+			return new ResponseEntity<>(fb, HttpStatus.OK);
+			
+
+			
+		}
+		
+	
+		
+		
+		
+		
+		
+		
 		@RequestMapping(value = "/api/flightSearch", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<ArrayList<FlightBean>> searchFlights(@RequestBody FlightBean search) throws Exception {
 			System.out.println("UPAO SAM U PRETRAGU LETOVA");
@@ -179,7 +205,7 @@ public class AirlineController {
 			DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
 			String companyName = "";
 			for (Flight f : flights) {
-				System.out.println("LET KOJI JE PRONADJEN U BAZI:"+f.toString());
+				//System.out.println("LET KOJI JE PRONADJEN U BAZI:"+f.toString());
 				companyName = getCompanyNameForFlight(f);
 				System.out.println("IME AEROKOMPANIJE KOJA SPROVODI LET:"+companyName);
 				if ((f.getStartDestination().getName().equals(search.getStartDestination())
