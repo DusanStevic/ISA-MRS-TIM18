@@ -834,8 +834,8 @@ $(document).on('submit', "#editOfferForm", function (e) {
 
 $(document).on('click', "#logout", function (e) {
 	removeJwtToken(TOKEN_KEY);
-	window.location.href = "index.html";
-    e.preventDefault();
+	localStorage.clear();
+	window.location.replace("index.html");
 });
 
 function inputToHotelRoom(image, beds, price, desc){

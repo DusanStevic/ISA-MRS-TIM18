@@ -1,5 +1,11 @@
+var TOKEN_KEY = 'jwtToken';
+
 $(window).on("load",function(){
 	if (window.location.href.match('users-hotelProfile.html') != null){
+		var token = getJwtToken(TOKEN_KEY);
+		if(token){
+			generateMenu();
+		}
 		$("#hotelInfo").empty();
 		$("#roomsDisp").empty();
 		var tab = localStorage.getItem("tab");
@@ -234,6 +240,11 @@ function displayCriteria(string_offers){
 }
 
 function displayChoosenCriteria(string_offers) {
+	var token = getJwtToken(TOKEN_KEY);
+	var reservation = "login";
+	if(token){
+		reservation = "reserveRoom";
+	}
 	var sort = localStorage.getItem("sort");
 	if(sort == undefined || sort == null || sort == ""){
 		sort = "1";
@@ -253,7 +264,8 @@ function displayChoosenCriteria(string_offers) {
                 tr.append('<td><img src=' + room.image + ' class="room_display"/></td>');
                 tr.append('<td><table><tr><td><h3>Price per night: ' + room.price + ' </h3></td></tr>' + '<tr><td><h4>Beds: ' + room.bedNumber + '</h4></td></tr>' +
                 '<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
-                '<tr><td><a href="#" id="viewRoom" name="' + room.id + '">More details</a></td></tr></table></td>');
+                '<tr><td><input type = "button" class="blueButton" id="viewRoom" value="More details" name="'+room.id+'"></td></tr>'+
+        		'<tr><td><input type = "button" class="greenButton" id="'+reservation+'" value="Reserve room" name="'+room.id+'"></td></tr>');
                 $('#roomsDisp').append(tr);
             })
         }
@@ -374,13 +386,19 @@ function findRooms(){
 }
 
 function displayRooms(data){
+	var token = getJwtToken(TOKEN_KEY);
+	var reservation = "login";
+	if(token){
+		reservation = "reserveRoom";
+	}
 	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 	$.each(list, function(index, room){
 		var tr=$('<tr></tr>');
 		tr.append('<td><img src='+room.image+' class="room_display"/></td>');
 		tr.append('<td><table><tr><td><h3>Price per night: '+room.price+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr>'+
 		'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
-		'<tr><td><a href="#" id="viewRoom" name="'+room.id+'">More details</a></td></tr>');
+		'<tr><td><input type = "button" class="blueButton" id="viewRoom" value="More details" name="'+room.id+'"></td></tr>'+
+		'<tr><td><input type = "button" class="greenButton" id="'+reservation+'" value="Reserve room" name="'+room.id+'"></td></tr>');
 		$('#roomsDisp').append(tr);
 	})
 }
@@ -448,4 +466,16 @@ function inputToOffersSort(string_offers, sort){
 		"roomOffers":string_offers,
 		"sort": sort,
 	})
+}
+
+function generateMenu(){
+	$('#menubar').empty();
+	$('#menubar').append('<div class="container-fluid">'+
+            '<div class="navbar-header">'+
+      			'<a class="navbar-brand" href="RegisteredUser.html"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>'+
+    		'</div>'+
+		    ' <ul class="nav navbar-nav navbar-right">'+
+      			'<li> <a id = "logout" href = ""><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>'+
+    		'</ul>'+
+        '</div>');
 }

@@ -12,6 +12,10 @@ $(document).on('click','#racSearch',function(){
 });
 
 $(document).ready(function(){
+	var token = getJwtToken(TOKEN_KEY);
+	if(token){
+		generateMenu();
+	}
 	var page = localStorage.getItem("page");
 	if(page == "hotel"){
 		localStorage.setItem("tab", "");
@@ -124,4 +128,16 @@ function displayData1(data){
 		$('#dataDisplay').append(tr1);
 		$('#dataDisplay').append(tr2);
 	})
+}
+
+function generateMenu(){
+	$('#menubar').empty();
+	$('#menubar').append('<div class="container-fluid">'+
+            '<div class="navbar-header">'+
+      			'<a class="navbar-brand" href="RegisteredUser.html"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>'+
+    		'</div>'+
+		    ' <ul class="nav navbar-nav navbar-right">'+
+      			'<li> <a id = "logout" href = ""><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>'+
+    		'</ul>'+
+        '</div>');
 }

@@ -8,6 +8,7 @@
 	<script type="text/javascript" src="js/authorization.js"></script>
 	<script type="text/javascript" src="js/RegisteredUser.js"></script>
   	<script type="text/javascript" src="js/jquery.min.js"></script>
+  	<script type="text/javascript" src="js/displayCompanies.js"></script>
   	<link rel = "stylesheet" type = "text/css" href = "css/style.css" >
   	
   	<link rel="stylesheet" type="text/css" href="css/jquery.seat-charts.css">
@@ -40,12 +41,8 @@
 		        <ul class="dropdown-menu">
 		        	<li><a href = "#" id = "viewUserProfile_button" > View user profile </a></li>
 		  			<li><a href = "#" id = "izmenaProfila_btn" > Edit user profile </a></li>
-		          
 		        </ul>
-		        <li> <a href = "#" id = "korisnici_btn" > <span class="glyphicon glyphicon-list-alt"></span> Korisnici</a></li>
-      			
-      			<li> <a href = "#" id = "pretraga_btn"><span class="glyphicon glyphicon-search"></span> Pretraga</a></li>
-      			
+		        <li> <a href = "#" id = "cart" > <span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
 		        <li>
 		      		<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-thumbs-up"></span> Friends <span class="caret"></span></a>
 			        <ul class="dropdown-menu">
@@ -54,26 +51,16 @@
 			            <li><button   onclick="openCity(event, 'friendRequests')" id="friendR">Friend requests</button></li>
 			        </ul>
 		        </li>
-		        <li>
-		      		<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-book"></span> Reservations <span class="caret"></span></a>
-			        <ul class="dropdown-menu">
-			        	<li><a href = "#" id = "mojeRezervacije_btn" > View reservations </a></li>
-			        	<!-- <li><a href="sysAdmin-addHotel.html" id="addHotel"> View reservations </a></li> -->
-			            <li><a href="sysAdmin-addHotel.html" id="addHotel"> Delete reservations </a></li>
-			            
-			        </ul>
-		        </li>
+		        <li><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-book"></span> Reservations <span class="caret"></span></a></li>
 		     </ul>
 		     <ul class="nav navbar-nav navbar-right">
       			<li> <a id = "logout" href = ""><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
     		</ul>
-		     
-		     
         </div>
     </nav>
     
     <!--Ova klasa main ni posto ne sme da se brise na nju se lepi sadrzaj iz js  -->
-	<div class = "main">
+	<div id = "main">
 	
 	</div>	
 

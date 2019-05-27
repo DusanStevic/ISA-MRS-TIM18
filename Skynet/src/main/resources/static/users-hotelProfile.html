@@ -6,12 +6,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript" src="js/authorization.js"></script>
     <script type="text/javascript" src="js/displayHotelInfo.js"></script>
+    <script type="text/javascript" src="js/reservation.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse" id="menubar">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="index.html"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>
@@ -53,7 +56,48 @@
         <table class="table85" id="hotelOffers">
         </table>
     </div>
-
+    
+    <div id="modal2" class="modal">
+    <div class="reservation_modal_content" id="res">
+    	<span id="close">&times;</span>
+        <div class="left_modalContent">
+            <table id="roomShow">
+            	
+            </table>
+        </div>
+        
+        <table id="offersShow">
+        	
+        </table>
+        
+        <table id="submitReservation"></table>
+    </div>
+    </div>
+    
+	<div id="modal" class="modal">
+        <div class="ombre_div">
+            <span id="closeLogin">&times;</span>
+            <form id ="loginForm">
+                <table class="ombre_table">
+                    <tr>
+                        <td><h3>Username: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="username"/></td>
+                    </tr>
+                    <tr>
+                        <td><h3>Password: </h3></td>
+                    </tr>
+                    <tr>
+                        <td><input type="password" id="password"/></td>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" value="Log in" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
     <script>
     function openCity(evt, cityName) {
         var i, tabcontent, tablinks;
