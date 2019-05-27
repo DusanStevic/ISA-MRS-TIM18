@@ -672,3 +672,68 @@ table.mainTable thead th:first-child {
         	right:0px;
         	width:auto;
         }
+        
+                .greenButton {
+        	background-color: #56f442;
+        	color: black;
+        	min-width:150px;
+        	border: none;
+        	text-align: center;
+        } /* Green */
+        
+        .blueButton {
+        	background-color: #60d2ff;
+        	color: black;
+        	min-width:150px;
+        	border: none;
+        	text-align: center;
+        } /* Blue */
+        
+        .reservation_modal_content{
+        	background-color: white;
+            margin: 5% auto;
+            padding: 2px;
+            width: 850px; 
+            color:black;
+        }
+        
+        .left_modalContent{
+        	width:100%;
+      		left:0%;
+      		position:relative;
+      		background-color: white;
+      		padding:2%;
+        }
+        
+        .right_modal_content{
+        	width:50%;
+        	left:50%;
+        	top:0%;
+        	position:relative;
+      		background: linear-gradient(to bottom, #005963 0%, #12b0cc 100%);
+        }
+        
+        .modal_picture{
+        	width: 100%;
+        }
+        
+        .modal_ombre{
+        	background: linear-gradient(to bottom, #005963 0%, #12b0cc 100%);
+        }
+        
+        .reservation_table{
+			border: 1px solid #ddd;
+        }
+        
+        .reservation_table th, td {
+		  text-align: left;
+		  padding: 5px;
+		}
+        
+        .reservation_table tr:nth-child(even) {
+			  background-color: #f2f2f2
+		}
+		
+		.custom_checkbox{
+			width:5px;
+		}

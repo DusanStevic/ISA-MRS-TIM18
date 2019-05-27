@@ -7,7 +7,6 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -34,7 +33,7 @@ public class RegisteredUser extends User {
 	private Set<FriendRequest> receivedRequests = new HashSet<FriendRequest>();
 
 	@ManyToMany(mappedBy = "passangers", cascade = CascadeType.REFRESH)
-	List<Reservation> reservations = new ArrayList<Reservation>(); 
+	private List<Reservation> reservations = new ArrayList<Reservation>(); 
 	
 	public RegisteredUser() {
 		// TODO Auto-generated constructor stub
@@ -92,7 +91,15 @@ public class RegisteredUser extends User {
 		return true;
 	}
 
+	public List<Reservation> getReservations() {
+		return reservations;
+	}
 
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+
+	
 
 
 

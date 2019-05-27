@@ -3,11 +3,21 @@
  */
 var TOKEN_KEY = 'jwtToken';
 
+$(document).ready(function(e){
+	if (window.location.href.match('RegisteredUser.html') != null) {
+		generateWelcomePage();
+	}
+	else{
+		generateMenu();
+	}
+})
+
 /*LOGOUT REGISTERED USERA*/
 $(document).on('click', '#logout', function(e) {
 	e.preventDefault();
 	removeJwtToken(TOKEN_KEY);
-	window.location.href = "index.html";
+	localStorage.clear();
+	window.location.replace("index.html");
 })
 
 /*PRIKAZ PROFILA REGISTERED USERA*/
@@ -29,16 +39,16 @@ $(document).on('click', '#viewUserProfile_button', function(e){
 function viewUserProfile(user){
 	
 	
-		$('.main').empty();
-		//$('.main').append('<img src = "'+ korisnik.slika + '" width= "409px" height= "318">');
-		$('.main').append('<h1>' +"View user profile"+ '</h1>' );
+		$('#main').empty();
+		//$('#main').append('<img src = "'+ korisnik.slika + '" width= "409px" height= "318">');
+		$('#main').append('<h1>' +"View user profile"+ '</h1>' );
 		var tabela1 = $('<table></table>');
 		tabela1.append('<tr><td> Name:</td><td>' +  user.name +'</td></tr>');
 		tabela1.append('<tr><td> Surname:</td><td>' +  user.surname +'</td></tr>');
 		tabela1.append('<tr><td> Username:</td><td>' +  user.username +'</td></tr>');
 		tabela1.append('<tr><td> Email:</td><td>' +  user.email +'</td></tr>');
 		
-		$('.main').append(tabela1);
+		$('#main').append(tabela1);
 	
 }
 
@@ -71,10 +81,10 @@ function prikazPodatakaZaIzmenu(data){
 	var forma = $('<form class = "posaljiIzmeneZaProfil"></form>');
 	//forma.append('<input type = "hidden" value="' + data.id +'">');
 	forma.append(tabela);
-	$('.main').empty();
-	//$('.main').append('<img src = "'+ data.slika + '" width= "411px" height= "321">');
-	$('.main').append('<h1>Izmena profila</h1>')
-	$('.main').append(forma)
+	$('#main').empty();
+	//$('#main').append('<img src = "'+ data.slika + '" width= "411px" height= "321">');
+	$('#main').append('<h1>Izmena profila</h1>')
+	$('#main').append(forma)
 	
 	
 	
@@ -102,12 +112,12 @@ $(document).on('submit', '.posaljiIzmeneZaProfil', function(e){
 		contentType: 'application/json',
 		data: formToJSON_profilIZ(password,name,surname,  email),
 		success : function(data){
-			$('.main').empty();
+			$('#main').empty();
 			setJwtToken(TOKEN_KEY, data.accessToken);
-        	$('.main').append('<p>Uspesno ste izmenili podatke.</p>');
+        	$('#main').append('<p>Uspesno ste izmenili podatke.</p>');
 			/*if (file == undefined){
-				$('.main').empty();
-	        	$('.main').append('<p>Uspesno ste izmenili podatke.</p>');
+				$('#main').empty();
+	        	$('#main').append('<p>Uspesno ste izmenili podatke.</p>');
 			}
 			else{
 				uploadImage(file);
@@ -156,9 +166,9 @@ $(document).on('click', '#pretraga_btn', function(e){
 	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Pretrazi" ></td></tr>');
 	var forma = $('<form id = "pretragaForma"></form>');
 	forma.append(tabela);
-	$('.main').empty();
-	$('.main').append('<h1>Pretraga</h1>')
-	$('.main').append(forma)
+	$('#main').empty();
+	$('#main').append('<h1>Pretraga</h1>')
+	$('#main').append(forma)
 	alert("IZSAO JE IZ PRETRAGE: ");
 })
 
@@ -223,11 +233,11 @@ $(document).on('submit', '#pretragaForma', function(e){
 
 function prikazLetova(data){
 	if (data == null){
-		$('.main').empty();
-		$('.main').append("Nema pronadjenih letova.");
+		$('#main').empty();
+		$('#main').append("Nema pronadjenih letova.");
 		return;
 	}
-	$('.main').empty();
+	$('#main').empty();
 	var filter = $('<table></table>')
 	filter.append('<tr><td> Filtriraj po:</td> <td><select name = "filter">'
 			+ '<option>Datumu</option>'
@@ -237,8 +247,8 @@ function prikazLetova(data){
 	filter.append('<tr><td>' +  '<input type = "submit" value = "Primeni filter" ></td></tr>');
 	var formaZaFilter = $('<form id = "filtriranje"></form>')
 	formaZaFilter.append(filter);
-	$('.main').append(formaZaFilter);
-	$('.main').append('<br><br>')
+	$('#main').append(formaZaFilter);
+	$('#main').append('<br><br>')
 	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 	var tabela = $('<table class = "mainTable"></table>')
 	var tr_h = $('<tr></tr>');
@@ -274,7 +284,7 @@ function prikazLetova(data){
 		t_body.append(tr);
 	});
 	tabela.append(t_body);
-	$('.main').append(tabela);
+	$('#main').append(tabela);
 }
 
 function formToJSON_pretraga(flightCompany,startDestination,endDestination,startDate,endDate,flightDuration,flightLength,minBusiness,minEconomic,minFirstClass,maxBusiness,maxEconomic,maxFirstClass){
@@ -360,10 +370,10 @@ function prikazLetaZaRezervaciju(data){
 	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
 	var forma = $('<form id = "posaljiPodatkeZaRezervaciju"></form>');
 	forma.append(tabela);
-	$('.main').empty();
-	$('.main').append('<h1>Rezervacija leta:</h1>')
-	$('.main').append(forma)
-	$('.main').append('<div class="container">'+
+	$('#main').empty();
+	$('#main').append('<h1>Rezervacija leta:</h1>')
+	$('#main').append(forma)
+	$('#main').append('<div class="container">'+
 			'<h3 id="relacija-leta"></h3>'+
 			'<div id="seat-map">'+
 				'<div class="front-indicator">Front</div>'+
@@ -514,8 +524,8 @@ function recalculateTotal(sc) {
 		data: formToJSON_rez(brPutnika, klasa),
 		success : function(data){
 			if (data == "uspesno"){
-				$('.main').empty();
-	        	$('.main').append('<p>Uspesno ste rezervisali let.</p>');
+				$('#main').empty();
+	        	$('#main').append('<p>Uspesno ste rezervisali let.</p>');
 			}
 			else
 			{
@@ -564,12 +574,12 @@ function formToJSON_rez(brPutnika, klasa) {
 
 function prikazRezervacija(data){
 	if (data == null){
-		$('.main').empty();
-		$('.main').append('Vas nalog je blokiran');
+		$('#main').empty();
+		$('#main').append('Vas nalog je blokiran');
 	}
 	else{
-		$('.main').empty();
-		$('.main').append('<h1>Vase rezervacije: <h1>');
+		$('#main').empty();
+		$('#main').append('<h1>Vase rezervacije: <h1>');
 		var tabela = $('<table class = "mainTable" border = "1"></table>')
 		var tr_h = $('<tr></tr>');
 			tr_h.append('<th>Broj rezervacije</th>');
@@ -599,7 +609,7 @@ function prikazRezervacija(data){
 			tr.append(td);
 			tabela.append(tr);
 		});
-		$('.main').append(tabela);
+		$('#main').append(tabela);
 	}
 }*/
 
@@ -614,12 +624,12 @@ function prikazRezervacija(data){
         dataType: 'text',
         success: function(data){
         	if (data == 'uspesno'){
-        		$('.main').empty();
-            	$('.main').append('<p>Uspesno ste otkazali rezervaciju.</p>');
+        		$('#main').empty();
+            	$('#main').append('<p>Uspesno ste otkazali rezervaciju.</p>');
         	}
         	else{
-        		$('.main').empty();
-            	$('.main').append('<p>' + data + '</p>');
+        		$('#main').empty();
+            	$('#main').append('<p>' + data + '</p>');
         	}
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -628,6 +638,75 @@ function prikazRezervacija(data){
 	});
 })*/
 
+function generateMenu(){
+	$('#menubar').empty();
+	$('#menubar').append('<div class="container-fluid">'+
+            '<div class="navbar-header">'+
+      			'<a class="navbar-brand" href="RegisteredUser.html"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>'+
+    		'</div>'+
+            '<ul class="nav navbar-nav ">'+
+                '<li><a href="RegisteredUser.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>'+
+                '<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> Profile<span class="caret"></span></a>'+
+		        '<ul class="dropdown-menu">'+
+		        	'<li><a href = "#" id = "viewUserProfile_button" > View user profile </a></li>'+
+		  			'<li><a href = "#" id = "izmenaProfila_btn" > Edit user profile </a></li>'+
+		        '</ul>'+
+		        '<li> <a href = "#" id = "korisnici_btn" > <span class="glyphicon glyphicon-list-alt"></span> Korisnici</a></li>'+
+      			'<li> <a href = "#" id = "pretraga_btn"><span class="glyphicon glyphicon-search"></span> Pretraga</a></li>'+
+		        '<li>'+
+		      		'<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-thumbs-up"></span> Friends <span class="caret"></span></a>'+
+			        '<ul class="dropdown-menu">'+
+			        	'<li><button   onclick="openCity(event, \'listOfFriends\')" id="listOfFri">List of friends</button></li>'+
+			            '<li><button   onclick="openCity(event, \'addFriends\')" id="addFrie">Add friends</button></li>'+
+			            '<li><button   onclick="openCity(event, \'friendRequests\')" id="friendR">Friend requests</button></li>'+
+			        '</ul>'+
+		       ' </li>'+
+		       ' <li>'+
+		      		'<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-book"></span> Reservations <span class="caret"></span></a>'+
+			        '<ul class="dropdown-menu">'+
+			        	'<li><a href = "#" id = "mojeRezervacije_btn" > View reservations </a></li>'+
+			        	'<!-- <li><a href="sysAdmin-addHotel.html" id="addHotel"> View reservations </a></li> -->'+
+			            '<li><a href="sysAdmin-addHotel.html" id="addHotel"> Delete reservations </a></li>'+
+			        '</ul>'+
+		       ' </li>'+
+		     '</ul>'+
+		    ' <ul class="nav navbar-nav navbar-right">'+
+      			'<li> <a id = "logout" href = ""><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>'+
+    		'</ul>'+
+        '</div>');
+}
 
+function generateWelcomePage(){
+	$('#menubar').empty();
+	$('#main').append('<div class="blue_middle_container">'+
+			'<table class="middle_table">'+
+	        '<tr>'+
+	            '<td>'+
+	                '<table>'+
+	                    '<tr><td><h1>Welcome to Skynet!</h1></td></tr>'+
+	                    '<tr><td><p>To start the search on our site, choose whether you want to search information about airline companies, hotels or rent-a-car services registered on our site.</p></td></tr>'+
+	                    '<tr><td><p>You can now book flights, hotel rooms and vehicles, as well as to access our full offer, just start yout search!.</p></td></tr>'+
+	                '</table>'+
+	            '</td>'+
+	        '</tr>'+
+	        '<tr>'+
+	            '<td>'+
+	                '<table class="middle_table">'+
+	                    '<tr>'+
+	                        '<td><div class="hover_image"><a href="companiesDisplay.html" id="airlineSearch"><img src="images/plane.png" class="hover_image" /></a></div></td>'+
+	                        '<td><div class="hover_image"><a href="companiesDisplay.html" id="hotelSearch"><img src="images/hotel.png" class="hover_image" /></a></div></td>'+
+	                        '<td><div class="hover_image"><a href="rentacar.html" id="racSearch"><img src="images/rac.png" class="hover_image" /></a></div></td>'+
+	                    '</tr>'+
+	                    '<tr>'+
+	                        '<td class="central"><h4><b>Airline</b></h4></td>'+
+	                        '<td class="central"><h4><b>Hotel</b></h4></td>'+
+	                        '<td class="central"><h4><b>Rent-A-Car Service</b></h4></td>'+
+	                    '</tr>'+
+	                '</table>'+
+	            '</td>'+
+	        '</tr> '+
+	    '</table>'+
+	'</div>' );
+}
 
 

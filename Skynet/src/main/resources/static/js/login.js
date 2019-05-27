@@ -1,5 +1,19 @@
 var TOKEN_KEY = 'jwtToken';
 
+$(document).on('click', '#login', function (e) {
+    var modal = document.getElementById('modal');
+    var span = document.getElementById("closeLogin");
+    modal.style.display = "block";
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+})
+
 $(document).on('submit', "#loginForm", function(e){
 	e.preventDefault();
 	var username = $("#username").val();
@@ -18,17 +32,21 @@ $(document).on('submit', "#loginForm", function(e){
 				setJwtToken(TOKEN_KEY, data.accessToken);
 				console.log(data.userRoleName)
 				if (data.userRoleName == "ROLE_HOTEL_ADMIN") {
-					window.location.href = "hotelAdmin-hotelProfile.html";
+					localStorage.setItem("pageat", "hotelAdmin");
+					window.location.replace("hotelAdmin-hotelProfile.html");
 				} else if (data.userRoleName == "ROLE_AIRLINE_ADMIN") {
-					window.location.href = "AirlineAdministrator.html"
+					localStorage.setItem("pageat", "airlineAdmin");
+					window.location.replace("AirlineAdministrator.html");
 				} else if (data.userRoleName == "ROLE_RENTACAR_ADMIN") {
-					console.log('Role is rentacardmin');
-					window.location.href = "racAdmin-home.html";
+					localStorage.setItem("pageat", "racAdmin");
+					window.location.replace("racAdmin-home.html");
 				} 
 				else if (data.userRoleName=="ROLE_USER"){
-					window.location.href = "RegisteredUser.html";
+					localStorage.setItem("pageat", "user");
+					window.location.replace("RegisteredUser.html");
 				}else{
-					window.location.href="sysAdmin-home.html";
+					localStorage.setItem("pageat", "sys");
+					window.location.replace("sysAdmin-home.html");
 				}
 			}
 		},

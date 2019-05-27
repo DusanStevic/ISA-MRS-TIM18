@@ -25,7 +25,6 @@ import com.tim18.skynet.dto.RoomOffersDTO;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.Room;
-import com.tim18.skynet.model.RoomOffer;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
 import com.tim18.skynet.service.impl.HotelServiceImpl;
 import com.tim18.skynet.service.impl.RoomServiceImpl;
