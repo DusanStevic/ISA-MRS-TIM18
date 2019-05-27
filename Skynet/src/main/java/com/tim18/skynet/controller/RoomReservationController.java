@@ -25,7 +25,9 @@ import com.tim18.skynet.service.HotelOfferService;
 import com.tim18.skynet.service.ReservationService;
 import com.tim18.skynet.service.RoomReservationService;
 import com.tim18.skynet.service.RoomService;
+import com.tim18.skynet.service.UserService;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
+import com.tim18.skynet.service.impl.ReservationServiceImpl;
 
 
 @RestController
@@ -36,36 +38,41 @@ public class RoomReservationController {
 	
 	@Autowired
 	private CustomUserDetailsService userInfoService;
+
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private RoomService roomService;
 	
 	@Autowired
-	private ReservationService reservationService;
+	private ReservationServiceImpl reservationService;
 	
 	@Autowired
 	private HotelOfferService hotelOfferService;
 	
 	@RequestMapping( value="/api/roomReservation",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
 	public Reservation reserveRoom(@RequestBody RoomReservationDTO temp){
-		//RegisteredUser user = (RegisteredUser) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		
-		//if(user == null){
-			//return null;
-		//}
+		RegisteredUser user = (RegisteredUser) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		
-		Reservation reservation = reservationService.findOne(temp.getReservationId());
+		if(user == null){
+			return null;
+		}
+		
+		long rid = 34;
+		Reservation reservation = reservationService.findOne(rid);
 		
 		Room room = roomService.findOne(temp.getRoomId());
 		System.out.println("Nasao sam sobu: "+room.getPrice());
 		
 		RoomReservation roomReservation = new RoomReservation();
 		
-		if(reservation.getPassangers().isEmpty() || reservation.getSeatReservations().isEmpty()){
-			return null;
-		}
+		//if(reservation.getPassangers().isEmpty() || reservation.getSeatReservations().isEmpty()){
+			//return null;
+		//}
 		
-		Date startDate = reservation.getSeatReservations().get(0).getCheckOu();
+		Date startDate = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(startDate);
 		calendar.add(Calendar.DATE, temp.getDays());
@@ -90,10 +97,8 @@ public class RoomReservationController {
 		reservation.getRoomReservations().add(roomReservation);
 		
 		roomReservationService.save(roomReservation);
-		//reservationService.save(reservation);
 		roomService.save(room);
-		
-		return reservation;
+		return reservationService.save(reservation);
 	}
 	
 	@RequestMapping( value="/api/getAvailableRooms/res_id",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

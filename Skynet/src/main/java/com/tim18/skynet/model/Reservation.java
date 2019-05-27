@@ -25,16 +25,18 @@ public class Reservation {
 	private Long id;
 	@Column(nullable = false)
 	private double totalPrice;
+	@Column(nullable = false)
+	private boolean completed;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private List<SeatReservation> seatReservations;
+	private List<SeatReservation> seatReservations = new ArrayList<SeatReservation>();
 	@JsonIgnore
 	@OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private List<RoomReservation> roomReservations;
+	private List<RoomReservation> roomReservations = new ArrayList<RoomReservation>();
 	@JsonIgnore
 	@OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private List<CarReservation> carReservations;
+	private List<CarReservation> carReservations = new ArrayList<CarReservation>();
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "reserving", joinColumns = @JoinColumn(name="reservation_id", referencedColumnName="id"),
@@ -77,12 +79,20 @@ public class Reservation {
 	public void setPassangers(List<RegisteredUser> passangers) {
 		this.passangers = passangers;
 	}
-	public Reservation(Long id, double totalPrice, List<SeatReservation> seatReservations,
+	
+	public boolean isCompleted() {
+		return completed;
+	}
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+	public Reservation(Long id, double totalPrice, boolean completed, List<SeatReservation> seatReservations,
 			List<RoomReservation> roomReservations, List<CarReservation> carReservations,
 			List<RegisteredUser> passangers) {
 		super();
 		this.id = id;
 		this.totalPrice = totalPrice;
+		this.completed = completed;
 		this.seatReservations = seatReservations;
 		this.roomReservations = roomReservations;
 		this.carReservations = carReservations;
@@ -91,6 +101,4 @@ public class Reservation {
 	public Reservation() {
 		super();
 	}
-	
-	
 }
