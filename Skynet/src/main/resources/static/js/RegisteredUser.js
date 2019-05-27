@@ -342,6 +342,7 @@ $(document).on('submit', '#rezervacija', function(e){
 
 var firstSeatLabel = 1;
 function prikazLetaZaRezervaciju(data){
+	alert("OVO JE ONO STO JE POSLATO IZ BAZE NA FRONT: " + data.id);
 	var tabela = $('<table></table>');
 	//tabela.append('<tr><td> Broj leta:</td><td>'+ data.brLeta + '</td></tr>');
 	
@@ -403,12 +404,12 @@ function prikazLetaZaRezervaciju(data){
      ],
      seats: {
        f: {
-         price   : 100,
+         price   : data.firstClassPrice,
          classes : 'first-class', //your custom CSS class
          category: 'First Class'
        },
        e: {
-         price   : 40,
+         price   : data.economicPrice,
          classes : 'economy-class', //your custom CSS class
          category: 'Economy Class'
        }         
