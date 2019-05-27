@@ -166,13 +166,16 @@ public class Seat {
 	public void setFlight(Flight flight) {
 		this.flight = flight;
 	}
-	
-	@Override
+
+
+	/*@Override
 	public String toString() {
 		return "Seat [id=" + id + ", flight=" + flight + ", taken=" + taken + ", SeatRow=" + SeatRow + ", SeatColumn="
 				+ SeatColumn + ", travelClassa=" + travelClassa + ", active=" + active + ", unavailable=" + unavailable
 				+ ", reservations=" + reservations + "]";
 	}
+	*/
+	
 
 
 	

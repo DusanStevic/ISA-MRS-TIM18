@@ -322,6 +322,20 @@ public class FlightBean {
 	public void setRate(double rate) {
 		this.rate = rate;
 	}
+
+
+	@Override
+	public String toString() {
+		return "FlightBean [startDestination=" + startDestination + ", endDestination=" + endDestination
+				+ ", startDate=" + startDate + ", startDate_str=" + startDate_str + ", endDate_str=" + endDate_str
+				+ ", endDate=" + endDate + ", flightDuration=" + flightDuration + ", flightLength=" + flightLength
+				+ ", businessPrice=" + businessPrice + ", economicPrice=" + economicPrice + ", firstClassPrice="
+				+ firstClassPrice + ", minBusiness=" + minBusiness + ", minEconomic=" + minEconomic + ", minFirstClass="
+				+ minFirstClass + ", maxBusiness=" + maxBusiness + ", maxEconomic=" + maxEconomic + ", maxFirstClass="
+				+ maxFirstClass + ", flightCompany=" + flightCompany + ", economicCapacity=" + economicCapacity
+				+ ", buisinesssCapacity=" + buisinesssCapacity + ", firstClassCapacity=" + firstClassCapacity + ", id="
+				+ id + ", companyId=" + companyId + ", rate=" + rate + "]";
+	}
 	
 	
 
