@@ -350,7 +350,7 @@ $(document).on('submit', '#rezervacija', function(e){
 
 
 
-var firstSeatLabel = 1;
+
 function prikazLetaZaRezervaciju(data){
 	alert("OVO JE ONO STO JE POSLATO IZ BAZE NA FRONT: " + data.id);
 	var tabela = $('<table></table>');
@@ -368,12 +368,77 @@ function prikazLetaZaRezervaciju(data){
 			+ '<option>Biznis</option>'
 			+ '<option>Ekonomska</option>'
 			+'</select></td></tr>');
-	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
-	var forma = $('<form id = "posaljiPodatkeZaRezervaciju"></form>');
+	/*tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
+	var forma = $('<form id = "posaljiPodatkeZaRezervaciju"></form>');*/
+	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Sedista" ></td></tr>');
+	var forma = $('<form id = "sedista"></form>');
+	forma.append('<input type = "hidden" value="' + data.id +'">');
+	
+	
+	
+	
+	
+	
 	forma.append(tabela);
 	$('#main').empty();
 	$('#main').append('<h1>Rezervacija leta:</h1>')
 	$('#main').append(forma)
+	
+}
+
+
+/*RENDEROVANJE SEDISTA*/
+
+$(document).on('submit', '#sedista', function(e){	
+	e.preventDefault();
+	var brLeta = $(this).find('input[type=hidden]').val();
+	alert("OVO JE BROJ LETA CIJA SEDISTA HOCU DA POKUPIM: " + brLeta);
+	//var adresa = '../Projekat/rest/letovi/pronadjiLet/' + brLeta;
+	var adresa = "http://localhost:8080/api/getSeatsOnFlight/" + brLeta;
+	
+	
+	
+	$.ajax({
+        type : 'GET',
+        url : adresa,
+        headers : createAuthorizationTokenHeader(TOKEN_KEY),
+        dataType: 'json',
+        success: prikazSedistaZaRezervaciju,
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});
+})
+
+
+
+var firstSeatLabel = 1;
+function prikazSedistaZaRezervaciju(data){
+	alert("ULETEO SAM U RENDEROVANJE SEDISTA");
+	/*var tabela = $('<table></table>');
+	//tabela.append('<tr><td> Broj leta:</td><td>'+ data.brLeta + '</td></tr>');
+	
+	tabela.append('<tr><td> Pocetna destinacija:</td><td>'+ data.startDestination + '</td></tr>');
+	tabela.append('<tr><td> Krajnja destinacija:</td><td>'+ data.endDestination + '</td></tr>');
+	tabela.append('<tr><td> Cena:</td><td>'+ data.cenaKarte + '</td></tr>');
+	tabela.append('<tr><td> Datum:</td><td>'+ data.datumLeta + '</td></tr>');
+	tabela.append('<tr><td> Model aviona:</td><td>'+ data.modelAviona + '</td></tr>');
+	tabela.append('<tr><td> Klasa aviona:</td><td>'+ data.klasaAviona + '</td></tr>');
+	tabela.append('<tr><td> Broj putnika:</td><td>' +  '<input type = "number" name = "brPutnika"> </td></tr>');
+	tabela.append('<tr><td> Klasa leta:</td> <td><select name = "klasa">'
+			+ '<option>Prva</option>'
+			+ '<option>Biznis</option>'
+			+ '<option>Ekonomska</option>'
+			+'</select></td></tr>');
+	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
+	var forma = $('<form id = "posaljiPodatkeZaRezervaciju"></form>');
+	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Sedista" ></td></tr>');
+	var forma = $('<form id = "sedista"></form>');
+	
+	
+	forma.append(tabela);*/
+	$('#main').empty();
+	$('#main').append('<h1> RENDEROVANJE SEDISTA:</h1>')
 	$('#main').append('<div class="container">'+
 			'<h3 id="relacija-leta"></h3>'+
 			'<div id="seat-map">'+
@@ -506,7 +571,9 @@ function recalculateTotal(sc) {
  return total;
 }
 	
-
+	
+	
+	
 
 
 

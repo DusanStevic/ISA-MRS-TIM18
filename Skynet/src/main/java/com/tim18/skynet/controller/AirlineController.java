@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tim18.skynet.dto.DestinationBean;
 import com.tim18.skynet.dto.FlightBean;
 import com.tim18.skynet.dto.ImageDTO;
+import com.tim18.skynet.dto.SeatsBean;
 import com.tim18.skynet.model.Airline;
 import com.tim18.skynet.model.AirlineAdmin;
 import com.tim18.skynet.model.Destination;
@@ -188,6 +189,67 @@ public class AirlineController {
 			
 		}
 		
+		
+		@RequestMapping(value = "/api/getSeatsOnFlight/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<SeatsBean> getSeatsOnFlight(@PathVariable("id") Long id){
+			System.out.println("ULETEO SAM U RENDEROVANJE SEDISTA");
+			Flight flight = flightService.findOne(id);
+			List<Seat> seats = new ArrayList<Seat>();
+			int economicCapacity_rows = 0;
+			int economicCapacity_columns = 0;
+			int buisinesssCapacity_rows = 0;
+			int buisinesssCapacity_columns = 0;
+			int firstClassCapacity_rows = 0;
+			int firstClassCapacity_columns = 0;
+			double businessPrice = 0;
+			double economicPrice = 0;
+			double firstClassPrice = 0;
+			for (Seat seat : flight.getSeats()) {
+				switch (seat.getTravelClassa()) {
+				case "economic":
+					seats.add(seat);
+					if (seat.getFlight().getEconomicPrice() > economicPrice) {
+						economicPrice = seat.getFlight().getEconomicPrice();
+					}
+					
+					
+					if (seat.getSeatRow() > economicCapacity_rows) {
+						economicCapacity_rows = seat.getSeatRow();
+					}
+					if (seat.getSeatColumn() > economicCapacity_columns) {
+						economicCapacity_columns = seat.getSeatColumn();
+					}
+				break;
+
+				
+				default:
+					System.out.println("Invalid Flight class!");    
+				}
+
+		
+				/*if (seat.getTravelClassa().equals("economic")) {
+					seats.add(seat);
+					if (seat.getFlight().getEconomicPrice() > economicPrice) {
+						economicPrice = seat.getFlight().getEconomicPrice();
+					}
+					
+					
+					if (seat.getSeatRow() > economicCapacity_rows) {
+						economicCapacity_rows = seat.getSeatRow();
+					}
+					if (seat.getSeatColumn() > economicCapacity_columns) {
+						economicCapacity_columns = seat.getSeatColumn();
+					}
+				}*/
+				
+				
+			}
+			
+			System.out.println("BROJ REDOVA U EKONOMSKOJ KLASI"+economicCapacity_rows);
+			System.out.println("BROJ KOLONA U EKONOMSKOJ KLASI"+economicCapacity_columns);
+			SeatsBean sb = new SeatsBean(seats, economicCapacity_rows, economicCapacity_columns, buisinesssCapacity_rows, buisinesssCapacity_columns, firstClassCapacity_rows, firstClassCapacity_columns, businessPrice, economicPrice, firstClassPrice);
+			return new ResponseEntity<>(sb, HttpStatus.OK);
+		}
 	
 		
 		
