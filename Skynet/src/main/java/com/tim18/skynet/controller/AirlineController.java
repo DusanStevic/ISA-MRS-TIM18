@@ -220,6 +220,36 @@ public class AirlineController {
 						economicCapacity_columns = seat.getSeatColumn();
 					}
 				break;
+				
+				case "business":
+					seats.add(seat);
+					if (seat.getFlight().getBusinessPrice() > businessPrice) {
+						businessPrice = seat.getFlight().getBusinessPrice();
+					}
+					
+					
+					if (seat.getSeatRow() > buisinesssCapacity_rows) {
+						buisinesssCapacity_rows = seat.getSeatRow();
+					}
+					if (seat.getSeatColumn() > buisinesssCapacity_columns) {
+						buisinesssCapacity_columns = seat.getSeatColumn();
+					}
+				break;
+				
+				case "first class":
+					seats.add(seat);
+					if (seat.getFlight().getFirstClassPrice() > firstClassPrice) {
+						firstClassPrice = seat.getFlight().getFirstClassPrice();
+					}
+					
+					
+					if (seat.getSeatRow() > firstClassCapacity_rows) {
+						firstClassCapacity_rows = seat.getSeatRow();
+					}
+					if (seat.getSeatColumn() > firstClassCapacity_columns) {
+						firstClassCapacity_columns  = seat.getSeatColumn();
+					}
+				break;
 
 				
 				default:
@@ -245,8 +275,18 @@ public class AirlineController {
 				
 			}
 			
-			System.out.println("BROJ REDOVA U EKONOMSKOJ KLASI"+economicCapacity_rows);
-			System.out.println("BROJ KOLONA U EKONOMSKOJ KLASI"+economicCapacity_columns);
+			System.out.println("BROJ REDOVA U EKONOMSKOJ KLASI:"+economicCapacity_rows);
+			System.out.println("BROJ KOLONA U EKONOMSKOJ KLASI:"+economicCapacity_columns);
+			System.out.println("CENA U EKONOMSKOJ KLASI:"+economicPrice);
+			
+			System.out.println("BROJ REDOVA U BUSINESS KLASI:"+buisinesssCapacity_rows);
+			System.out.println("BROJ KOLONA U BUSINESS KLASI:"+buisinesssCapacity_columns);
+			System.out.println("CENA U BUSINESS KLASI:"+businessPrice);
+			
+			System.out.println("BROJ REDOVA U FIRST KLASI:"+firstClassCapacity_rows);
+			System.out.println("BROJ KOLONA U FIRST KLASI:"+firstClassCapacity_columns);
+			System.out.println("CENA U FIRST KLASI:"+firstClassPrice);
+			
 			SeatsBean sb = new SeatsBean(seats, economicCapacity_rows, economicCapacity_columns, buisinesssCapacity_rows, buisinesssCapacity_columns, firstClassCapacity_rows, firstClassCapacity_columns, businessPrice, economicPrice, firstClassPrice);
 			return new ResponseEntity<>(sb, HttpStatus.OK);
 		}
