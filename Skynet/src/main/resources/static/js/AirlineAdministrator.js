@@ -260,8 +260,10 @@ $(document).on('submit', "#uploadImageForm", function(event){
 $(document).on('click', '#logout_button', function(e) {
 	e.preventDefault();
 	removeJwtToken(TOKEN_KEY);
+	localStorage.clear();
 	window.location.href = "index.html";
 })
+
 
 /*PRIKAZ PROFILA AIRLINE ADMINISTRATORA*/
 $(document).on('click', '#viewUserProfile_button', function(e){
