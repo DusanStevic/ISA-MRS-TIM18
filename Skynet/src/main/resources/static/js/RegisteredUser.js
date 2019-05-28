@@ -462,7 +462,49 @@ function prikazSedistaZaRezervaciju(data){
 				'<div id="legend"></div>'+
 			'</div>'+
 		'</div>');
-	 var $cart = $('#selected-seats'),
+	
+	$('.seatCharts-row').remove();
+	//$('.booking-details').empty();
+	
+	var economicCapacity_rows=data.economicCapacity_rows;
+	var economicCapacity_columns=data.economicCapacity_columns;
+	var buisinesssCapacity_rows=data.buisinesssCapacity_rows;
+	var buisinesssCapacity_columns= data.buisinesssCapacity_columns;
+	var firstClassCapacity_rows= data.firstClassCapacity_rows;
+	var firstClassCapacity_columns= data.firstClassCapacity_columns;
+	
+	var lista=[];
+	for(var i=1; i<=firstClassCapacity_rows; i++){
+		var rowFirst='';
+		for(var j=1; j<=firstClassCapacity_columns; j++){
+			rowFirst+='f';
+		}
+		lista.push(rowFirst);
+	}
+	for(var i=1; i<=economicCapacity_rows; i++){
+		var rowEconomic='';
+		for(var j=1; j<=economicCapacity_columns; j++){
+			rowEconomic+='e';
+		}
+		lista.push(rowEconomic);
+	}
+	for(var i=1; i<=buisinesssCapacity_rows; i++){
+		var rowBusiness='';
+		for(var j=1; j<=buisinesssCapacity_columns; j++){
+			rowBusiness+='b';
+		}
+		lista.push(rowBusiness);
+	}
+	console.log(lista)
+	var $cart = $('#selected-seats'),
+	$counter = $('#counter'),
+	$total = $('#total'),
+	sc = $('#seat-map').seatCharts({
+	map: lista,
+	
+	
+	
+/*	 var $cart = $('#selected-seats'),
      $counter = $('#counter'),
      $total = $('#total'),
      sc = $('#seat-map').seatCharts({
@@ -477,7 +519,7 @@ function prikazSedistaZaRezervaciju(data){
        'ee_ee',
        'eeeee',
        'bbbbb',
-     ],
+     ],*/
      seats: {
        f: {
          price   : data.firstClassPrice,
