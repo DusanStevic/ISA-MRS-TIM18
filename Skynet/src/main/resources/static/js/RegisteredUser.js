@@ -415,28 +415,6 @@ $(document).on('submit', '#sedista', function(e){
 var firstSeatLabel = 1;
 function prikazSedistaZaRezervaciju(data){
 	alert("ULETEO SAM U RENDEROVANJE SEDISTA");
-	/*var tabela = $('<table></table>');
-	//tabela.append('<tr><td> Broj leta:</td><td>'+ data.brLeta + '</td></tr>');
-	
-	tabela.append('<tr><td> Pocetna destinacija:</td><td>'+ data.startDestination + '</td></tr>');
-	tabela.append('<tr><td> Krajnja destinacija:</td><td>'+ data.endDestination + '</td></tr>');
-	tabela.append('<tr><td> Cena:</td><td>'+ data.cenaKarte + '</td></tr>');
-	tabela.append('<tr><td> Datum:</td><td>'+ data.datumLeta + '</td></tr>');
-	tabela.append('<tr><td> Model aviona:</td><td>'+ data.modelAviona + '</td></tr>');
-	tabela.append('<tr><td> Klasa aviona:</td><td>'+ data.klasaAviona + '</td></tr>');
-	tabela.append('<tr><td> Broj putnika:</td><td>' +  '<input type = "number" name = "brPutnika"> </td></tr>');
-	tabela.append('<tr><td> Klasa leta:</td> <td><select name = "klasa">'
-			+ '<option>Prva</option>'
-			+ '<option>Biznis</option>'
-			+ '<option>Ekonomska</option>'
-			+'</select></td></tr>');
-	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
-	var forma = $('<form id = "posaljiPodatkeZaRezervaciju"></form>');
-	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Sedista" ></td></tr>');
-	var forma = $('<form id = "sedista"></form>');
-	
-	
-	forma.append(tabela);*/
 	$('#main').empty();
 	$('#main').append('<h1> RENDEROVANJE SEDISTA:</h1>')
 	$('#main').append('<div class="container">'+
@@ -464,7 +442,7 @@ function prikazSedistaZaRezervaciju(data){
 		'</div>');
 	
 	$('.seatCharts-row').remove();
-	//$('.booking-details').empty();
+	
 	
 	var economicCapacity_rows=data.economicCapacity_rows;
 	var economicCapacity_columns=data.economicCapacity_columns;
@@ -502,24 +480,6 @@ function prikazSedistaZaRezervaciju(data){
 	sc = $('#seat-map').seatCharts({
 	map: lista,
 	
-	
-	
-/*	 var $cart = $('#selected-seats'),
-     $counter = $('#counter'),
-     $total = $('#total'),
-     sc = $('#seat-map').seatCharts({
-     map: [
-       'ff_ff',
-       'ff_ff',
-       'ee_ee',
-       'ee_ee',
-       'ee___',
-       'ee_ee',
-       'ee_ee',
-       'ee_ee',
-       'eeeee',
-       'bbbbb',
-     ],*/
      seats: {
        f: {
          price   : data.firstClassPrice,
