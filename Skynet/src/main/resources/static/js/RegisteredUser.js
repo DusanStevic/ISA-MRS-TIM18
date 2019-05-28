@@ -411,6 +411,7 @@ function prikazLetaZaRezervaciju(data){
        'ee_ee',
        'ee_ee',
        'eeeee',
+       'bbbbb',
      ],
      seats: {
        f: {
@@ -422,7 +423,12 @@ function prikazLetaZaRezervaciju(data){
          price   : data.economicPrice,
          classes : 'economy-class', //your custom CSS class
          category: 'Economy Class'
-       }         
+       },
+       b: {
+			price:data.businessPrice,
+			classes:'business-class',
+			category:'Business Class'
+		}
      
      },
      naming : {
@@ -436,6 +442,7 @@ function prikazLetaZaRezervaciju(data){
          items : [
          [ 'f', 'available',   'First Class' ],
          [ 'e', 'available',   'Economy Class'],
+         [ 'b', 'available',   'Business Class'],
          [ 'f', 'unavailable', 'Already Booked']
          ]         
      },
