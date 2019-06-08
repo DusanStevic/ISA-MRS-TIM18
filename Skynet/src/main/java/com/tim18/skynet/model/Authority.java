@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tim18.skynet.enums.UserRoleName;
 
 @Entity
 @Table(name="authority")

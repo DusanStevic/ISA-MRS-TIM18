@@ -23,11 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tim18.skynet.dto.AdminDTO;
 import com.tim18.skynet.dto.UserDTO;
+import com.tim18.skynet.enums.UserRoleName;
 import com.tim18.skynet.model.AirlineAdmin;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.RACAdmin;
 import com.tim18.skynet.model.User;
-import com.tim18.skynet.model.UserRoleName;
+
 import com.tim18.skynet.model.UserTokenState;
 import com.tim18.skynet.security.TokenHelper;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;

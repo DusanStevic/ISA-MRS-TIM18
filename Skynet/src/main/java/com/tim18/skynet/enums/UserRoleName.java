@@ -1,4 +1,4 @@
-package com.tim18.skynet.model;
+package com.tim18.skynet.enums;
 
 public enum UserRoleName {
 	ROLE_USER,
