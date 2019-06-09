@@ -3,6 +3,7 @@
   <groupId>com.Tim18</groupId>
   <artifactId>Skynet</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
   <name>Skynet</name>
   <description>ISA-MRS-TIM18 PROJEKAT</description>
   
