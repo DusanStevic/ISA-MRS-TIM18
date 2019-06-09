@@ -1,4 +1,4 @@
-insert into user (dtype, id, username, password, name, surname, email, enabled,last_password_reset_date, first_time)values('User',1,'admin','$2a$10$c7jv8zcmZoNkjkLZAdTE5OmvmPddtMzMn6GLYt62lymTYu5vdpfpG','Stojko', 'Stojanovic', 'stojko@example.com', true, '2019-04-28 21:00:00', true);
+insert into user (dtype, id, username, password, name, surname, email, enabled,last_password_reset_date, first_time)values('User',1,'admin','$2a$10$c7jv8zcmZoNkjkLZAdTE5OmvmPddtMzMn6GLYt62lymTYu5vdpfpG','Stojko', 'Stojanovic', 'stojko@example.com', true, '2019-04-28 21:00:00', 1);
 insert into authority (id, name) values (1, 'ROLE_SYSTEM_ADMIN');
 insert into user_authority (user_id, authority_id) values(1,1);
 insert into airline (id,name,address, description, image ) values (1, 'JAT','Batajnica', 'Low cost', 'images/airline1.jpg');
