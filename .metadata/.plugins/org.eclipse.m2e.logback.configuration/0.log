@@ -1,15 +1,1 @@
 2019-04-03 10:06:14,725 [Worker-2: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
-2019-06-10 10:20:42,466 [Worker-68] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
-2019-06-10 10:20:43,168 [Worker-68] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
-2019-06-10 10:20:43,340 [Worker-68] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 83 resources
-2019-06-10 10:20:43,839 [Worker-68] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
-2019-06-10 10:20:43,839 [Worker-68] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Dule\Desktop\ISA-MRS\ISA-MRS-TIM18\Skynet\src\test\resources
-2019-06-10 10:20:45,808 [Worker-68] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
-2019-06-10 10:20:45,824 [Worker-68] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
-2019-06-10 10:20:45,839 [Worker-68] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 83 resources
-2019-06-10 10:20:45,995 [Worker-68] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
-2019-06-10 10:20:45,995 [Worker-68] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Dule\Desktop\ISA-MRS\ISA-MRS-TIM18\Skynet\src\test\resources
-2019-06-10 10:24:22,153 [Worker-71] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
-2019-06-10 10:24:22,184 [Worker-71] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
-2019-06-10 10:24:22,200 [Worker-71] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 83 resources
-2019-06-10 10:24:22,309 [Worker-71] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
