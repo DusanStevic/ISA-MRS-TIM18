@@ -15,17 +15,3 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.core.jobs 4 2 2019-06-10 14:40:24.518
-!MESSAGE An internal error occurred during: "Periodic workspace save.".
-!STACK 0
-java.lang.NumberFormatException: null
-	at java.lang.Integer.parseInt(Unknown Source)
-	at java.lang.Integer.parseInt(Unknown Source)
-	at org.eclipse.core.internal.resources.SaveManager.validateMasterTableBeforeSave(SaveManager.java:1617)
-	at org.eclipse.core.internal.resources.SaveManager.saveMasterTable(SaveManager.java:1285)
-	at org.eclipse.core.internal.resources.SaveManager.saveMasterTable(SaveManager.java:1277)
-	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1254)
-	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1165)
-	at org.eclipse.core.internal.resources.DelayedSnapshotJob.run(DelayedSnapshotJob.java:52)
-	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
