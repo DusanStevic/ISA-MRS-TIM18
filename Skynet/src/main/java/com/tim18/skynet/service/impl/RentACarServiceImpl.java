@@ -1,6 +1,6 @@
 package com.tim18.skynet.service.impl;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.tim18.skynet.dto.RentACarDTO;
 import com.tim18.skynet.model.RentACar;
-import com.tim18.skynet.model.Car;
 import com.tim18.skynet.repository.RentACarRepository;
 import com.tim18.skynet.service.RentACarService;
 
@@ -88,6 +87,16 @@ public class RentACarServiceImpl implements RentACarService {
 		}
 	*/
 		return available;
+	}
+
+	@Override
+	public List<RentACar> search2(String name, String address, Date checkin, Date checkout) {
+		if(name != null){
+			return rentacarsRepository.findByNameAndAddressAndDateAndBeds(name, address, checkin, checkout);
+		}
+		else{
+			return rentacarsRepository.findByAddressAndDateAndBeds(address, checkin, checkout);
+		}
 	}
 
 }
