@@ -350,7 +350,7 @@ $(document).on('submit', '#rezervacija', function(e){
 
 
 
-
+var firstSeatLabel = 1;
 function prikazLetaZaRezervaciju(data){
 	alert("OVO JE ONO STO JE POSLATO IZ BAZE NA FRONT: " + data.id);
 	var tabela = $('<table></table>');
@@ -368,55 +368,12 @@ function prikazLetaZaRezervaciju(data){
 			+ '<option>Biznis</option>'
 			+ '<option>Ekonomska</option>'
 			+'</select></td></tr>');
-	/*tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
-	var forma = $('<form id = "posaljiPodatkeZaRezervaciju"></form>');*/
-	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Sedista" ></td></tr>');
-	var forma = $('<form id = "sedista"></form>');
-	forma.append('<input type = "hidden" value="' + data.id +'">');
-	
-	
-	
-	
-	
-	
+	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
+	var forma = $('<form id = "posaljiPodatkeZaRezervaciju"></form>');
 	forma.append(tabela);
 	$('#main').empty();
 	$('#main').append('<h1>Rezervacija leta:</h1>')
 	$('#main').append(forma)
-	
-}
-
-
-/*RENDEROVANJE SEDISTA*/
-
-$(document).on('submit', '#sedista', function(e){	
-	e.preventDefault();
-	var brLeta = $(this).find('input[type=hidden]').val();
-	alert("OVO JE BROJ LETA CIJA SEDISTA HOCU DA POKUPIM: " + brLeta);
-	//var adresa = '../Projekat/rest/letovi/pronadjiLet/' + brLeta;
-	var adresa = "http://localhost:8080/api/getSeatsOnFlight/" + brLeta;
-	
-	
-	
-	$.ajax({
-        type : 'GET',
-        url : adresa,
-        headers : createAuthorizationTokenHeader(TOKEN_KEY),
-        dataType: 'json',
-        success: prikazSedistaZaRezervaciju,
-        error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown);
-		}
-	});
-})
-
-
-
-var firstSeatLabel = 1;
-function prikazSedistaZaRezervaciju(data){
-	alert("ULETEO SAM U RENDEROVANJE SEDISTA");
-	$('#main').empty();
-	$('#main').append('<h1> RENDEROVANJE SEDISTA:</h1>')
 	$('#main').append('<div class="container">'+
 			'<h3 id="relacija-leta"></h3>'+
 			'<div id="seat-map">'+
@@ -440,46 +397,21 @@ function prikazSedistaZaRezervaciju(data){
 				'<div id="legend"></div>'+
 			'</div>'+
 		'</div>');
-	
-	$('.seatCharts-row').remove();
-	
-	
-	var economicCapacity_rows=data.economicCapacity_rows;
-	var economicCapacity_columns=data.economicCapacity_columns;
-	var buisinesssCapacity_rows=data.buisinesssCapacity_rows;
-	var buisinesssCapacity_columns= data.buisinesssCapacity_columns;
-	var firstClassCapacity_rows= data.firstClassCapacity_rows;
-	var firstClassCapacity_columns= data.firstClassCapacity_columns;
-	
-	var lista=[];
-	for(var i=1; i<=firstClassCapacity_rows; i++){
-		var rowFirst='';
-		for(var j=1; j<=firstClassCapacity_columns; j++){
-			rowFirst+='f';
-		}
-		lista.push(rowFirst);
-	}
-	for(var i=1; i<=economicCapacity_rows; i++){
-		var rowEconomic='';
-		for(var j=1; j<=economicCapacity_columns; j++){
-			rowEconomic+='e';
-		}
-		lista.push(rowEconomic);
-	}
-	for(var i=1; i<=buisinesssCapacity_rows; i++){
-		var rowBusiness='';
-		for(var j=1; j<=buisinesssCapacity_columns; j++){
-			rowBusiness+='b';
-		}
-		lista.push(rowBusiness);
-	}
-	console.log(lista)
-	var $cart = $('#selected-seats'),
-	$counter = $('#counter'),
-	$total = $('#total'),
-	sc = $('#seat-map').seatCharts({
-	map: lista,
-	
+	 var $cart = $('#selected-seats'),
+     $counter = $('#counter'),
+     $total = $('#total'),
+     sc = $('#seat-map').seatCharts({
+     map: [
+       'ff_ff',
+       'ff_ff',
+       'ee_ee',
+       'ee_ee',
+       'ee___',
+       'ee_ee',
+       'ee_ee',
+       'ee_ee',
+       'eeeee',
+     ],
      seats: {
        f: {
          price   : data.firstClassPrice,
@@ -490,12 +422,7 @@ function prikazSedistaZaRezervaciju(data){
          price   : data.economicPrice,
          classes : 'economy-class', //your custom CSS class
          category: 'Economy Class'
-       },
-       b: {
-			price:data.businessPrice,
-			classes:'business-class',
-			category:'Business Class'
-	   },	
+       }         
      
      },
      naming : {
@@ -509,7 +436,6 @@ function prikazSedistaZaRezervaciju(data){
          items : [
          [ 'f', 'available',   'First Class' ],
          [ 'e', 'available',   'Economy Class'],
-         [ 'b', 'available',   'Business Class'],
          [ 'f', 'unavailable', 'Already Booked']
          ]         
      },
@@ -573,9 +499,7 @@ function recalculateTotal(sc) {
  return total;
 }
 	
-	
-	
-	
+
 
 
 
@@ -770,9 +694,9 @@ function generateWelcomePage(){
 	            '<td>'+
 	                '<table class="middle_table">'+
 	                    '<tr>'+
-	                        '<td><div class="hover_image"><a href="companiesDisplay.html" id="airlineSearch"><img src="images/plane.png" class="hover_image" /></a></div></td>'+
-	                        '<td><div class="hover_image"><a href="companiesDisplay.html" id="hotelSearch"><img src="images/hotel.png" class="hover_image" /></a></div></td>'+
-	                        '<td><div class="hover_image"><a href="rentacar.html" id="racSearch"><img src="images/rac.png" class="hover_image" /></a></div></td>'+
+	                        '<td><div class="hover_image"><a href="search.html" id="airlineSearch"><img src="images/plane.png" class="hover_image" /></a></div></td>'+
+	                        '<td><div class="hover_image"><a href="search.html" id="hotelSearch"><img src="images/hotel.png" class="hover_image" /></a></div></td>'+
+	                        '<td><div class="hover_image"><a href="search.html" id="racSearch"><img src="images/rac.png" class="hover_image" /></a></div></td>'+
 	                    '</tr>'+
 	                    '<tr>'+
 	                        '<td class="central"><h4><b>Airline</b></h4></td>'+

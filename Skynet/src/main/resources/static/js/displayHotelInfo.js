@@ -255,7 +255,7 @@ function displayChoosenCriteria(string_offers) {
         url: '/api/searchRooms/'+id,
         contentType: 'application/json',
         dataType: 'json',
-        data: inputToOffersSort(string_offers, sort),
+        data: inputToRoomSearchDTO(sort,string_offers),
         success: function (data) {
             $("#roomsDisp").empty();
             var list = data == null ? [] : (data instanceof Array ? data : [data]);
@@ -377,9 +377,9 @@ function findRooms(){
 	}
 	$.ajax({
 		type:'POST',
-		url:'/api/getRooms/'+id,
+		url:'/api/getAvailableRooms/'+id,
 		dataType:'json',
-		data: inputToSort(sort),
+		data: inputToRoomSearchDTO(sort,null),
 		contentType: 'application/json',
 		success:displayRooms
 	})
@@ -458,6 +458,16 @@ function inputToSort(sort){
 	return JSON.stringify({
 		"sort":sort,
 		"roomOffers":null,
+	})
+}
+
+function inputToRoomSearchDTO(sort,roomOffers){
+	return JSON.stringify({
+		"sort":sort,
+		"roomOffers":roomOffers,
+		"checkin":localStorage.getItem("checkin"),
+		"checkout":localStorage.getItem("checkout"),
+		"beds":localStorage.getItem("guests"),
 	})
 }
 

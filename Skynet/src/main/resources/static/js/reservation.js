@@ -31,7 +31,15 @@ $(document).on('click','#makeRes',function(e){
 		dataType:'json',
 		data:inputToRoomReservation(offers, days, roomID, resID),
 		success:function(data){
-			alert("reservation added!");
+			if(data == null){
+				alert("Reservation could not be added in cart. Please check if you are trying to make another reservation until you have not completed current one.");
+			}
+			else{
+				alert("Reservation added!");
+			}
+		},
+		error:function(){
+			alert("Reservation could not be added in cart. Please check if you are trying to make another reservation until you have not completed current one.");
 		}
 	});
 });
@@ -46,18 +54,21 @@ $(document).on('click','.custom_checkbox',function(e){
 		totalPrice = totalPrice - price;
 	}
 	$('#submitReservation').empty();
-	$('#submitReservation').append('<tr><td><h4><b>Total price: '+totalPrice+'</b></h4></td></tr>');
+	$('#TotPrice').empty();
+	$('#TotPrice').append('<tr><td><h4><b>Total price: '+totalPrice+'</b></h4></td></tr>');
     $('#submitReservation').append('<tr><td><input type="button" id="makeRes" value = "Reserve Room" class="greenButton"/></td></tr>');
 });
 
 function displayRoomReservation(room){
+	totalPrice=room.price;
 	$('#roomShow').empty();
 	$('#submitReservation').empty();
+	$('#TotPrice').empty();
 	var tr2=$('<tr></tr>');
     tr2.append('<td><img src="'+room.image+'" class="modal_picture"/></td>');
-    tr2.append('<td align="top"><table class="reservation_table" id="roomResInfo"></table></td>');
+    tr2.append('<td align="top"><table id="roomResInfo"></table></td>');
     $('#roomShow').append(tr2);
-    $('#roomResInfo').append('<tr><td><b>Beds:'+room.bedNumber+'</b></td></tr>');
+    $('#roomResInfo').append('<tr><td><b>Beds:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp'+room.bedNumber+'</b></td></tr>');
 
     $.ajax({
         type: 'POST',
@@ -68,10 +79,7 @@ function displayRoomReservation(room){
 
     dispHotelOffers();
     
-    totalPrice=room.price;
     
-    $('#submitReservation').append('<tr><td><h4><b>Total price: '+totalPrice+'</b></h4></td></tr>');
-    $('#submitReservation').append('<tr><td><input type="button" id="makeRes" value = "Reserve Room" class="greenButton"/></td></tr>');
     
     var modal = document.getElementById('modal2');
 	var span = document.getElementById("close");
@@ -88,9 +96,11 @@ function displayRoomReservation(room){
 
 function displayResInfo(res){
 	totalPrice = totalPrice * res.days;
-    $('#roomResInfo').append('<tr><td><b>Start date: '+res.startDate+'</b></td></tr>');
-    $('#roomResInfo').append('<tr><td><b>End date: '+res.endDate+'</b></td></tr>');
-    $('#roomResInfo').append('<tr><td><b>Price:'+totalPrice+'</b></td></tr>');
+    $('#roomResInfo').append('<tr><td><b>Checkin:&nbsp &nbsp &nbsp'+res.startDate+'</b></td></tr>');
+    $('#roomResInfo').append('<tr><td><b>Checkout:&nbsp &nbsp'+res.endDate+'</b></td></tr>');
+    $('#roomResInfo').append('<tr><td><b>Price:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp'+totalPrice+'</b></td></tr>');
+    $('#TotPrice').append('<tr><td><h4><b>Total price: '+totalPrice+'</b></h4></td></tr>');
+    $('#submitReservation').append('<tr><td><input type="button" id="makeRes" value = "Reserve Room" class="greenButton"/></td></tr>');
 }
 
 function dispHotelOffers(){
@@ -120,6 +130,8 @@ function inputToRoomReservation(offers, days, roomID, resID){
 		"days": days,
 		"roomId":roomID,
 		"reservationId":resID,
+		"checkin":localStorage.getItem("checkin"),
+		"checkout":localStorage.getItem("checkout"),
 	})
 }
 

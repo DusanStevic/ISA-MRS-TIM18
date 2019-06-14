@@ -1,7 +1,11 @@
 package com.tim18.skynet.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -22,6 +26,7 @@ import com.tim18.skynet.comparator.RoomPriceComparatorHighToLow;
 import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.dto.RoomDTO;
 import com.tim18.skynet.dto.RoomOffersDTO;
+import com.tim18.skynet.dto.RoomSearchDTO;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.Room;
@@ -61,6 +66,27 @@ public class RoomController {
 		}
 	}
 	
+	@RequestMapping( value="/api/getAvailableRooms/{h_id}",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Collection<Room> getAvailableRooms(@PathVariable(value = "h_id") Long hotelId, @RequestBody RoomSearchDTO search){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date d1 = null;
+		Date d2 = null;
+		try {
+			d1 = sdf.parse(search.getCheckin());
+			d2 = sdf.parse(search.getCheckout());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		if(search.getSort().equals("1")){
+			return sortRoomsLowToHigh(roomService.search(hotelId, d1, d2, search.getBeds()));
+		}
+		else{
+			return sortRoomsHighToLow(roomService.search(hotelId, d1, d2, search.getBeds()));
+		}
+	}
+	
 	@RequestMapping( value="/api/searchForRooms",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
 	public List<Room> searchRooms( @Valid @RequestBody RoomOffersDTO roomOffers) {
 		System.out.println(roomOffers.getSort());
@@ -92,16 +118,28 @@ public class RoomController {
 	}
 	
 	@RequestMapping( value="/api/searchRooms/{id}",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
-	public List<Room> searchRoomsID(@PathVariable(value = "id") Long id, @Valid @RequestBody RoomOffersDTO roomOffers) {
+	public List<Room> searchRoomsID(@PathVariable(value = "id") Long id, @Valid @RequestBody RoomSearchDTO search) {
 		Hotel hotel = hotelService.findOne(id);
-		if(roomOffers.getRoomOffers().isEmpty()){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date d1 = null;
+		Date d2 = null;
+		try {
+			d1 = sdf.parse(search.getCheckin());
+			d2 = sdf.parse(search.getCheckout());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		List<Room> rrom = roomService.search(id, d1, d2, search.getBeds());
+		if(search.getRoomOffers().isEmpty()){
 			return hotel.getRooms();
 		}
 		List<Room> rooms = new ArrayList<Room>();
-		for(Room r : hotel.getRooms()){
+		for(Room r : rrom){
 			boolean containsAll = true;
 			if(r.getRoomOffers().size() > 0){
-				for(String off : roomOffers.getRoomOffers()){
+				for(String off : search.getRoomOffers()){
 					if(r.containsOffer(off) == false){
 						containsAll = false;
 						break;
@@ -112,7 +150,7 @@ public class RoomController {
 				}
 			}
 		}
-		if(roomOffers.getSort().equals("1")){
+		if(search.getSort().equals("1")){
 			return sortRoomsLowToHigh(rooms);
 		}
 		else{

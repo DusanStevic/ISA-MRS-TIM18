@@ -676,7 +676,7 @@ table.mainTable thead th:first-child {
                 .greenButton {
         	background-color: #56f442;
         	color: black;
-        	min-width:150px;
+        	width:150px;
         	border: none;
         	text-align: center;
         } /* Green */
@@ -695,22 +695,6 @@ table.mainTable thead th:first-child {
             padding: 2px;
             width: 850px; 
             color:black;
-        }
-        
-        .left_modalContent{
-        	width:100%;
-      		left:0%;
-      		position:relative;
-      		background-color: white;
-      		padding:2%;
-        }
-        
-        .right_modal_content{
-        	width:50%;
-        	left:50%;
-        	top:0%;
-        	position:relative;
-      		background: linear-gradient(to bottom, #005963 0%, #12b0cc 100%);
         }
         
         .modal_picture{
@@ -737,3 +721,26 @@ table.mainTable thead th:first-child {
 		.custom_checkbox{
 			width:5px;
 		}
+		
+		.tirkiz_div{
+        	background: #42e5f4;
+        	top:20%;
+        	left:25%;
+        	right:25%;
+        	width:50%;
+            position:relative;
+            padding:50px;
+            color:black;
+            overflow:hidden;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+        
+        .tirkiz_div input select{
+        	width:60%;
+        	color:black;
+        }
+        
+        .sub_table{
+        	margin-right: 20%;
+        	margin-left: 20%;
+        }

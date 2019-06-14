@@ -22,10 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tim18.skynet.dto.AirlineSearchDTO;
 import com.tim18.skynet.dto.CarSearchDTO;
 import com.tim18.skynet.dto.CompanyDTO;
+import com.tim18.skynet.dto.HotelSearchDTO;
 import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.dto.RentACarSearchDTO;
+import com.tim18.skynet.model.Airline;
 import com.tim18.skynet.model.Branch;
 import com.tim18.skynet.model.Car;
 import com.tim18.skynet.model.Hotel;
@@ -285,6 +288,40 @@ public class RACController {
 			Collection<Car> vehs = vehicleService.search(vehicleSearchDTO);
 			return new ResponseEntity<>(vehs, HttpStatus.OK);
 		}
+		
+		@RequestMapping(value = "/api/searchedRacs", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+		public Collection<RentACar> getSearched(@RequestBody HotelSearchDTO search) {
+			/*
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date date1 = null;
+			Date date2 = null;
+			try {
+				date1 = sdf.parse(search.getDeparture());
+				date2 = sdf.parse(search.getArrival());
+			} catch (ParseException e) {
+				System.out.println("Neuspesno parsiranje datuma");
+				return null;
+			}
+			if(date1.before(new Date()) || date2.before(new Date())){
+				return null;
+			}
+			
+			int beds = search.getPassangers();
+			String name = search.getName();
+			String start = search.getStartDestination();
+			String end = search.getEndDestination();
+			
+			if(name == "" || name == null){
+				name = null;
+			}
+			
+			List<Hotel> hotels = hotelService.search(name, address, date1, date2, beds);
+			return hotels;
+		*/
+			return null;
+		}
 	}
+
+
 
 
