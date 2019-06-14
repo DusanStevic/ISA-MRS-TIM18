@@ -20,3 +20,4 @@ public class LoggedDTO {
 		this.token = token;
 	}
 }
+

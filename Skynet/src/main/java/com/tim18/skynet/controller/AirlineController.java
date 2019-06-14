@@ -1,5 +1,6 @@
 package com.tim18.skynet.controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -496,13 +497,14 @@ public class AirlineController {
 	
 	@RequestMapping(value = "/api/searchedAirlines", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Collection<Airline> getSearched(@RequestBody AirlineSearchDTO search) {
-		/*
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date1 = null;
 		Date date2 = null;
 		try {
 			date1 = sdf.parse(search.getDeparture());
-			date2 = sdf.parse(search.getArrival());
+			if(search.getArrival() != ""){
+				date2 = sdf.parse(search.getArrival());
+			}
 		} catch (ParseException e) {
 			System.out.println("Neuspesno parsiranje datuma");
 			return null;
@@ -511,7 +513,7 @@ public class AirlineController {
 			return null;
 		}
 		
-		int beds = search.getPassangers();
+		int passangers = search.getPassangers();
 		String name = search.getName();
 		String start = search.getStartDestination();
 		String end = search.getEndDestination();
@@ -520,10 +522,8 @@ public class AirlineController {
 			name = null;
 		}
 		
-		List<Hotel> hotels = hotelService.search(name, address, date1, date2, beds);
-		return hotels;
-	*/
-		return null;
+		List<Airline> airlines = airlineService.search(name, start, end, date1, passangers);
+		return airlines;
 	}
 
 	

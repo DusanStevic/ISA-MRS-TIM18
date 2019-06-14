@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.tim18.skynet.model.Hotel;
 
 public interface HotelRepository extends JpaRepository<Hotel, Long>{
+	
 	@Query("SELECT DISTINCT h FROM Hotel h " +
 			   "WHERE lower(h.name) like lower(concat('%', ?1,'%')) " + 
 			   "AND lower(h.address) like lower(concat('%', ?2,'%')) " +
