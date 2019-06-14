@@ -1,6 +1,7 @@
 package com.tim18.skynet.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,12 +10,14 @@ import org.springframework.stereotype.Service;
 
 import com.tim18.skynet.dto.CarSearchDTO;
 import com.tim18.skynet.model.Car;
+import com.tim18.skynet.model.Room;
 import com.tim18.skynet.repository.CarRepository;
+import com.tim18.skynet.service.CarService;
 
 
 
 @Service
-public class CarServiceImpl {
+public class CarServiceImpl implements CarService{
 
 	@Autowired
 	private CarRepository vehicleRepository;
@@ -74,5 +77,10 @@ public class CarServiceImpl {
 		result1.retainAll(result2);
 		
 		return result1;
+	}
+
+	@Override
+	public ArrayList<Room> findAvailable(long racId, Date checkin, Date checkout) {
+		return vehicleRepository.findAvailable(racId, checkin, checkout);
 	}
 }

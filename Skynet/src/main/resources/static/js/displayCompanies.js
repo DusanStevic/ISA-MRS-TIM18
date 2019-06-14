@@ -77,8 +77,6 @@ function generateRACSearch(){
     	+'<tr><td><input type="date" id="checkin" /></td></tr>'
     	+'<tr><td>*End date:</td></tr>'
     	+'<tr><td><input type="date" id="checkout" /></td></tr>'
-    	+'<tr><td>*Number of people:</td></tr>'
-    	+'<tr><td><input type="number" id="guests" step="1" /></td></tr>'
     	+'<tr><td><input type="submit" value="Search"></td></tr>'
     	+'</table>'
     	+'</form>';
@@ -180,7 +178,7 @@ $(document).on('submit','#racSearchForm',function(e){
 	e.preventDefault();
 	var date1 = $(this).find("input[id = checkin]").val();
 	var date2 = $(this).find("input[id = checkout]").val();
-	var guests = $('#guests').val();
+	var guests = "2";
 	var name = $('#name').val();
 	var address = $('#address').val();
 	
