@@ -1,6 +1,5 @@
 $(document).on('click','#hotelSearch',function(){
 	localStorage.setItem("page", "hotel");
-	
 });
 
 $(document).on('click','#airlineSearch',function(){
@@ -22,53 +21,258 @@ $(document).ready(function(){
 		localStorage.setItem('searchCriteria', "");
 		var admin = localStorage.setItem("isAdmin", "");
 		generateHotelSearch();
-		findHotels();
 	}
 	else if(page == "airline"){
-		generateHotelSearch();
-		findAirlines();
+		generateAirlineSearch();
 	}
 	else if(page == "rac"){
-		generateHotelSearch();
-		findRACs();
+		generateRACSearch();
+		//findRACs();
+	}
+	//i ako je strana companies display
+	else if(page == "searchHotels"){
+		searchHotels();
+	}
+	
+	else if(page == "searchAirlines"){
+		//searchAirlines();
+	}
+	else if(page == "searchRacs"){
+		//searchRacs();
 	}
 });
 
 function generateHotelSearch(){
-	var tirkiz_content ='<td>'
-	    +'<div class="tirkiz_table_content">'
-	    +'<table>'
-        +'<tr>'
-        +'<td>'
-        +'<table><tr><td><h3 class="white">For better search, fill out the offered parameters:</h3></td></tr></table>'
-        +'</td>'
-        +'</tr>'
-        +'<tr>'
-        +'<td>'
-        +'<table><tr><td><h4 class="white"><b>Location: </b></h4></td><td><input type="text" id="address" value="Enter location of hotel..." /></td></tr></table>'
-        +'</td>'
-        +'<td>'
-        +'<table>'
-        +'<tr>'
-        +'<td><h4 class="white"><b>Sort by: </b></h4></td>'
-        +'<td>'
-        +'<select>'
-        +'<option id="star">Most rated</option>'
-        +'<option id="cheap">Price(cheapest)</option>'
-        +'<option id="expensive">Price(most expensive)</option>'
-        +'</select>'
-        +'</td>'
-        +'</tr>'
-        +'</table>'
-        +'</td>'
-        +'</tr>'
-        +'</table>'
-	    +'</div>'
-		+'</td>'
-		+'</tr>';
-	var tr=$('<tr></tr>');
-	tr.append(tirkiz_content);
-	$('#tirkiz_display').append(tr);
+	$('#searchDiv').empty();
+	var form = '<form id="hotelSearchForm">'
+    	+'<table class="ombre_table">'
+    	+'<tr><th><h1>Search for hotel:</h1></th></tr>'
+    	+'<tr><td>Enter hotel name (optional)</td></tr>'
+    	+'<tr><td><input type="text" id="name" /></td></tr>'
+    	+'<tr><td>*Hotel address</td></tr>'
+    	+'<tr><td><input type="text" id="address" /></td></tr>'
+    	+'<tr><td>*Check-in:</td></tr>'
+    	+'<tr><td><input type="date" id="checkin" /></td></tr>'
+    	+'<tr><td>*Check-out:</td></tr>'
+    	+'<tr><td><input type="date" id="checkout" /></td></tr>'
+    	+'<tr><td>*Guests:</td></tr>'
+    	+'<tr><td><input type="number" id="guests" step="1" /></td></tr>'
+    	+'<tr><td><input type="submit" value="Search"></td></tr>'
+    	+'</table>'
+    	+'</form>';
+	$('#searchDiv').append(form);
+}
+
+function generateRACSearch(){
+	$('#searchDiv').empty();
+	var form = '<form id="racSearchForm">'
+    	+'<table class="ombre_table">'
+    	+'<tr><th><h1>Search for Rent-A-Car service:</h1></th></tr>'
+    	+'<tr><td>Enter Rent-A-Car name (optional)</td></tr>'
+    	+'<tr><td><input type="text" id="name" /></td></tr>'
+    	+'<tr><td>*Rent-A-Car address</td></tr>'
+    	+'<tr><td><input type="text" id="address" /></td></tr>'
+    	+'<tr><td>*Check-in:</td></tr>'
+    	+'<tr><td><input type="date" id="checkin" /></td></tr>'
+    	+'<tr><td>*Check-out:</td></tr>'
+    	+'<tr><td><input type="date" id="checkout" /></td></tr>'
+    	+'<tr><td>*Number of people:</td></tr>'
+    	+'<tr><td><input type="number" id="guests" step="1" /></td></tr>'
+    	+'<tr><td><input type="submit" value="Search"></td></tr>'
+    	+'</table>'
+    	+'</form>';
+	$('#searchDiv').append(form);
+}
+
+function generateAirlineSearch(){
+	$('#searchDiv').empty();
+	var form = '<form id="airlineSearchForm">'
+    	+'<table class="ombre_table">'
+    	+'<tr><th><h1>Search for airline:</h1></th></tr>'
+    	+'<tr><td>Enter airline name (optional)</td></tr>'
+    	+'<tr><td><input type="text" id="name" /></td></tr>'
+    	+'<tr><td>*Start destination</td></tr>'
+    	+'<tr><td><input type="text" id="startaddress" /></td></tr>'
+    	+'<tr><td>*End destination</td></tr>'
+    	+'<tr><td><input type="text" id="endaddress" /></td></tr>'
+    	+'<tr><td>*Start date:</td></tr>'
+    	+'<tr><td><input type="date" id="checkin" /></td></tr>'
+    	+'<tr><td>*End date:</td></tr>'
+    	+'<tr><td><input type="date" id="checkout" /></td></tr>'
+    	+'<tr><td>*Passangers:</td></tr>'
+    	+'<tr><td><input type="number" id="guests" step="1" /></td></tr>'
+    	+'<tr><td><input type="submit" value="Search"></td></tr>'
+    	+'</table>'
+    	+'</form>';
+	$('#searchDiv').append(form);
+}
+
+$(document).on('submit','#hotelSearchForm',function(e){
+	e.preventDefault();
+	var date1 = $(this).find("input[id = checkin]").val();
+	var date2 = $(this).find("input[id = checkout]").val();
+	var guests = $('#guests').val();
+	var name = $('#name').val();
+	var address = $('#address').val();
+	
+	if(date1 == "" || date2 == "" || guests == "" || address == ""){
+		alert("You did not filled all required fields.");
+		return;
+	}
+	
+	if(isNaN(guests)){
+		alert("Please enter valid number of guests.");
+		return;
+	}
+	else if(guests < 1){
+		alert("Minimal number of guests is 1.");
+		return;
+	}
+	
+	localStorage.setItem("checkin",date1);
+	localStorage.setItem("checkout",date2);
+	localStorage.setItem("guests",guests);
+	if(name != ""){
+		localStorage.setItem("name",name);
+	}
+	localStorage.setItem("address",address);
+	localStorage.setItem("page","searchHotels");
+	window.location.replace("companiesDisplay.html");
+});
+
+$(document).on('submit','#airlineSearchForm',function(e){
+	e.preventDefault();
+	var date1 = $(this).find("input[id = checkin]").val();
+	var date2 = $(this).find("input[id = checkout]").val();
+	var guests = $('#guests').val();
+	var name = $('#name').val();
+	var start = $('#startaddress').val();
+	var end = $('#endaddress').val();
+	
+	if(date1 == "" || date2 == "" || guests == "" || start == "" || end == ""){
+		alert("You did not filled all required fields.");
+		return;
+	}
+	
+	if(isNaN(guests)){
+		alert("Please enter valid number of passangers.");
+		return;
+	}
+	else if(guests < 1){
+		alert("Minimal number of passangers is 1.");
+		return;
+	}
+	
+	localStorage.setItem("checkin",date1);
+	localStorage.setItem("checkout",date2);
+	localStorage.setItem("guests",guests);
+	if(name != ""){
+		localStorage.setItem("name",name);
+	}
+	localStorage.setItem("start",address);
+	localStorage.setItem("end",address);
+	localStorage.setItem("page","searchAirlines");
+	window.location.replace("companiesDisplay.html");
+});
+
+$(document).on('submit','#racSearchForm',function(e){
+	e.preventDefault();
+	var date1 = $(this).find("input[id = checkin]").val();
+	var date2 = $(this).find("input[id = checkout]").val();
+	var guests = $('#guests').val();
+	var name = $('#name').val();
+	var address = $('#address').val();
+	
+	if(date1 == "" || date2 == "" || guests == "" || address == ""){
+		alert("You did not filled all required fields.");
+		return;
+	}
+	
+	if(isNaN(guests)){
+		alert("Please enter valid number of guests.");
+		return;
+	}
+	else if(guests < 1){
+		alert("Minimal number of guests is 1.");
+		return;
+	}
+	
+	localStorage.setItem("checkin",date1);
+	localStorage.setItem("checkout",date2);
+	localStorage.setItem("guests",guests);
+	if(name != ""){
+		localStorage.setItem("name",name);
+	}
+	localStorage.setItem("address",address);
+	localStorage.setItem("page","searchRacs");
+	window.location.replace("companiesDisplay.html");
+});
+
+function searchHotels(){
+	var date1 = localStorage.getItem("checkin");
+	var date2 = localStorage.getItem("checkout");
+	var guests = localStorage.getItem("guests");
+	var address = localStorage.getItem("address");
+	var name = null;
+	if(localStorage.getItem("name") != null && localStorage.getItem("name") != undefined){
+		name = localStorage.getItem("name");
+	}
+	$.ajax({
+		type : 'POST',
+		url : "/api/searchedHotels",
+		contentType: 'application/json',
+		data: searchToHotel(name,date1,date2,guests,address),
+		dataType: 'json',
+		success : displayData,
+		error : function() {
+			alert("ERROR OCCURRED!!!");
+		}
+	});	
+}
+
+function searchAirlines(){
+	var date1 = localStorage.getItem("checkin");
+	var date2 = localStorage.getItem("checkout");
+	var guests = localStorage.getItem("guests");
+	var start = localStorage.getItem("start");
+	var end = localStorage.getItem("end");
+	var name = null;
+	if(localStorage.getItem("name") != null && localStorage.getItem("name") != undefined){
+		name = localStorage.getItem("name");
+	}
+	$.ajax({
+		type : 'POST',
+		url : "/api/searchedAirlines",
+		contentType: 'application/json',
+		data: searchToAirline(name,date1,date2,guests,start,end),
+		dataType: 'json',
+		success : displayData,
+		error : function() {
+			alert("ERROR OCCURRED!!!");
+		}
+	});	
+}
+
+function searchRacs(){
+	var date1 = localStorage.getItem("checkin");
+	var date2 = localStorage.getItem("checkout");
+	var guests = localStorage.getItem("guests");
+	var address = localStorage.getItem("address");
+	var name = null;
+	if(localStorage.getItem("name") != null && localStorage.getItem("name") != undefined){
+		name = localStorage.getItem("name");
+	}
+	$.ajax({
+		type : 'POST',
+		url : "/api/searchedRacs",
+		contentType: 'application/json',
+		data: searchToHotel(name,date1,date2,guests,address),
+		dataType: 'json',
+		success : displayData,
+		error : function() {
+			alert("ERROR OCCURRED!!!");
+		}
+	});	
 }
 
 function findHotels(){
@@ -99,6 +303,8 @@ function findRACs(){
 }
 
 function displayData(data){
+	$('#display').empty();
+	$('#display').append('<table id="dataDisplay"></table>');
 	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 	$.each(list, function(index, data){
 		var tr1=$('<tr></tr>');
@@ -106,7 +312,7 @@ function displayData(data){
 				+'<td><table class="min"><tr><td><h3>'+data.name+'</h3></td></tr>'
 				+'<tr><td><h4>' + data.address+'</h4></td></tr>'
 				+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
-				+'<td><table><tr><td><h3>Price from:<b> 30$</b></h3>(Per night)<td></tr><tr><td><a href="#" id="moreInfoHotel" name="'+data.id+'">More informations</a></td></tr></table></td>');
+				+'<td><table><tr></tr><tr><td><a href="#" id="moreInfoHotel" name="'+data.id+'">More informations</a></td></tr></table></td>');
 		var tr2=$('<tr></tr>');
 		tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
 		$('#dataDisplay').append(tr1);
@@ -140,4 +346,25 @@ function generateMenu(){
       			'<li> <a id = "logout" href = ""><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>'+
     		'</ul>'+
         '</div>');
+}
+
+function searchToHotel(name,checkin,checkout,beds, address){
+	return JSON.stringify({
+		"name":name,
+		"checkin":checkin,
+		"checkout":checkout,
+		"beds":beds,
+		"address":address,
+	})
+}
+
+function searchToAirline(name,date1,date2,guests,start,end){
+	return JSON.stringify({
+		"name":name,
+		"departure":checkin,
+		"arrival":checkout,
+		"passangers":beds,
+		"startDestination":start,
+		"endDestination":end,
+	})
 }

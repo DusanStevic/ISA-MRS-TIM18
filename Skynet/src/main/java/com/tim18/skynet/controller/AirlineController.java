@@ -2,6 +2,7 @@ package com.tim18.skynet.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tim18.skynet.dto.AirlineSearchDTO;
 import com.tim18.skynet.dto.DestinationBean;
 import com.tim18.skynet.dto.FlightBean;
 import com.tim18.skynet.dto.ImageDTO;
@@ -490,6 +492,38 @@ public class AirlineController {
 
 		Airline updateAirline = airlineService.save(airline);
 		return ResponseEntity.ok().body(updateAirline);
+	}
+	
+	@RequestMapping(value = "/api/searchedAirlines", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Collection<Airline> getSearched(@RequestBody AirlineSearchDTO search) {
+		/*
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date1 = null;
+		Date date2 = null;
+		try {
+			date1 = sdf.parse(search.getDeparture());
+			date2 = sdf.parse(search.getArrival());
+		} catch (ParseException e) {
+			System.out.println("Neuspesno parsiranje datuma");
+			return null;
+		}
+		if(date1.before(new Date()) || date2.before(new Date())){
+			return null;
+		}
+		
+		int beds = search.getPassangers();
+		String name = search.getName();
+		String start = search.getStartDestination();
+		String end = search.getEndDestination();
+		
+		if(name == "" || name == null){
+			name = null;
+		}
+		
+		List<Hotel> hotels = hotelService.search(name, address, date1, date2, beds);
+		return hotels;
+	*/
+		return null;
 	}
 
 	

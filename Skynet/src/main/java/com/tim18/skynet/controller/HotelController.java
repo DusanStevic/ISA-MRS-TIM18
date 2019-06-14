@@ -1,5 +1,9 @@
 package com.tim18.skynet.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +19,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tim18.skynet.dto.CompanyDTO;
+import com.tim18.skynet.dto.HotelSearchDTO;
 import com.tim18.skynet.dto.ImageDTO;
+import com.tim18.skynet.dto.RoomSearchDTO;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
+import com.tim18.skynet.model.Room;
+import com.tim18.skynet.repository.HotelRepository;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
 import com.tim18.skynet.service.impl.HotelServiceImpl;
+import com.tim18.skynet.service.impl.RoomServiceImpl;
 
 @RestController
 public class HotelController {
 
 	@Autowired
 	private HotelServiceImpl hotelService;
+	
+
+	@Autowired
+	private RoomServiceImpl roomService;
 	
 	@Autowired
 	private CustomUserDetailsService userInfoService;
@@ -72,6 +85,34 @@ public class HotelController {
 		return hotelService.findAll();
 	}
 	
+	@RequestMapping(value = "/api/searchedHotels", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Collection<Hotel> getSearched(@RequestBody HotelSearchDTO search) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date1 = null;
+		Date date2 = null;
+		try {
+			date1 = sdf.parse(search.getCheckin());
+			date2 = sdf.parse(search.getCheckout());
+		} catch (ParseException e) {
+			System.out.println("Neuspesno parsiranje datuma");
+			return null;
+		}
+		if(date1.before(new Date()) || date2.before(new Date())){
+			return null;
+		}
+		
+		int beds = search.getBeds();
+		String name = search.getName();
+		String address = search.getAddress();
+		
+		if(name == "" || name == null){
+			name = null;
+		}
+		
+		List<Hotel> hotels = hotelService.search(name, address, date1, date2, beds);
+		return hotels;
+	}
+	
 	@RequestMapping(value = "/api/hotel", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Hotel createHotel(@RequestBody Hotel hotel) {
 		return hotelService.save(hotel);
@@ -87,6 +128,8 @@ public class HotelController {
 	
 		return ResponseEntity.ok().body(hotel);
 	}
+	
+	
 	
 	@RequestMapping(value = "/api/hotels/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Hotel> deleteHotel(

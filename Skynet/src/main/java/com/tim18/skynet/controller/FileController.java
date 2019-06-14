@@ -32,13 +32,14 @@ public class FileController {
     
     @PostMapping(value="/api/uploadFile", produces = MediaType.APPLICATION_JSON_VALUE)
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+    	String fileName = fileStorageService.storeFile(file);
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName)
                 .toUriString();
         
-        fileName = "images/"+fileName;
+        System.out.println(fileDownloadUri);
+        fileName = "addedImages/"+fileName;
         return new UploadFileResponse(fileName, fileDownloadUri,file.getContentType(), file.getSize());
     }
 

@@ -1,18 +1,22 @@
 package com.tim18.skynet.controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tim18.skynet.dto.HotelSearchDTO;
 import com.tim18.skynet.dto.ReservationDTO;
 import com.tim18.skynet.dto.RoomReservationDTO;
 import com.tim18.skynet.model.HotelOffer;
@@ -53,7 +57,7 @@ public class RoomReservationController {
 	
 	@RequestMapping( value="/api/roomReservation",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
 	public Reservation reserveRoom(@RequestBody RoomReservationDTO temp){
-		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		RegisteredUser user = (RegisteredUser) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		
 		if(user == null){
@@ -64,19 +68,31 @@ public class RoomReservationController {
 		Reservation reservation = reservationService.findOne(rid);
 		
 		Room room = roomService.findOne(temp.getRoomId());
-		System.out.println("Nasao sam sobu: "+room.getPrice());
 		
 		RoomReservation roomReservation = new RoomReservation();
 		
 		//if(reservation.getPassangers().isEmpty() || reservation.getSeatReservations().isEmpty()){
 			//return null;
 		//}
+		Date startDate = null;
+		Date endDate = null;
+		try {
+			startDate = sdf.parse(temp.getCheckin());
+			endDate = sdf.parse(temp.getCheckout());
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
 		
-		Date startDate = new Date();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(startDate);
-		calendar.add(Calendar.DATE, temp.getDays());
-		Date endDate = calendar.getTime();
+		Interval interval1 = new Interval(startDate.getTime(), endDate.getTime());
+		
+		for(RoomReservation reserv : room.getReservations()){
+			Interval interval2 = new Interval(reserv.getCheckIn().getTime(), reserv.getCheckOu().getTime());
+			Interval overlap = interval2.overlap(interval1);
+			if(overlap != null){
+				return null;
+			}
+		}
 		
 		double price = room.getPrice();
 		for(long id : temp.getHotelOffers()){
@@ -101,11 +117,7 @@ public class RoomReservationController {
 		return reservationService.save(reservation);
 	}
 	
-	@RequestMapping( value="/api/getAvailableRooms/res_id",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Room> getAvailableRooms(){
-		
-		return null;
-	}
+	
 	
 	@RequestMapping( value="/api/getReservation",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ReservationDTO getReservation(){

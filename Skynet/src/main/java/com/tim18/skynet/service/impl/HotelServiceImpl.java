@@ -1,5 +1,6 @@
 package com.tim18.skynet.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,17 @@ public class HotelServiceImpl implements HotelService{
 	public void remove(Long id) {
 		hotelRepository.deleteById(id);
 		
+	}
+
+
+	@Override
+	public List<Hotel> search(String name, String address, Date checkin, Date checkout, int beds) {
+		if(name != null){
+			return hotelRepository.findByNameAndAddressAndDateAndBeds(name, address, checkin, checkout, beds);
+		}
+		else{
+			return hotelRepository.findByAddressAndDateAndBeds(address, checkin, checkout, beds);
+		}
 	}
 	
 

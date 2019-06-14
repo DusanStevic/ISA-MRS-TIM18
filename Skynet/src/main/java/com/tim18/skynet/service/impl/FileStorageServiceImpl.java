@@ -38,15 +38,16 @@ public class FileStorageServiceImpl implements FileStorageService{
     public String storeFile(MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
+        String path = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\addedImages\\";
+        path = path + fileName;
         try {
             // Check if the file's name contains invalid characters
-            if(fileName.contains("..")) {
+            if(path.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
             // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            Path targetLocation = this.fileStorageLocation.resolve(path);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             return fileName;
