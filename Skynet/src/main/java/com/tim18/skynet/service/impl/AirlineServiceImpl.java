@@ -1,5 +1,6 @@
 package com.tim18.skynet.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,17 @@ public class AirlineServiceImpl implements AirlineService{
 	public void remove(Long id) {
 		airlineRepository.deleteById(id);
 		
+	}
+
+
+	@Override
+	public List<Airline> search(String name, String start, String end, Date date1, int passangers) {
+		if(name != null){
+			return airlineRepository.findByNameAndAddressAndDateAndBeds(name, start, end, date1, passangers);
+		}
+		else{
+			return airlineRepository.findByAddressAndDateAndBeds(start, end, date1, passangers);
+		}
 	}
 	
 

@@ -1,3 +1,4 @@
+var TOKEN_KEY = 'jwtToken';
 $(document).on('click','#hotelSearch',function(){
 	localStorage.setItem("page", "hotel");
 });
@@ -35,7 +36,7 @@ $(document).ready(function(){
 	}
 	
 	else if(page == "searchAirlines"){
-		//searchAirlines();
+		searchAirlines();
 	}
 	else if(page == "searchRacs"){
 		//searchRacs();
@@ -72,9 +73,9 @@ function generateRACSearch(){
     	+'<tr><td><input type="text" id="name" /></td></tr>'
     	+'<tr><td>*Rent-A-Car address</td></tr>'
     	+'<tr><td><input type="text" id="address" /></td></tr>'
-    	+'<tr><td>*Check-in:</td></tr>'
+    	+'<tr><td>*Start date:</td></tr>'
     	+'<tr><td><input type="date" id="checkin" /></td></tr>'
-    	+'<tr><td>*Check-out:</td></tr>'
+    	+'<tr><td>*End date:</td></tr>'
     	+'<tr><td><input type="date" id="checkout" /></td></tr>'
     	+'<tr><td>*Number of people:</td></tr>'
     	+'<tr><td><input type="number" id="guests" step="1" /></td></tr>'
@@ -95,9 +96,9 @@ function generateAirlineSearch(){
     	+'<tr><td><input type="text" id="startaddress" /></td></tr>'
     	+'<tr><td>*End destination</td></tr>'
     	+'<tr><td><input type="text" id="endaddress" /></td></tr>'
-    	+'<tr><td>*Start date:</td></tr>'
+    	+'<tr><td>*Date of departure:</td></tr>'
     	+'<tr><td><input type="date" id="checkin" /></td></tr>'
-    	+'<tr><td>*End date:</td></tr>'
+    	+'<tr><td>Date of return (optional):</td></tr>'
     	+'<tr><td><input type="date" id="checkout" /></td></tr>'
     	+'<tr><td>*Passangers:</td></tr>'
     	+'<tr><td><input type="number" id="guests" step="1" /></td></tr>'
@@ -149,7 +150,7 @@ $(document).on('submit','#airlineSearchForm',function(e){
 	var start = $('#startaddress').val();
 	var end = $('#endaddress').val();
 	
-	if(date1 == "" || date2 == "" || guests == "" || start == "" || end == ""){
+	if(date1 == "" || guests == "" || start == "" || end == ""){
 		alert("You did not filled all required fields.");
 		return;
 	}
@@ -169,8 +170,8 @@ $(document).on('submit','#airlineSearchForm',function(e){
 	if(name != ""){
 		localStorage.setItem("name",name);
 	}
-	localStorage.setItem("start",address);
-	localStorage.setItem("end",address);
+	localStorage.setItem("start",start);
+	localStorage.setItem("end",end);
 	localStorage.setItem("page","searchAirlines");
 	window.location.replace("companiesDisplay.html");
 });

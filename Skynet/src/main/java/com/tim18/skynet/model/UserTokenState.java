@@ -1,7 +1,5 @@
 package com.tim18.skynet.model;
 
-import com.tim18.skynet.enums.UserRoleName;
-
 public class UserTokenState {
 	private String accessToken;
 	private Long expiresIn;
