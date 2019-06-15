@@ -311,7 +311,7 @@ function displayData(data){
 				+'<td><table class="min"><tr><td><h3>'+data.name+'</h3></td></tr>'
 				+'<tr><td><h4>' + data.address+'</h4></td></tr>'
 				+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
-				+'<td><table><tr></tr><tr><td><a href="#" id="moreInfoHotel" name="'+data.id+'">More informations</a></td></tr></table></td>');
+				+'<td><table><tr><td><a href="#" id="showLocation" name="'+data.address+'"><i class="fa fa-map-marker" style="font-size:36px" color:red"></i> Show Location</a></td></tr><tr><td align="center"><input type="button" id="moreInfoHotel" name="'+data.id+'" value = "View profile and offers" class="blueButton"/></td></tr></table></td>');
 		var tr2=$('<tr></tr>');
 		tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
 		$('#dataDisplay').append(tr1);
@@ -333,6 +333,59 @@ function displayData1(data){
 		$('#dataDisplay').append(tr1);
 		$('#dataDisplay').append(tr2);
 	})
+}
+
+$(document).on('click','#showLocation',function(e){
+	e.preventDefault();
+	var modal = document.getElementById('mapModal');
+	modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    var addr=$(this).attr("name");
+    var coordinates;
+    $.ajax({
+		type : 'GET',
+		url : "https://geocode-maps.yandex.ru/1.x/?apikey=18116907-79b6-47b3-97aa-0db7c335b7e0&format=json&geocode="
+				+ addr + "&lang=en_US",
+		dataType : "json",
+		async : false,
+		success : function(data) {
+			var found = data.response.GeoObjectCollection.featureMember;
+			if (found.length != 0) {
+				coordinates = found[0].GeoObject.Point.pos.split(" ");
+				ymaps.ready(init(coordinates));
+			} else {
+				coordinates = [ -1, -1 ];
+				alert("Location could not be found. Maybe this address does not exist?");
+			}
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			alert(jqXHR.status);
+			alert(textStatus);
+			alert(errorThrown);
+		}
+
+	})
+})
+
+function init(coordinates){
+	
+	var coordinate1 = coordinates[1];
+	var coordinate2 = coordinates[0];
+	var myMap = new ymaps.Map("map", {
+        center: [coordinate1, coordinate2],
+        zoom: 7
+    });
+	
+	myPlacemark = new ymaps.Placemark([ coordinate1, coordinate2 ], {
+		hintContent : 'Location',
+		balloonContent : 'Location of company'
+	});
+	
+	myMap.geoObjects.add(myPlacemark);
 }
 
 function generateMenu(){
