@@ -11,6 +11,7 @@
     <script type="text/javascript" src="js/authorization.js"></script>
     <script type="text/javascript" src="js/displayCompanies.js"></script>
     <script type="text/javascript" src="js/displayHotelInfo.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=18116907-79b6-47b3-97aa-0db7c335b7e0&lang=en_US" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
@@ -27,7 +28,12 @@
             </ul>
         </div>
     </nav>
-
+    
+    <div id="mapModal" class="modal">
+    	<div id="map" style="width: 800px; height: 600px; margin-left: 20%;  margin-right: 20%;  padding:20px;"></div>
+    </div>
+	
+	
     <div class="blue_middle_container" id="display">
     	
 		<table id="dataDisplay">
