@@ -19,10 +19,11 @@ public class SeatReservation {
 	@Id
 	@GeneratedValue
 	private long id;
-	@Column(nullable = false)
-	private Date checkIn;
-	@Column(nullable = false)
-	private Date checkOu;
+	
+	
+	@Column(name = "datum", unique = false, nullable = false)
+	private Date datum;
+	
 	@Column(nullable = false)
 	private double price;
 	
@@ -36,23 +37,15 @@ public class SeatReservation {
 	@JoinColumn(name = "reservation_id", referencedColumnName = "id")
 	private Reservation reservation;
 
-	public SeatReservation(long id, Date checkIn, Date checkOu, double price, Seat reservedSeat) {
-		super();
-		this.id = id;
-		this.checkIn = checkIn;
-		this.checkOu = checkOu;
-		this.price = price;
-		this.reservedSeat = reservedSeat;
-	}
+	
 
 	public SeatReservation() {
 		super();
 	}
 
-	public SeatReservation(Date checkIn, Date checkOu, double price, Seat reservedSeat) {
+	public SeatReservation(Date datum, double price, Seat reservedSeat) {
 		super();
-		this.checkIn = checkIn;
-		this.checkOu = checkOu;
+		this.datum = datum;
 		this.price = price;
 		this.reservedSeat = reservedSeat;
 	}
@@ -65,20 +58,14 @@ public class SeatReservation {
 		this.id = id;
 	}
 
-	public Date getCheckIn() {
-		return checkIn;
+	
+
+	public Date getDatum() {
+		return datum;
 	}
 
-	public void setCheckIn(Date checkIn) {
-		this.checkIn = checkIn;
-	}
-
-	public Date getCheckOu() {
-		return checkOu;
-	}
-
-	public void setCheckOu(Date checkOu) {
-		this.checkOu = checkOu;
+	public void setDatum(Date datum) {
+		this.datum = datum;
 	}
 
 	public double getPrice() {
