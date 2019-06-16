@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tim18.skynet.comparator.RoomNumberComparator;
 import com.tim18.skynet.comparator.RoomPriceComparator;
 import com.tim18.skynet.comparator.RoomPriceComparatorHighToLow;
 import com.tim18.skynet.dto.ImageDTO;
@@ -61,10 +62,15 @@ public class RoomController {
 		if(sort.getSort().equals("1")){
 			return sortRoomsLowToHigh(user.getHotel().getRooms());
 		}
-		else{
+		else if(sort.getSort().equals("2")){
 			return sortRoomsHighToLow(user.getHotel().getRooms());
 		}
+		else{
+			return sortRoomsByNumber(user.getHotel().getRooms());
+		}
 	}
+	
+	
 	
 	@RequestMapping( value="/api/getAvailableRooms/{h_id}",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Collection<Room> getAvailableRooms(@PathVariable(value = "h_id") Long hotelId, @RequestBody RoomSearchDTO search){
@@ -203,6 +209,12 @@ public class RoomController {
 	
 	public List<Room> sortRoomsHighToLow(List<Room> rooms){
 		RoomPriceComparatorHighToLow comparator = new RoomPriceComparatorHighToLow();
+		Collections.sort(rooms, comparator);
+		return rooms;
+	}
+	
+	private List<Room> sortRoomsByNumber(List<Room> rooms){
+		RoomNumberComparator comparator = new RoomNumberComparator();
 		Collections.sort(rooms, comparator);
 		return rooms;
 	}

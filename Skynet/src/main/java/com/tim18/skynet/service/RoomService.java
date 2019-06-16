@@ -11,4 +11,5 @@ public interface RoomService {
 	public List<Room> findAll();
 	public void delete(Long id);
 	public List<Room> search(long hotelId, Date checkin, Date checkout, int beds);
+	public List<Room> getFastHotelRooms(long hotelId);
 }
