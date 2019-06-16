@@ -41,5 +41,9 @@ public class SeatService {
 	public void remove(Long id) {
 		repository.deleteById(id);
 	}
+	
+	public Seat findByFlightIdAndId(Long id_leta, Long id_sedista){
+		return repository.findByFlightIdAndId(id_leta,id_sedista);
+	}
 
 }

@@ -7,5 +7,6 @@ import com.tim18.skynet.model.Seat;
 
 
 public interface SeatRepository extends JpaRepository<Seat, Long> {
+	public Seat findByFlightIdAndId(Long id_leta, Long id_sedista);
 
 }
