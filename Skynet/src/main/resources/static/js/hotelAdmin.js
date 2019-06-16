@@ -35,6 +35,88 @@ $(window).on("load",function(e){
 	}
 })
 
+function fillRoomNumbers(){
+	var sort = "5";
+	var token = getJwtToken(TOKEN_KEY);
+	if (token) {
+		$.ajax({
+			type : 'POST',
+			url : "/api/getRooms",
+			headers : createAuthorizationTokenHeader(TOKEN_KEY),
+			dataType : "json",
+			data: inputToSort(sort),
+			success : function(data) {
+				if (data == null) {
+					alert('Error while finding loged one!');
+				} else {
+					var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+					$.each(list, function(index, room){
+						var opt=$('<option value="'+room.id+'">'+room.roomNumber+'</option>');
+						$('#roomNum').append(opt);
+					})
+				}
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR.status);
+				alert(textStatus);
+				alert(errorThrown);
+			}
+	
+		})
+	}
+}
+
+function fillHotelOffers(){
+	$.ajax({
+		type:'GET',
+		url:'/api/getHotelOffers',
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		contentType:'application/json',
+		dataType:'json',
+		success:function(data){
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			$.each(list, function(index, offer){
+				var tr = $('<tr></tr>');
+		        tr.append('<td><input type="checkbox" class="offers" name="offer" value="'+offer.id+'"/><b>' + offer.name + '</b></td>');
+		        $('#hotelOffersRes').append(tr);
+			});
+		}
+	});
+}
+
+$(document).on('submit','#fastRoomReservation',function(e){
+	e.preventDefault();
+	var roomid = $("#roomNum :selected").val();
+	var disc = $("#discount").val();
+	var start = $("#start").val();
+	var end = $("#end").val();
+	var string_offers = [];
+	$("input:checkbox[name=offer]:checked").each(function(){
+		string_offers.push($(this).val());
+	});
+	$.ajax({
+		type : 'POST',
+		url : "/api/fastRoomReservation",
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		data: inputToFast(roomid, disc, start, end, string_offers, null),
+		dataType : "json",
+		success : function(data) {
+			if (data == null) {
+				alert('Fast reservation could not be added. There is another fast reservation added for this room in defined time period. Choose another time period or delete fast reservation that is added before.');
+			} else {
+				alert('Fast reservation successfuly added!');
+				 window.location.href = "hotelAdmin-hotelProfile.html";
+			}
+		},
+		error : function() {
+			alert('Fast reservation could not be added. There is another fast reservation added for this room in defined time period. Choose another time period or delete fast reservation that is added before.');
+		}
+
+	})
+	
+})
+
+
 function getHotelAdmin() {
 	var token = getJwtToken(TOKEN_KEY);
 	if (token) {
@@ -100,10 +182,11 @@ function getHotel() {
 			dataType : "json",
 			success : function(data) {
 				if (data == null) {
-					alert('Error while finding loged one!');
+					alert('Error while loading page!');
 				} else {
 					displayHotel(data);
 					printHotelOffers();
+					getFastRooms();
 					var search;
 					var s1 = localStorage.getItem("searchCriteria");
 					if(s1 != "" && s1 != null && s1 != undefined){
@@ -122,6 +205,27 @@ function getHotel() {
 						displayCriteria(null);
 					}
 				}
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR.status);
+				alert(textStatus);
+				alert(errorThrown);
+			}
+	
+		})
+	}
+}
+
+function getFastRooms() {
+	var token = getJwtToken(TOKEN_KEY);
+	if (token) {
+		$.ajax({
+			type : 'GET',
+			url : "/api/getfastRooms",
+			headers : createAuthorizationTokenHeader(TOKEN_KEY),
+			dataType : "json",
+			success : function(data) {
+				displayFastRooms(data);
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR.status);
@@ -177,6 +281,43 @@ function displayAdmin(data){
 	$('#surnameEdit').val(data.surname);
 	$('#usernameEdit').val(data.username);
 	$('#emailEdit').val(data.email);
+}
+
+function displayFastRooms(rooms){
+	if(rooms != null && rooms != undefined){
+		var list = rooms == null ? [] : (rooms instanceof Array ? rooms : [ rooms ]);
+		$.each(list, function(index, room){
+			var tr=$('<tr></tr>');
+			tr.append('<td><img src='+room.image+' class="room_display"/></td>');
+			tr.append('<td><table><tr><td><input type="button" id="viewFastRes" name="'+room.id+'" value="Display fast reservations for this room" class="blueButton"/></td></tr><tr><td>Beds: '+room.bedNumber+'</td></tr><tr><td>Room number: '+room.roomNumber+'</td></tr>'+
+			'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
+			'</table></td>');
+			$('#fastRoomsDisp').append(tr);
+		})
+	}
+	else{
+		alert("NO FAST ROOMS");
+	}
+}
+
+$(document).on('click','#viewFastRes',function(e){
+	var id=$(this).attr("name");
+	$.ajax({
+		type : 'GET',
+		url : "/api/getfastRoomReservations/" + id,
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		dataType : "json",
+		success : function(data) {
+			displayFastReservations(data);
+		},
+		error : function(){
+			alert("ERROR");
+		}
+	})
+})
+
+function displayFastReservations(data){
+	
 }
 
 $(document).on('click','#editAdminProfile',function(e){
@@ -321,10 +462,9 @@ function displayRooms(data){
 		$.each(list, function(index, room){
 			var tr=$('<tr></tr>');
 			tr.append('<td><img src='+room.image+' class="room_display"/></td>');
-			tr.append('<td><table><tr><td><h3>Price per night: '+room.price+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr>'+
+			tr.append('<td><table><tr><td><h3>Price per night: '+room.price+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr><tr><td>Room number: '+room.roomNumber+'</td></tr>'+
 			'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
 			'<tr><td><a href="#" id="viewRoom" name="'+room.id+'">More details</a></td></tr>'+
-			'<tr><td><a href="#" id="editRoom" name="'+room.id+'">Edit room</a></td></tr>'+
 			'<tr><td><a href="#" id="deleteRoom" name="'+room.id+'">Delete room</a></td></tr></table></td>');
 			$('#roomsDisp').append(tr);
 		})
@@ -413,10 +553,9 @@ function displayChoosenCriteria(string_offers){
 			$.each(list, function(index, room){
 				var tr=$('<tr></tr>');
 				tr.append('<td><img src='+room.image+' class="room_display"/></td>');
-				tr.append('<td><table><tr><td><h3>Price per night: '+room.price+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr>'+
+				tr.append('<td><table><tr><td><h3>Price per night: '+room.price+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr><tr><td>Room number: '+room.roomNumber+'</td></tr>'+
 				'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
 				'<tr><td><a href="#" id="viewRoom" name="'+room.id+'">More details</a></td></tr>'+
-				'<tr><td><a href="#" id="editRoom" name="'+room.id+'">Edit room</a></td></tr>'+
 				'<tr><td><a href="#" id="deleteRoom" name="'+room.id+'">Delete room</a></td></tr></table></td>');
 				$('#roomsDisp').append(tr);
 			})
@@ -441,7 +580,7 @@ $(document).on('submit','#updateRoom',function(){
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',
-		data:inputToHotelRoomID(id, image, beds, price, desc),
+		data:inputToHotelRoomID(id, image, beds, price, desc, ""),
 		success:function(data){
 			alert("Room successfully edited!");
 			location.reload();
@@ -614,6 +753,7 @@ $(document).on('submit', "#newRoomForm", function(e){
 	var image = "images/room.png";
 	var beds = $('#beds').val();
 	var price = $('#price').val();
+	var number = $('#roomNumber').val();
 	var description = $('#roomDesc').val();
 	if(beds == "" || price == "" || description == ""){
 		alert("All fields must be filled!");
@@ -629,7 +769,7 @@ $(document).on('submit', "#newRoomForm", function(e){
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',
-		data:inputToHotelRoom(image, beds, price, description),
+		data:inputToHotelRoom(image, beds, price, description, number),
 		success:function(data){
 			e.preventDefault();
 			localStorage.setItem("roomID", data.id);
@@ -838,22 +978,24 @@ $(document).on('click', "#logout", function (e) {
 	window.location.replace("index.html");
 });
 
-function inputToHotelRoom(image, beds, price, desc){
+function inputToHotelRoom(image, beds, price, desc, number){
 	return JSON.stringify({
 		"image":image,
 		"bedNumber":beds,
 		"price":price,
 		"description":desc,
+		"roomNumber":number,
 	})
 }
 
-function inputToHotelRoomID(id, image, beds, price, desc){
+function inputToHotelRoomID(id, image, beds, price, desc, number){
 	return JSON.stringify({
 		"id" : id,
 		"image":image,
 		"beds":beds,
 		"price":price,
 		"description":desc,
+		"roomNumber":number,
 	})
 }
 
@@ -920,5 +1062,16 @@ function inputToUser(email, name, surname, username, password, id){
 		"username":username,
 		"password":password,
 		"email":email,
+	})
+}
+
+function inputToFast(roomId, disc, start, end, string_offers, id){
+	return JSON.stringify({
+		"roomID":roomId,
+		"id":id,
+		"discount":disc,
+		"start":start,
+		"end":end,
+		"hotelOffers":string_offers,
 	})
 }

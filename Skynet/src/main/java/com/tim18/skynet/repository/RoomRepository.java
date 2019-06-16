@@ -19,4 +19,9 @@ public interface RoomRepository extends JpaRepository<Room, Long>{
 			   		"OR (rr.checkOu >= ?2 AND rr.checkOu <= ?3) " +
 			   		"OR (rr.checkIn >= ?2 AND rr.checkOu <= ?3)))")
 	ArrayList<Room> findAvailable(long hotelId, Date checkin, Date checkout, int beds);
+	
+	@Query("SELECT DISTINCT r FROM Room r " +
+			   "WHERE r.hotel.id = ?1 " + 
+			   "AND r.id IN (SELECT DISTINCT fr.room.id FROM FastRoomReservation fr)")
+	ArrayList<Room> getAllFastRooms(long hotelId);
 }

@@ -42,4 +42,9 @@ public class RoomServiceImpl implements RoomService{
 		return roomRepository.findAvailable(hotelId, checkin, checkout, beds);
 	}
 
+	@Override
+	public List<Room> getFastHotelRooms(long hotelId) {
+		return roomRepository.getAllFastRooms(hotelId);
+	}
+
 }

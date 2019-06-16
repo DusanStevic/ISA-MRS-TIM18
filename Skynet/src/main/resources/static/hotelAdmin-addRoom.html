@@ -22,10 +22,20 @@
             <ul class="nav navbar-nav"></ul>
 
             <ul class="nav navbar-nav navbar-right">
+            	<li><a href="hotelAdmin-addRoom.html"><span class="glyphicon glyphicon-bed"></span> Add Room</a></li>
+            	<li><a href="hotelAdmin-addFastReservation.html"><span class="glyphicon glyphicon-calendar"></span> Add Fast Reservation</a></li>
                 <li><a href="hotelAdmin-hotelProfile.html"><span class="glyphicon glyphicon-bed"></span> Hotel's Profile</a></li>
                 <li><a href="userProfile.html"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+                <li class="dropdown">
+	        		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+	        		<span class="glyphicon glyphicon-stats"></span> Reports<span class="caret"></span></a>
+	        		<ul class="dropdown-menu">
+					  <li><a href = "#" id = "dailyReport_btn" > Daily Report </a></li>
+					  <li><a href = "#" id = "monthlyReport_btn" > Monthly Report </a></li>
+					  <li><a href = "#" id = "annualReport_btn" > Annual Report </a></li>
+	        		</ul>
+        		</li>
                 <li><a href="#" id="logout"><span class="glyphicon glyphicon-log-out"></span>Log out</a></li>
-
             </ul>
         </div>
     </nav>
@@ -40,6 +50,8 @@
                 <tr><td><input type="text" id="beds" /></td></tr>
                 <tr><td><h4>Price per night:</h4></td></tr>
                 <tr><td><input type="text" id="price" /></td></tr>
+                <tr><td><h4>Room number:</h4></td></tr>
+                <tr><td><input type="number" id="roomNumber" /></td></tr>
                 <tr><td><button type="button" id="goToDescription">Next</button></td></tr>
             </table>
         </div>

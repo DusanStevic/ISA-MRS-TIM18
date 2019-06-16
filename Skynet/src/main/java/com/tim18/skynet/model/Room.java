@@ -28,6 +28,8 @@ public class Room {
 	@Column(nullable = false)
 	private int bedNumber;
 	@Column(nullable = false)
+	private int roomNumber;
+	@Column(nullable = false)
 	private String image;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -39,6 +41,10 @@ public class Room {
 	@JsonIgnore
 	@OneToMany(mappedBy = "reservedRoom", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	List<RoomReservation> reservations = new ArrayList<RoomReservation>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	List<FastRoomReservation> fastReservations = new ArrayList<FastRoomReservation>();
 
 	public Room(double price, String description, int bedNumber, String image, Hotel hotel) {
 		super();
@@ -79,6 +85,26 @@ public class Room {
 		this.hotel = hotel;
 		this.roomOffers = roomOffers;
 		this.reservations = reservations;
+	}
+	
+	
+
+	
+
+	public Room(long id, double price, String description, int bedNumber, int roomNumber, String image, Hotel hotel,
+			List<RoomOffer> roomOffers, List<RoomReservation> reservations,
+			List<FastRoomReservation> fastReservations) {
+		super();
+		this.id = id;
+		this.price = price;
+		this.description = description;
+		this.bedNumber = bedNumber;
+		this.roomNumber = roomNumber;
+		this.image = image;
+		this.hotel = hotel;
+		this.roomOffers = roomOffers;
+		this.reservations = reservations;
+		this.fastReservations = fastReservations;
 	}
 
 	public Room() {
@@ -158,5 +184,21 @@ public class Room {
 
 	public void setReservations(List<RoomReservation> reservations) {
 		this.reservations = reservations;
+	}
+
+	public int getRoomNumber() {
+		return roomNumber;
+	}
+
+	public void setRoomNumber(int roomNumber) {
+		this.roomNumber = roomNumber;
+	}
+
+	public List<FastRoomReservation> getFastReservations() {
+		return fastReservations;
+	}
+
+	public void setFastReservations(List<FastRoomReservation> fastReservations) {
+		this.fastReservations = fastReservations;
 	}
 }

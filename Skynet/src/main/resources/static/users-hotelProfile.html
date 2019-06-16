@@ -30,6 +30,7 @@
     <div class="tab">
         <button class="tablinks" onclick="openCity(event, 'Home')" id="defaultOpen">About</button>
         <button class="tablinks" onclick="openCity(event, 'Rooms')" id="roomsOpen">Rooms</button>
+        <button class="tablinks" onclick="openCity(event, 'FastReservations')" id="reservationsOpen">Fast Reservations</button>
         <button class="tablinks" onclick="openCity(event, 'Other_offers')" id="offersOpen">Other offers</button>
     </div>
 
@@ -55,6 +56,10 @@
     <div id="Other_offers" class="tabcontent">
         <table class="table85" id="hotelOffers">
         </table>
+    </div>
+    
+    <div class="tabcontent" id="FastReservations">
+        
     </div>
     
     <div id="modal2" class="modal">
@@ -111,6 +116,9 @@
         }
         else if(cityName == "Other_offers"){
       	  localStorage.setItem("tab", "offersOpen");
+        }
+        else if(cityName == "FastReservations"){
+      	  localStorage.setItem("tab", "reservationsOpen");
         }
         evt.currentTarget.className += " active";
       }
