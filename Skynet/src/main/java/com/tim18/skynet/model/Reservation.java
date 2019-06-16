@@ -34,9 +34,10 @@ public class Reservation {
 	@JsonIgnore
 	@OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private List<RoomReservation> roomReservations = new ArrayList<RoomReservation>();
+	/*
 	@JsonIgnore
 	@OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private List<CarReservation> carReservations = new ArrayList<CarReservation>();
+	private List<CarReservation> carReservations = new ArrayList<CarReservation>();*/
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "reserving", joinColumns = @JoinColumn(name="reservation_id", referencedColumnName="id"),
@@ -67,12 +68,13 @@ public class Reservation {
 	public void setRoomReservations(List<RoomReservation> roomReservations) {
 		this.roomReservations = roomReservations;
 	}
+	/*
 	public List<CarReservation> getCarReservations() {
 		return carReservations;
 	}
 	public void setCarReservations(List<CarReservation> carReservations) {
 		this.carReservations = carReservations;
-	}
+	}*/
 	public List<RegisteredUser> getPassangers() {
 		return passangers;
 	}
@@ -87,7 +89,7 @@ public class Reservation {
 		this.completed = completed;
 	}
 	public Reservation(Long id, double totalPrice, boolean completed, List<SeatReservation> seatReservations,
-			List<RoomReservation> roomReservations, List<CarReservation> carReservations,
+			List<RoomReservation> roomReservations,/* List<CarReservation> carReservations,*/
 			List<RegisteredUser> passangers) {
 		super();
 		this.id = id;
@@ -95,7 +97,7 @@ public class Reservation {
 		this.completed = completed;
 		this.seatReservations = seatReservations;
 		this.roomReservations = roomReservations;
-		this.carReservations = carReservations;
+		//this.carReservations = carReservations;
 		this.passangers = passangers;
 	}
 	public Reservation() {

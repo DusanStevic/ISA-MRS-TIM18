@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tim18.skynet.dto.RentACarDTO;
 
 import io.jsonwebtoken.lang.Objects;
 
@@ -28,34 +29,108 @@ public class RentACar {
 	private String description;
 	@Column(nullable = false)
 	private String image;
+	@Column(nullable = false)
+	private Double score;
+	@Column(nullable = false)
+	private Integer number;
+
 	
-	@OneToMany(mappedBy = "rac", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private Set<Branch> branches = new HashSet<Branch>();
+	
+	public Integer getNumber() {
+		return number;
+	}
 
-	@OneToMany(mappedBy = "racservice", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private Set<RACSpecialOffer> specialOffers = new HashSet<RACSpecialOffer>();
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "rentacarAdmin", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private Set<RentacarAdmin> rentacarAdmins = new HashSet<>();
+
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "rentacar", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private Set<RentacarCustomerService> rentacarCustomerServices = new HashSet<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "rentacar", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private Set<Car> cars = new HashSet<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "rentacarRes", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private Set<CarReservation> carReservations = new HashSet<>();
+
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "rentacar", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private Set<Branch> branches = new HashSet<>();
+	
 		
+		public RentACar(Long id, String name, String address, String description, String image, Double score,
+			Set<RentacarAdmin> rentacarAdmins, /*Set<rentacarCustomerService> rentacarCustomerServices,*/ Set<Car> cars,
+			Set<CarReservation> carReservations, Set<Branch> branches) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.address = address;
+		this.description = description;
+		this.image = image;
+		this.score = score;
+		this.rentacarAdmins = rentacarAdmins;
+		//this.rentacarCustomerServices = rentacarCustomerServices;
+		this.cars = cars;
+		this.carReservations = carReservations;
+		this.branches = branches;
+	}
 
+		public Double getScore() {
+		return score;
+	}
 
-		public Set<Branch> getBranches() {
-			return branches;
-		}
-		
-		@JsonIgnore
-		public Set<Car> getVehicles() {
-			Set<Car> vehs = new HashSet<Car>();
-			
-			for (Branch branch : this.branches) {
-				for (Car vehicle : branch.getVehicles()) {
-					vehs.add(vehicle);
-				}
-			}
-			return vehs;
-		}
+	public void setScore(Double score) {
+		this.score = score;
+	}
 
-		public void setBranches(Set<Branch> branches) {
-			this.branches = branches;
-		}
+	public Set<RentacarAdmin> getRentacarAdmins() {
+		return rentacarAdmins;
+	}
+
+	public void setRentacarAdmins(Set<RentacarAdmin> rentacarAdmins) {
+		this.rentacarAdmins = rentacarAdmins;
+	}
+/*
+	public Set<rentacarCustomerService> getRentacarCustomerServices() {
+		return rentacarCustomerServices;
+	}
+
+	public void setRentacarCustomerServices(Set<rentacarCustomerService> rentacarCustomerServices) {
+		this.rentacarCustomerServices = rentacarCustomerServices;
+	}*/
+
+	public Set<Car> getCars() {
+		return cars;
+	}
+
+	public void setCars(Set<Car> cars) {
+		this.cars = cars;
+	}
+
+	public Set<CarReservation> getCarReservations() {
+		return carReservations;
+	}
+
+	public void setCarReservations(Set<CarReservation> carReservations) {
+		this.carReservations = carReservations;
+	}
+
+	public Set<Branch> getBranches() {
+		return branches;
+	}
+
+	public void setBranches(Set<Branch> branches) {
+		this.branches = branches;
+	}
 
 		@Override
 		public int hashCode() {
@@ -67,28 +142,9 @@ public class RentACar {
 			return "Rent a car [id=" + id + "]";
 		}
 
-		public void addBranch(Branch b) {
-			this.branches.add(b);
-		}
-
-		public Set<RACSpecialOffer> getSpecialOffers() {
-			return specialOffers;
-		}
-
-		public void setSpecialOffers(Set<RACSpecialOffer> specialOffers) {
-			this.specialOffers = specialOffers;
-		}
 	
 
 
-	public RentACar(Long id, String name, String address, String description, Set<Branch> branchs) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.address = address;
-		this.description = description;
-		this.branches = branchs;
-	}
 	
 	public RentACar(String name, String address, String description, String image) {
 		super();
@@ -98,15 +154,7 @@ public class RentACar {
 		this.image = image;
 	}
 
-	public RentACar(Long id, String name, String address, String description, String image, Set<Branch> branchs) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.address = address;
-		this.description = description;
-		this.image = image;
-		this.branches = branchs;
-	}
+
 
 
 
@@ -116,12 +164,7 @@ public class RentACar {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Set<Branch> getBranchs() {
-		return branches;
-	}
-	public void setBranchs(Set<Branch> branchs) {
-		this.branches = branchs;
-	}
+	
 	public String getName() {
 		return name;
 	}
@@ -150,6 +193,13 @@ public class RentACar {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+	
+	public RentACar(RentACarDTO rentacarDTO) {
+		this.name = rentacarDTO.getRentacarNameRegister();
+		this.address = rentacarDTO.getRentacarAddressRegister();
+		this.description = rentacarDTO.getRentacarPromotionalDescription();
+		this.score = 0.0;
 	}
 
 	

@@ -26,7 +26,7 @@ import com.tim18.skynet.dto.UserDTO;
 import com.tim18.skynet.enums.UserRoleName;
 import com.tim18.skynet.model.AirlineAdmin;
 import com.tim18.skynet.model.HotelAdmin;
-import com.tim18.skynet.model.RACAdmin;
+import com.tim18.skynet.model.RentacarAdmin;
 import com.tim18.skynet.model.User;
 
 import com.tim18.skynet.model.UserTokenState;
@@ -158,8 +158,8 @@ public class UserController {
 				AdminDTO admin = new AdminDTO(company, u.getName(), u.getSurname(), u.getUsername(), "", u.getEmail());
 				users.add(admin);
 			}
-			else if(u instanceof RACAdmin){
-				String company = ((RACAdmin)u).getRentacar().getName();
+			else if(u instanceof RentacarAdmin){
+				String company = ((RentacarAdmin)u).getRentacar().getName();
 				AdminDTO admin = new AdminDTO(company, u.getName(), u.getSurname(), u.getUsername(), "", u.getEmail());
 				users.add(admin);
 			}

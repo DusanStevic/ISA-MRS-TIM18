@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -39,6 +40,26 @@ public class RegisteredUser extends User {
 		// TODO Auto-generated constructor stub
 	}
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "regularUser", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private List<CarReservation> carReservations = new ArrayList<>();
+
+
+	
+	public List<CarReservation> getCarReservations() {
+		return carReservations;
+	}
+
+
+
+
+	public void setCarReservations(List<CarReservation> carReservations) {
+		this.carReservations = carReservations;
+	}
+
+
+
+
 	public RegisteredUser( String username, String password, String firstName, String lastName, String email) {
 		super(username,password,firstName,lastName,email);
 	}

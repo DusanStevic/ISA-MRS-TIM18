@@ -33,7 +33,7 @@ import com.tim18.skynet.model.AirlineAdmin;
 import com.tim18.skynet.model.Authority;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
-import com.tim18.skynet.model.RACAdmin;
+import com.tim18.skynet.model.RentacarAdmin;
 import com.tim18.skynet.model.RegisteredUser;
 import com.tim18.skynet.model.RentACar;
 import com.tim18.skynet.model.User;
@@ -140,7 +140,7 @@ public class AuthenticationController {
 			return new ResponseEntity<>(null, HttpStatus.OK);
 		}
 
-		RACAdmin admin = new RACAdmin();
+		RentacarAdmin admin = new RentacarAdmin();
 		List<Authority> authorities = new ArrayList<>();
 		Authority authority = new Authority();
 		RentACar rac = racService.findOne(Long.parseLong(user.getAdminId()));
@@ -211,7 +211,7 @@ public class AuthenticationController {
 
 		if (user instanceof HotelAdmin) {
 			userType = UserRoleName.ROLE_HOTEL_ADMIN;
-		} else if (user instanceof RACAdmin) {
+		} else if (user instanceof RentacarAdmin) {
 			userType = UserRoleName.ROLE_RENTACAR_ADMIN;
 		} else if (user instanceof AirlineAdmin) {
 			userType = UserRoleName.ROLE_AIRLINE_ADMIN;

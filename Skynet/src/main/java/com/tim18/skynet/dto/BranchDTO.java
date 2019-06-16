@@ -1,52 +1,36 @@
 package com.tim18.skynet.dto;
 
 public class BranchDTO {
-	private String name;
-	private String adress;
-	private String image;
-	private Long id;
-	
-	
-	
-	public BranchDTO(String name, String adress, String image) {
-		super();
-		this.name = name;
-		this.adress = adress;
-		this.image = image;
-	}
-	
+	private  Long id;
 	public Long getId() {
 		return id;
 	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	private String city;
+	private String address;
 	
-
-	public String getImage() {
-		return image;
+	public BranchDTO() {
+		
 	}
-
-
-
-	public void setImage(String image) {
-		this.image = image;
+	public String getCity() {
+		return city;
 	}
-
-
-
-	
-	public String getName() {
-		return name;
+	public void setCity(String city) {
+		this.city = city;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public String getAddress() {
+		return address;
 	}
-	public String getAdress() {
-		return adress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
-	public void setAdress(String adress) {
-		this.adress = adress;
+	public BranchDTO(String city, String address) {
+		super();
+		this.city = city;
+		this.address = address;
 	}
 	
-
-
-
+	
 }

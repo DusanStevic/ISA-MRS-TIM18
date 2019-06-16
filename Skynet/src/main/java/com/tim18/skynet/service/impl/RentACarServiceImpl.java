@@ -1,6 +1,5 @@
 package com.tim18.skynet.service.impl;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,9 +10,8 @@ import java.util.concurrent.ConcurrentMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tim18.skynet.dto.RentACarDTO;
+import com.tim18.skynet.dto.RACDTO;
 import com.tim18.skynet.model.RentACar;
-import com.tim18.skynet.model.Car;
 import com.tim18.skynet.repository.RentACarRepository;
 import com.tim18.skynet.service.RentACarService;
 
@@ -47,7 +45,7 @@ public class RentACarServiceImpl implements RentACarService {
 		rentacarsRepository.deleteById(id);
 	}
 
-	public Collection<RentACar> search(RentACarDTO rentACar) {
+	public Collection<RentACar> search(RACDTO rentACar) {
 
 		ConcurrentMap<Long, RentACar> searchRAC = new ConcurrentHashMap<Long, RentACar>();
 
@@ -89,5 +87,29 @@ public class RentACarServiceImpl implements RentACarService {
 	*/
 		return available;
 	}
+
+	/*
+	@Override
+	public List<RentACar> search2(String name, String address, Date checkin, Date checkout) {
+		if(name != null){
+			return rentacarsRepository.findByNameAndAddressAndDateAndBeds(name, address, checkin, checkout);
+		}
+		else{
+			return rentacarsRepository.findByAddressAndDateAndBeds(address, checkin, checkout);
+		}
+	}*/
+
+	public List<RentACar> findByName(String name) {
+		return rentacarsRepository.findByName(name);
+	}
+	
+
+
+	@Override
+	public List<RentACar> findByAddress(String address) {
+		return rentacarsRepository.findByAddress(address);
+	}
+
+
 
 }
