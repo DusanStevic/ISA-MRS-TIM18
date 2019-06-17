@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -44,7 +45,18 @@ public class RegisteredUser extends User {
 	}
 
 	
-	
+	@JsonIgnore
+	@OneToMany(mappedBy = "registredUser", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private List<CarReservation> carReservations = new ArrayList<>();
+
+
+	public List<CarReservation> getCarReservations() {
+		return carReservations;
+	}
+
+	public void setCarReservations(List<CarReservation> carReservations) {
+		this.carReservations = carReservations;
+	}
 
 	public Set<FriendRequest> getSendRequests() {
 		return sendRequests;

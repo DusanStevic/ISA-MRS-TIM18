@@ -1,16 +1,14 @@
 package com.tim18.skynet.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tim18.skynet.dto.CarSearchDTO;
 import com.tim18.skynet.model.Car;
-import com.tim18.skynet.model.Room;
+import com.tim18.skynet.model.RentACar;
 import com.tim18.skynet.repository.CarRepository;
 import com.tim18.skynet.service.CarService;
 
@@ -42,16 +40,14 @@ public class CarServiceImpl implements CarService{
 		vehicleRepository.deleteById(id);
 	}
 
-	public Car findByRegNumber(String regNumber) {
-		return vehicleRepository.findByRegistrationNumber(regNumber);
-	}
-	
+
+	/*
 	public List<Car> search(CarSearchDTO dto){
 		
 		ArrayList<Car> result1 = new ArrayList<>();
 		ArrayList<Car> result2 = new ArrayList<>();
 		
-		result1 = vehicleRepository.findByTypeContainingIgnoreCaseAndGearContainingIgnoreCase(dto.getType(), dto.getGear());
+		//result1 = vehicleRepository.findByTypeContainingIgnoreCaseAndGearContainingIgnoreCase(dto.getType(), dto.getGear());
 		double min, max;
 		
 		if(dto.getMinPrice() == null) {
@@ -83,4 +79,12 @@ public class CarServiceImpl implements CarService{
 	public ArrayList<Room> findAvailable(long racId, Date checkin, Date checkout) {
 		return vehicleRepository.findAvailable(racId, checkin, checkout);
 	}
+	*/
+
+	@Override
+	public List<Car> findByRentACar(RentACar r) {
+		return vehicleRepository.findByRentacar(r);
+
+	}
+
 }

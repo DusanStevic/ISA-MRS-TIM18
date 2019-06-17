@@ -3,54 +3,47 @@ package com.tim18.skynet.dto;
 import java.util.Date;
 
 public class CarReservationDTO {
-	private Long id;
-
-	private Long user_id;
-
-	private Date checkInDate;
-	private Date checkOutDate;
-	private Double totalPrice;
+	private Date startDate;
+	private Date endDate;
+	private Integer passengers;
+	private Long carId;
 	
 	public CarReservationDTO() {
+		
 	}
-
-	public Long getId() {
-		return id;
+	public CarReservationDTO(Long carId, Date startDate, Date endDate, Integer passengers) {
+		super();
+		this.carId = carId;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.passengers = passengers;
+		
 	}
-
-	public Long getUser_id() {
-		return user_id;
+	public Date getStartDate() {
+		return startDate;
 	}
-
-	public Date getCheckInDate() {
-		return checkInDate;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
-
-	public Date getCheckOutDate() {
-		return checkOutDate;
+	public Date getEndDate() {
+		return endDate;
 	}
-
-	public Double getTotalPrice() {
-		return totalPrice;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public Integer getPassengers() {
+		return passengers;
 	}
-
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
+	public void setPassengers(Integer passengers) {
+		this.passengers = passengers;
 	}
-
-	public void setCheckInDate(Date checkInDate) {
-		this.checkInDate = checkInDate;
+	public Long getCarId() {
+		return carId;
 	}
-
-	public void setCheckOutDate(Date checkOutDate) {
-		this.checkOutDate = checkOutDate;
+	public void setCarId(Long carId) {
+		this.carId = carId;
 	}
-
-	public void setTotalPrice(Double totalPrice) {
-		this.totalPrice = totalPrice;
-	}
+	
+	
+	
 }

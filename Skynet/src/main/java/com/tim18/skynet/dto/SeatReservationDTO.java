@@ -1,7 +1,6 @@
 package com.tim18.skynet.dto;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class SeatReservationDTO {
 	private Long flight_id;

@@ -1,6 +1,5 @@
 package com.tim18.skynet.dto;
 
-import javax.persistence.Column;
 
 public class DestinationBean {
 	

@@ -1,22 +1,19 @@
 package com.tim18.skynet.repository;
 
-import java.util.ArrayList; 
-import java.util.Date;
+
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import com.tim18.skynet.model.Car;
-import com.tim18.skynet.model.Room;
+import com.tim18.skynet.model.RentACar;
 
 
 
 public interface CarRepository extends JpaRepository<Car, Long>{
 	
-	Car findByRegistrationNumber(String registrationNumber);
 
-	ArrayList<Car> findByTypeContainingIgnoreCaseAndGearContainingIgnoreCase(String type, String gear);
-	
+	/*
 	@Query("SELECT v FROM Car v WHERE v.branch.rac.id = ?1 AND ?3 >= v.pricePerDay AND ?2 <= v.pricePerDay")
 	ArrayList<Car> findByPriceRange(Long rentacarId, double minPrice, double maxPrice);
 	
@@ -36,6 +33,9 @@ public interface CarRepository extends JpaRepository<Car, Long>{
 			   			"OR (vr.checkInDate <= ?2 AND vr.checkOutDate >= ?3) " +
 			   			"OR (vr.checkOutDate >= ?2 AND vr.checkOutDate <= ?3) " +
 			   			"OR (vr.checkInDate >= ?2 AND vr.checkOutDate <= ?3)))")
-	ArrayList<Room> findAvailable(long racId, Date checkin, Date checkout);
+	ArrayList<Room> findAvailable(long racId, Date checkin, Date checkout);*/
+	
+	
+	public List<Car> findByRentacar(RentACar rentacar);
 }
 

@@ -7,12 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tim18.skynet.model.Branch;
+import com.tim18.skynet.model.RentACar;
 import com.tim18.skynet.repository.BranchRepository;
+import com.tim18.skynet.service.BranchService;
 
 
 @Service
-public class BranchServiceImpl {
-
+public class BranchServiceImpl implements BranchService {
 	@Autowired
 	private BranchRepository branchRepository;
 
@@ -36,4 +37,16 @@ public class BranchServiceImpl {
 		branchRepository.deleteById(id);
 	}
 
+	
+	public List<Branch> findByRentacar(RentACar r) {
+		return branchRepository.findByRentacar(r);
+	}
+
+	@Override
+	public void remove(Long id) {
+		branchRepository.deleteById(id);
+	}
+
+	
+	
 }
