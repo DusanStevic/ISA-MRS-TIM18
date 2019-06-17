@@ -7,36 +7,37 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.tim18.skynet.dto.FriendRequestDTO;
+
 
 
 @Entity
+@Table(name = "friendRequest")
 public class FriendRequest {
-	
 	@Id
 	@GeneratedValue
 	private Long id;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "sender_id")
-	private RegisteredUser sender;
-	
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "reciever_id")
-	private RegisteredUser reciever;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "sent_id")
+	private RegisteredUser sent;
+
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "received_id")
+	private RegisteredUser received;
+
 	@Column(name = "accepted")
 	private Boolean accepted;
-	
-	public FriendRequest() {
-		// TODO Auto-generated constructor stub
-	}
 
-	public FriendRequest(RegisteredUser sender, RegisteredUser reciever, boolean accepted) {
+	public FriendRequest(FriendRequestDTO dto) {
 		super();
-		this.sender = sender;
-		this.reciever = reciever;
-		this.accepted = accepted;
+		this.sent = dto.getSenderId();
+		this.received = dto.getReceiverId();
+		this.accepted = dto.getAccepted();
 	}
 
 	public Long getId() {
@@ -47,34 +48,32 @@ public class FriendRequest {
 		this.id = id;
 	}
 
-	public RegisteredUser getSender() {
-		return sender;
+	public FriendRequest() {
+		super();
 	}
 
-	public void setSender(RegisteredUser sender) {
-		this.sender = sender;
+	public RegisteredUser getSent() {
+		return sent;
 	}
 
-	public RegisteredUser getReciever() {
-		return reciever;
+	public void setSent(RegisteredUser sent) {
+		this.sent = sent;
 	}
 
-	public void setReciever(RegisteredUser reciever) {
-		this.reciever = reciever;
+	public RegisteredUser getReceived() {
+		return received;
 	}
 
-	public boolean isAccepted() {
+	public void setReceived(RegisteredUser received) {
+		this.received = received;
+	}
+
+	public Boolean getAccepted() {
 		return accepted;
 	}
 
-	public void setAccepted(boolean accepted) {
+	public void setAccepted(Boolean accepted) {
 		this.accepted = accepted;
 	}
-	
-	
-	
-
-	
-	
 
 }

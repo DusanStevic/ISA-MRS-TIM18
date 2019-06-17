@@ -309,6 +309,471 @@ function formToJSON_pretraga(flightCompany,startDestination,endDestination,start
 	});
 }
 
+/*DODAVANJE FRIENDSA*/
+$(document).on('click', '#addFriends_button', function(e){
+	console.log("ULETEO SAM U DODAVANJE PRIJATELJA");
+	e.preventDefault();
+	var tabela = $('<table></table>');
+	tabela.append('<tr><td> First name:</td><td>' +  '<input type = "text" name = "firstName" ></td></tr>');
+	tabela.append('<tr><td> Last name:</td><td>' +  '<input type = "text" name = "lastName" ></td></tr>');
+	
+	
+	
+	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
+	var forma = $('<form id = "addFriendsForm" enctype="multipart/form-data"></form>');
+	forma.append(tabela);
+	$('#main').empty();
+	$('#main').append('<h1>Dodavanje prijatelja </h1>')
+	$('#main').append(forma)
+})
+
+$(document).on('submit', '#addFriendsForm', function(e){
+	e.preventDefault();
+	var firstName = $(this).find("input[name = firstName]").val();
+	var lastName = $(this).find("input[name = lastName]").val();
+	
+	
+	
+	
+	if (firstName == "" || lastName == ""  ){
+		alert("Morate popuniti sva polja!");
+		return false;
+	}
+	$.ajax({
+		type : 'POST',
+		url : "http://localhost:8080/api/potentialFriends",
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		contentType: 'application/json',
+		dataType : 'json',
+		data: addFriendsForm2JSON(firstName, lastName),
+		success : prikazRegisteredUsers,
+		
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("ULETEO SAM U AJAX ERROR: " + errorThrown);
+		}
+	});	
+	
+})
+
+function addFriendsForm2JSON(firstName, lastName){
+	return JSON.stringify({
+		"firstName" : firstName,
+		"lastName" : lastName
+	});
+}
+
+function prikazRegisteredUsers(data){
+	
+	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	var tabela = $('<table class = "mainTable"></table>')
+	/*zagalvlje tabele*/
+	var tr_h = $('<tr></tr>');
+		
+		tr_h.append('<th>First Name</th>');
+		tr_h.append('<th>Last Name</th>');
+		tr_h.append('<th>Status</th>');
+		tr_h.append('<th></th>');
+	
+	var t_head = $('<thead></thead>');
+	t_head.append(tr_h);
+	tabela.append(t_head);
+	/*telo tabele*/
+	var t_body = $('<tbody></tbody>')
+	$.each(list, function(index, destinacija){
+		var tr = $('<tr></tr>');
+		tr.append('<td>'+ destinacija.user.name + '</td>');
+		tr.append('<td>'+ destinacija.user.surname + '</td>');
+		tr.append('<td>'+ destinacija.status + '</td>');
+		
+		/*tr.append('<td>'+ '<img src= "' + destinacija.slikaDestinacije + '" alt = "nisam nasao" width= "261px" height= "121">' + '</td>');
+		tr.append('<td>'+ destinacija.nazivDestinacije + '</td>');
+		tr.append('<td>'+ destinacija.drzava + '</td>');
+		tr.append('<td>'+ destinacija.nazivAerodroma + '</td>');
+		tr.append('<td>'+ destinacija.kodAerodroma + '</td>');
+		tr.append('<td>'+ destinacija.lokacija + '</td>');
+		tr.append('<td id = "stanje_' + destinacija.nazivDestinacije + '">'+ destinacija.stanjeDestinacije + '</td>');
+		var forma = $('<form class = "arhiviranje"></form>')
+		forma.append('<input type = "hidden" value="' + destinacija.nazivDestinacije +'">');
+		if (destinacija.stanjeDestinacije == "ARHIVIRANA"){
+			
+			forma.append('<input type = "submit" id = "arhiviranje_' + destinacija.nazivDestinacije +'" value = "Aktiviraj">')
+		}
+		else{
+			forma.append('<input type = "submit" id = "arhiviranje_' + destinacija.nazivDestinacije +'" value = "Arhiviraj">')
+		}*/
+		var forma2 = $('<form class = "addFriend"></form>')
+		forma2.append('<input type = "hidden" value="' + destinacija.user.id +'">');
+		forma2.append('<input type = "submit" value = "Add Friend">')
+		//var td = $('<td></td>');
+		var td2 = $('<td></td>');
+		//td.append(forma);
+		td2.append(forma2);
+		//tr.append(td);
+		tr.append(td2);
+		t_body.append(tr);
+	});
+	tabela.append(t_body);
+	$('#main').empty();
+	$('#main').append(tabela);
+}
+
+
+
+
+
+
+$(document).on('submit', '.addFriend', function(e){	
+	e.preventDefault();
+	var id = $(this).find('input[type=hidden]').val(); 
+	//var adresa = '../Projekat/rest/admini/pronadjiDestinaciju/' + nazivDest;
+	var adresa = "http://localhost:8080/api/addFriend/" + id;
+	
+	$.ajax({
+		type : 'POST',
+		url : adresa,
+        headers : createAuthorizationTokenHeader(TOKEN_KEY),
+        dataType: 'json',
+        //success: prikazDestinacijeZaIzmenu,
+        success : function(data) {
+        	
+        	$.bootstrapGrowl("Friend request has been successfully sent!", {
+				  ele: 'body', // which element to append to
+				  type: 'success', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If false then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+			
+			//$("button[name='" + name + "']").attr('disabled', 'disabled');
+			//$("button[name='" + name + "']").text('Request sent');
+		},
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+			$.bootstrapGrowl("An error occurred while trying to add friend!", {
+				  ele: 'body', // which element to append to
+				  type: 'danger', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If true then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+		}
+	});
+})
+
+/*VIEW FRIEND REQUESTS*/
+$(document).on('click', '#viewFriendRequests_button', function(e){
+	e.preventDefault();
+	$.ajax({
+		type : 'GET',
+		url : "http://localhost:8080/api/getMyRequests",
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		dataType: 'json',
+		success : prikazPodatakaFriendsRequests,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			$.bootstrapGrowl("An error occurred while trying to view friend requests!", {
+				  ele: 'body', // which element to append to
+				  type: 'danger', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If true then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+		}
+	});	
+})
+
+function prikazPodatakaFriendsRequests(data){
+	
+	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	var tabela = $('<table class = "mainTable"></table>')
+	/*zagalvlje tabele*/
+	var tr_h = $('<tr></tr>');
+		
+		tr_h.append('<th>First Name</th>');
+		tr_h.append('<th>Last Name</th>');
+		tr_h.append('<th>Status</th>');
+		tr_h.append('<th></th>');
+	
+	var t_head = $('<thead></thead>');
+	t_head.append(tr_h);
+	tabela.append(t_head);
+	/*telo tabele*/
+	var t_body = $('<tbody></tbody>')
+	$.each(list, function(index, friendRequest){
+		var tr = $('<tr></tr>');
+		tr.append('<td>'+ friendRequest.sent.name + '</td>');
+		tr.append('<td>'+ friendRequest.sent.surname + '</td>');
+		//tr.append('<td>'+ destinacija.status + '</td>');
+		
+		/*tr.append('<td>'+ '<img src= "' + destinacija.slikaDestinacije + '" alt = "nisam nasao" width= "261px" height= "121">' + '</td>');
+		tr.append('<td>'+ destinacija.nazivDestinacije + '</td>');
+		tr.append('<td>'+ destinacija.drzava + '</td>');
+		tr.append('<td>'+ destinacija.nazivAerodroma + '</td>');
+		tr.append('<td>'+ destinacija.kodAerodroma + '</td>');
+		tr.append('<td>'+ destinacija.lokacija + '</td>');
+		tr.append('<td id = "stanje_' + destinacija.nazivDestinacije + '">'+ destinacija.stanjeDestinacije + '</td>');
+		var forma = $('<form class = "arhiviranje"></form>')
+		forma.append('<input type = "hidden" value="' + destinacija.nazivDestinacije +'">');
+		if (destinacija.stanjeDestinacije == "ARHIVIRANA"){
+			
+			forma.append('<input type = "submit" id = "arhiviranje_' + destinacija.nazivDestinacije +'" value = "Aktiviraj">')
+		}
+		else{
+			forma.append('<input type = "submit" id = "arhiviranje_' + destinacija.nazivDestinacije +'" value = "Arhiviraj">')
+		}*/
+		
+		
+		
+		var forma2 = $('<form class = "accept"></form>')
+		forma2.append('<input type = "hidden" value="' + friendRequest.sent.id +'">');
+		forma2.append('<input type = "submit" value = "Accept">')
+		
+		var forma3 = $('<form class = "reject"></form>')
+		forma3.append('<input type = "hidden" value="' + friendRequest.sent.id +'">');
+		forma3.append('<input type = "submit" value = "Reject">')
+		
+		
+		
+		//var td = $('<td></td>');
+		var td2 = $('<td></td>');
+		var td3 = $('<td></td>');
+		//td.append(forma);
+		td2.append(forma2);
+		td3.append(forma3);
+		//tr.append(td);
+		tr.append(td2);
+		tr.append(td3);
+		t_body.append(tr);
+	});
+	tabela.append(t_body);
+	$('#main').empty();
+	$('#main').append(tabela);
+}
+
+
+
+
+
+
+$(document).on('submit', '.accept', function(e){	
+	e.preventDefault();
+	var id = $(this).find('input[type=hidden]').val(); 
+	var adresa = "http://localhost:8080/api/acceptRequest/" + id;
+	
+	$.ajax({
+		type : 'PUT',
+		url : adresa,
+        headers : createAuthorizationTokenHeader(TOKEN_KEY),
+        dataType: 'json',
+        //success: prikazDestinacijeZaIzmenu,
+        success : function(data) {
+			$.bootstrapGrowl("Friend request has been successfully accepted!", {
+				  ele: 'body', // which element to append to
+				  type: 'success', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If false then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+			//$("button[name='" + name + "']").attr('disabled', 'disabled');
+			//$("button[name='" + name + "']").text('Request sent');
+		},
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+			$.bootstrapGrowl("An error occurred while trying to accept friend request!", {
+				  ele: 'body', // which element to append to
+				  type: 'danger', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If true then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+		}
+	});
+})
+
+
+$(document).on('submit', '.reject', function(e){	
+	e.preventDefault();
+	var id = $(this).find('input[type=hidden]').val(); 
+	//var adresa = '../Projekat/rest/admini/pronadjiDestinaciju/' + nazivDest;
+	var adresa = "http://localhost:8080/api/rejectRequest/" + id;
+	
+	$.ajax({
+		type : 'DELETE',
+		url : adresa,
+        headers : createAuthorizationTokenHeader(TOKEN_KEY),
+        dataType: 'json',
+        success : function(data) {
+			$.bootstrapGrowl("Friend request has been successfully rejected!", {
+				  ele: 'body', // which element to append to
+				  type: 'success', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If false then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+			//$("button[name='" + name + "']").attr('disabled', 'disabled');
+			//$("button[name='" + name + "']").text('Request sent');
+		},
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+			$.bootstrapGrowl("An error occurred while trying to reject friend request!", {
+				  ele: 'body', // which element to append to
+				  type: 'danger', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If true then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+		}
+	});
+})
+
+
+
+
+
+
+
+/*VIEW FRIENDS*/
+$(document).on('click', '#viewFriends_button', function(e){
+	e.preventDefault();
+	$.ajax({
+		type : 'GET',
+		url : "http://localhost:8080/api/getMyFriends",
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		dataType: 'json',
+		success : prikazPodatakaFriends,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			$.bootstrapGrowl("An error occurred while trying to view friends list!", {
+				  ele: 'body', // which element to append to
+				  type: 'danger', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If true then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+		}
+	});	
+})
+
+function prikazPodatakaFriends(data){
+	
+	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	var tabela = $('<table class = "mainTable"></table>')
+	/*zagalvlje tabele*/
+	var tr_h = $('<tr></tr>');
+		
+		tr_h.append('<th>First Name</th>');
+		tr_h.append('<th>Last Name</th>');
+		tr_h.append('<th>Status</th>');
+		tr_h.append('<th></th>');
+	
+	var t_head = $('<thead></thead>');
+	t_head.append(tr_h);
+	tabela.append(t_head);
+	/*telo tabele*/
+	var t_body = $('<tbody></tbody>')
+	$.each(list, function(index, friend){
+		var tr = $('<tr></tr>');
+		tr.append('<td>'+ friend.name + '</td>');
+		tr.append('<td>'+ friend.surname + '</td>');
+		//tr.append('<td>'+ destinacija.status + '</td>');
+		
+		/*tr.append('<td>'+ '<img src= "' + destinacija.slikaDestinacije + '" alt = "nisam nasao" width= "261px" height= "121">' + '</td>');
+		tr.append('<td>'+ destinacija.nazivDestinacije + '</td>');
+		tr.append('<td>'+ destinacija.drzava + '</td>');
+		tr.append('<td>'+ destinacija.nazivAerodroma + '</td>');
+		tr.append('<td>'+ destinacija.kodAerodroma + '</td>');
+		tr.append('<td>'+ destinacija.lokacija + '</td>');
+		tr.append('<td id = "stanje_' + destinacija.nazivDestinacije + '">'+ destinacija.stanjeDestinacije + '</td>');
+		var forma = $('<form class = "arhiviranje"></form>')
+		forma.append('<input type = "hidden" value="' + destinacija.nazivDestinacije +'">');
+		if (destinacija.stanjeDestinacije == "ARHIVIRANA"){
+			
+			forma.append('<input type = "submit" id = "arhiviranje_' + destinacija.nazivDestinacije +'" value = "Aktiviraj">')
+		}
+		else{
+			forma.append('<input type = "submit" id = "arhiviranje_' + destinacija.nazivDestinacije +'" value = "Arhiviraj">')
+		}*/
+		var forma2 = $('<form class = "remove"></form>')
+		forma2.append('<input type = "hidden" value="' + friend.id +'">');
+		forma2.append('<input type = "submit" value = "Remove">')
+		//var td = $('<td></td>');
+		var td2 = $('<td></td>');
+		//td.append(forma);
+		td2.append(forma2);
+		//tr.append(td);
+		tr.append(td2);
+		t_body.append(tr);
+	});
+	tabela.append(t_body);
+	$('#main').empty();
+	$('#main').append(tabela);
+}
+
+
+
+
+
+
+$(document).on('submit', '.remove', function(e){	
+	e.preventDefault();
+	var id = $(this).find('input[type=hidden]').val(); 
+	var adresa = "http://localhost:8080/api/removeFriend/" + id;
+	
+	$.ajax({
+		type : 'DELETE',
+		url : adresa,
+        headers : createAuthorizationTokenHeader(TOKEN_KEY),
+        dataType: 'json',
+        //success: prikazDestinacijeZaIzmenu,
+        success : function(data) {
+			$.bootstrapGrowl("Friend has been successfully removed!", {
+				  ele: 'body', // which element to append to
+				  type: 'success', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If false then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+			//$("button[name='" + name + "']").attr('disabled', 'disabled');
+			//$("button[name='" + name + "']").text('Request sent');
+		},
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+			$.bootstrapGrowl("An error occurred while trying to remove friends!", {
+				  ele: 'body', // which element to append to
+				  type: 'danger', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If true then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+		}
+	});
+})
+
+
 
 /*DODAVANJE NOVE REZERVACIJE*/
 

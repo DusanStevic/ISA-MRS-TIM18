@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -23,14 +24,19 @@ public class RegisteredUser extends User {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "sender")
-	private Set<FriendRequest> sendRequests = new HashSet<FriendRequest>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "reciever")
-	private Set<FriendRequest> receivedRequests = new HashSet<FriendRequest>();
+	@OneToMany(mappedBy = "sent", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private List<FriendRequest> sent = new ArrayList<>();
+	
+
+
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "received", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private List<FriendRequest> received = new ArrayList<>();
+
+	
 
 	@ManyToMany(mappedBy = "passangers", cascade = CascadeType.REFRESH)
 	private List<Reservation> reservations = new ArrayList<Reservation>(); 
@@ -46,25 +52,27 @@ public class RegisteredUser extends User {
 	
 	
 
-	public Set<FriendRequest> getSendRequests() {
-		return sendRequests;
-	}
-
-	public void setSendRequests(Set<FriendRequest> sendRequests) {
-		this.sendRequests = sendRequests;
-	}
-
-	public Set<FriendRequest> getReceivedRequests() {
-		return receivedRequests;
-	}
-
-	public void setReceivedRequests(Set<FriendRequest> receivedRequests) {
-		this.receivedRequests = receivedRequests;
-	}
+	
 	
 	
 	
 
+
+	public List<FriendRequest> getSent() {
+		return sent;
+	}
+
+	public void setSent(List<FriendRequest> sent) {
+		this.sent = sent;
+	}
+
+	public List<FriendRequest> getReceived() {
+		return received;
+	}
+
+	public void setReceived(List<FriendRequest> received) {
+		this.received = received;
+	}
 
 	@JsonIgnore
 	@Override
