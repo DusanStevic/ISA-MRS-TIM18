@@ -1,91 +1,168 @@
 package com.tim18.skynet.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tim18.skynet.dto.CarReservationDTO;
 
 @Entity
 public class CarReservation {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	private Long id;
-	@Column(nullable = false)
-	private Date checkInDate;
-	@Column(nullable = false)
-	private Date checkOutDate;
-	@Column(nullable = false)
-	private Double totalPrice;
-
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "reserved_car", referencedColumnName = "id")
-	private Car vehicle;
+	
+	@Column(name = "price")
+	private Double price;
+	
+	@Column (name="discount")
+	private Integer discount;
+	
+	@Column(name = "start_date")
+	private Date startDate;
+	
+	@Column(name = "end_date")
+	private Date endDate;
+	
+	@Column(name="num_of_pass")
+	private Integer numOfPass;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	RegisteredUser registredUser;
 	
 	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "reservation_id", referencedColumnName = "id")
-	private Reservation reservation;
+	@ManyToOne(fetch = FetchType.EAGER)
+	Reservation reservation;
+	
+	
+	
+	@Column(name="flightId")
+	Long flightId;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	Car car;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	RentACar rentacarRes;
+	
 	public CarReservation() {
+		
+	}
+	
+	public CarReservation(Date startDate, Date endDate) {
+		this.startDate=startDate;
+		this.endDate=endDate;
+	}
+	public Long getFlightId() {
+		return flightId;
+	}
+
+	public void setFlightId(Long flightId) {
+		this.flightId = flightId;
+	}
+
+	public CarReservation(CarReservationDTO dto) {
+		this.startDate=dto.getStartDate();
+		this.endDate=dto.getEndDate();
+		this.numOfPass=dto.getPassengers();
+		
+	}
+
+	public RentACar getRentacarRes() {
+		return rentacarRes;
+	}
+
+
+	public void setRentacarRes(RentACar rentacarRes) {
+		this.rentacarRes = rentacarRes;
+	}
+
+
+	
+
+
+	public RegisteredUser getRegistredUser() {
+		return registredUser;
+	}
+
+	public void setRegistredUser(RegisteredUser registredUser) {
+		this.registredUser = registredUser;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
+
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Date getCheckInDate() {
-		return checkInDate;
+
+	public Double getPrice() {
+		return price;
 	}
 
-	public void setCheckInDate(Date checkInDate) {
-		this.checkInDate = checkInDate;
+
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
-	public Date getCheckOutDate() {
-		return checkOutDate;
+
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setCheckOutDate(Date checkOutDate) {
-		this.checkOutDate = checkOutDate;
+
+	public Integer getDiscount() {
+		return discount;
 	}
 
-	@JsonIgnore
-	public Car getVehicle() {
-		return vehicle;
+	public void setDiscount(Integer discount) {
+		this.discount = discount;
 	}
 
-	public void setVehicle(Car vehicle) {
-		this.vehicle = vehicle;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
-	public Double getTotalPrice() {
-		return totalPrice;
+
+	public Date getEndDate() {
+		return endDate;
 	}
 
-	public void setTotalPrice(Double totalPrice) {
-		this.totalPrice = totalPrice;
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
-	public Reservation getReservation() {
-		return reservation;
+
+	public Integer getNumOfPass() {
+		return numOfPass;
 	}
 
-	public void setReservation(Reservation reservation) {
-		this.reservation = reservation;
+
+	public void setNumOfPass(Integer numOfPass) {
+		this.numOfPass = numOfPass;
 	}
+
+
+	public Car getCar() {
+		return car;
+	}
+
+
+	public void setCar(Car car) {
+		this.car = car;
+	}
+	
+	
 }

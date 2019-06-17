@@ -1,38 +1,63 @@
 package com.tim18.skynet.model;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tim18.skynet.dto.BranchDTO;
 
 @Entity
 public class Branch {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	private Long id;
 
-	private String name;
+	@Column(name = "city")
+	private String city;
 
+	@Column(name = "address")
 	private String address;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	private RentACar rac;
-
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	RentACar rentacar;
+	
 	@OneToMany(mappedBy = "branch", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Car> vehicles = new HashSet<Car>();
 
+	
+	public Branch(Long id, String city, String address, RentACar rentacar, Set<Car> vehicles) {
+		super();
+		this.id = id;
+		this.city = city;
+		this.address = address;
+		this.rentacar = rentacar;
+		this.vehicles = vehicles;
+	}
+
+	public Set<Car> getVehicles() {
+		return vehicles;
+	}
+
+	public void setVehicles(Set<Car> vehicles) {
+		this.vehicles = vehicles;
+	}
+
 	public Branch() {
+		
+	}
+	
+	public Branch(BranchDTO dto) {
+		this.city=dto.getCity();
+		this.address=dto.getAddress();
 	}
 
 	public Long getId() {
@@ -43,58 +68,13 @@ public class Branch {
 		this.id = id;
 	}
 
-	@JsonIgnore
-	public RentACar getRac() {
-		return rac;
+	
+	public String getCity() {
+		return city;
 	}
 
-	public void setRac(RentACar rac) {
-		this.rac = rac;
-	}
-
-	public Set<Car> getVehicles() {
-		return vehicles;
-	}
-
-	public void addVehicle(Car veh) {
-		this.vehicles.add(veh);
-	}
-
-	public void setVehicles(Set<Car> vehicles) {
-		this.vehicles = vehicles;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		Branch b = (Branch) o;
-		if (b.id == null || id == null) {
-			return false;
-		}
-		return Objects.equals(id, b.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(id);
-	}
-
-	@Override
-	public String toString() {
-		return "Branch [id=" + id + "]";
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getAddress() {
@@ -105,5 +85,11 @@ public class Branch {
 		this.address = address;
 	}
 
-}
+	public RentACar getRentacar() {
+		return rentacar;
+	}
 
+	public void setRentacar(RentACar rentacar) {
+		this.rentacar = rentacar;
+	}
+}

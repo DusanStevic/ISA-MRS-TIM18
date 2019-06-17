@@ -39,7 +39,7 @@ $(document).on('submit', "#loginForm", function(e){
 					window.location.replace("AirlineAdministrator.html");
 				} else if (data.userRoleName == "ROLE_RENTACAR_ADMIN") {
 					localStorage.setItem("pageat", "racAdmin");
-					window.location.replace("racAdmin-home.html");
+					window.location.replace("rentacaradmin.html");
 				} 
 				else if (data.userRoleName=="ROLE_USER"){
 					localStorage.setItem("pageat", "user");
