@@ -2,6 +2,7 @@ package com.tim18.skynet.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -87,7 +88,7 @@ public class RentACarServiceImpl implements RentACarService {
 		return available;
 	}
 
-	/*
+	
 	@Override
 	public List<RentACar> search2(String name, String address, Date checkin, Date checkout) {
 		if(name != null){
@@ -96,7 +97,7 @@ public class RentACarServiceImpl implements RentACarService {
 		else{
 			return rentacarsRepository.findByAddressAndDateAndBeds(address, checkin, checkout);
 		}
-	}*/
+	}
 
 	public List<RentACar> findByName(String name) {
 		return rentacarsRepository.findByName(name);

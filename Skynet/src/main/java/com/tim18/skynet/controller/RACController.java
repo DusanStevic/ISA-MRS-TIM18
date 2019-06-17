@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tim18.skynet.comparator.RentACarComparatorAddress;
 import com.tim18.skynet.comparator.RentACarComparatorName;
 import com.tim18.skynet.dto.CompanyDTO;
+import com.tim18.skynet.dto.HotelSearchDTO;
 import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.dto.RentACarDTO;
 import com.tim18.skynet.dto.ReportRentacarAttendanceDTO;
@@ -191,6 +193,8 @@ public class RACController {
 		return new ResponseEntity<>(rentacars, HttpStatus.OK);
 	}
 
+
+	
 	@PostMapping(value = "/createRentacar", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RentACar> create(@RequestBody RentACarDTO rentacarDTO) {
 		RentACar retVal = rentacarService.save(new RentACar(rentacarDTO));
@@ -292,7 +296,7 @@ public class RACController {
 			return new ResponseEntity<>(vehs, HttpStatus.OK);
 		}*/
 		
-		/*
+		
 		@RequestMapping(value = "/api/searchedRacs", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 		public Collection<RentACar> getSearched(@RequestBody HotelSearchDTO search) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -318,7 +322,7 @@ public class RACController {
 			
 			List<RentACar> racs = rentacarService.search2(name, address, date1, date2);
 			return racs;
-		}*/
+		}
 	}
 
 

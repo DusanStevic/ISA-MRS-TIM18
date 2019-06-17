@@ -28,7 +28,7 @@ $(document).ready(function(){
 	}
 	else if(page == "rac"){
 		generateRACSearch();
-		//findRACs();
+		findRACs();
 	}
 	//i ako je strana companies display
 	else if(page == "searchHotels"){
@@ -39,7 +39,7 @@ $(document).ready(function(){
 		searchAirlines();
 	}
 	else if(page == "searchRacs"){
-		//searchRacs();
+		searchRacs();
 	}
 });
 
