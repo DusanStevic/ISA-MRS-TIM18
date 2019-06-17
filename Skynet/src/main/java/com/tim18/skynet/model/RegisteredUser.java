@@ -107,9 +107,22 @@ public class RegisteredUser extends User {
 		this.reservations = reservations;
 	}
 
-	
+	@JsonIgnore
+	@OneToMany(mappedBy = "registredUser", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private List<CarReservation> carReservations = new ArrayList<>();
+
+	public List<CarReservation> getCarReservations() {
+		return carReservations;
+	}
+
+	public void setCarReservations(List<CarReservation> carReservations) {
+		this.carReservations = carReservations;
+	}
+
 
 
 
 }
+
+
 

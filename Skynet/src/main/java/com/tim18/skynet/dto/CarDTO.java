@@ -11,49 +11,95 @@ import com.tim18.skynet.model.Branch;
 
 public class CarDTO {
 
-	private Long id;
-	private String registrationNumber;
-	private String type;
-	private String gear;
+	private long id;
+	private String name;
+	private Double price;
+	private Integer year;
+	private String carType;
+	private String brand;
+	private String model;
+	private Integer seats;
+	
+	
+	public String getCarType() {
+		return carType;
+	}
 
+	public void setCarType(String carType) {
+		this.carType = carType;
+	}
 
-	public Long getId() {
+	public CarDTO() {
+		super();
+	}
+
+	public CarDTO(String name, Double price, Integer year, Long id, String ct, String brand, String model, Integer seats) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.year = year;
+		this.carType=ct;
+		this.brand=brand;
+		this.model=model;
+		this.seats=seats;
+		
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	public void setModel(String model) {
+		this.model = model;
+	}
+
+	public Integer getSeats() {
+		return seats;
+	}
+
+	public void setSeats(Integer seats) {
+		this.seats = seats;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public long getId() {
 		return id;
 	}
 
-
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-
-	public String getRegistrationNumber() {
-		return registrationNumber;
-	}
-
-
-	public void setRegistrationNumber(String registrationNumber) {
-		this.registrationNumber = registrationNumber;
-	}
-
-
-	public String getType() {
-		return type;
-	}
-
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-
-	public String getGear() {
-		return gear;
-	}
-
-
-	public void setGear(String gear) {
-		this.gear = gear;
-	}
 }
-

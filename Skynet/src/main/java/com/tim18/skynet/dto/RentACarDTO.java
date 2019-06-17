@@ -2,35 +2,45 @@ package com.tim18.skynet.dto;
 
 public class RentACarDTO {
 
-	private Long id;
-	private String name;
-	private String address;
-	
+	private String rentacarNameRegister;
+	private String rentacarAddressRegister;
+	private String rentacarPromotionalDescription;
+
+	public String getRentacarNameRegister() {
+		return rentacarNameRegister;
+	}
+
+	public void setRentacarNameRegister(String rentacarNameRegister) {
+		this.rentacarNameRegister = rentacarNameRegister;
+	}
+
+	public String getRentacarAddressRegister() {
+		return rentacarAddressRegister;
+	}
+
+	public void setRentacarAddressRegister(String rentacarAddressRegister) {
+		this.rentacarAddressRegister = rentacarAddressRegister;
+	}
+
+	public String getRentacarPromotionalDescription() {
+		return rentacarPromotionalDescription;
+	}
+
+	public void setRentacarPromotionalDescription(String rentacarPromotionalDescription) {
+		this.rentacarPromotionalDescription = rentacarPromotionalDescription;
+	}
+
+	public RentACarDTO(String rentacarNameRegister, String rentacarAddressRegister,
+			String rentacarPromotionalDescription) {
+		super();
+		this.rentacarNameRegister = rentacarNameRegister;
+		this.rentacarAddressRegister = rentacarAddressRegister;
+		this.rentacarPromotionalDescription = rentacarPromotionalDescription;
+	}
+
 	public RentACarDTO() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
+	
 }
