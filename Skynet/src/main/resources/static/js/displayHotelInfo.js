@@ -17,6 +17,7 @@ $(window).on("load",function(){
 		}
 		displayHotelProfile();
 		printHotelOffers();
+		getFastReservations();
 		var s1 = localStorage.getItem("searchCriteria");
 		var search;
 		if(s1 != null && s1 != undefined && s1 != ""){
@@ -174,6 +175,58 @@ $(document).on('click','#uploadRoomImg',function(e){
     }
 })
 
+function getFastReservations(){
+	var id = localStorage.getItem("hotelId1");
+	var reservation = "login";
+	var token = getJwtToken(TOKEN_KEY);
+	if(token){
+		reservation = "fastReserve";
+	}
+	var number = localStorage.getItem("nights");
+	var arr = [];
+	var sort = "1";
+	$.ajax({
+		type:'POST',
+		url:'/api/getfastRooms/'+id,
+		contentType:'application/json',
+		data: inputToRoomSearchDTO(sort,arr),
+		dataType:'json',
+		success:function(data){
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			$.each(list, function(index, res){
+				var real_price = res.room.price;
+				var new_price = res.price;
+				var ul = '<ul>';
+				$.each(res.offers, function(index2, off){
+					ul = ul +'<li><b><h4>'+off.name+'<h4></b></li>';
+					real_price = real_price + off.price;
+					new_price = new_price + off.price;
+				})
+				var ul2 = '<ul>';
+				$.each(res.room.roomOffers, function(index3, offr){
+					ul2 = ul2 +'<li><b><h4>'+offr.offer+'<h4></b></li>';
+				})
+				ul = ul + '</ul>';
+				ul2 = ul2 + '</ul>';
+				var tr = $('<tr></tr>');
+				if(res.offers.length > 0){
+					tr.append('<td><img src=' + res.room.image + ' class="room_display"/></td>');
+	                tr.append('<td><table><tr><td><div style="color:red;"><strike><h4>Price per'+number+' night(s): ' + number * real_price + '$</h4></strike></div></td></tr><tr><td><h3>Price per '+number+' night(s): '+new_price * number+'$</h3></td></tr>' + '<tr><td><h4>Beds: ' + res.room.bedNumber + '</h4></td></tr>' +
+	                '<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
+	        		'<tr><td><input type = "button" class="greenButton" id="'+reservation+'" value="Reserve room" name="'+res.id+'"></td></tr></table></td><td><div class="blue_box">'+ul2+'<h3>Included hotel\'s offers:</h3>'+ul+'</div></td>');
+				}
+				else{
+					tr.append('<td><img src=' + res.room.image + ' class="room_display"/></td>');
+	                tr.append('<td><table><tr><td><div style="color:red;"><strike><h4>Price per'+number+' night(s): ' + number * real_price + '$</h4></strike></div></td></tr><tr><td><h3>Price per '+number+' night(s): '+new_price * number+'<tr><td><h4>Beds: ' + res.room.bedNumber + '</h4></td></tr>' +
+	                		'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
+	        		'<tr><td><input type = "button" class="greenButton" id="'+reservation+'" value="Reserve room" name="'+res.id+'"></td></tr></table></td><td><div class="blue_box">'+ul2+'</div></td>');
+				}
+                $('#fastDisp').append(tr);
+			});
+		}
+	});
+}
+
 function printHotelOffers(){
 	var id = localStorage.getItem("hotelId1");
 	$.ajax({
@@ -240,6 +293,7 @@ function displayCriteria(string_offers){
 }
 
 function displayChoosenCriteria(string_offers) {
+	var number = localStorage.getItem("nights");
 	var token = getJwtToken(TOKEN_KEY);
 	var reservation = "login";
 	if(token){
@@ -262,7 +316,7 @@ function displayChoosenCriteria(string_offers) {
             $.each(list, function (index, room) {
                 var tr = $('<tr></tr>');
                 tr.append('<td><img src=' + room.image + ' class="room_display"/></td>');
-                tr.append('<td><table><tr><td><h3>Price per night: ' + room.price + ' </h3></td></tr>' + '<tr><td><h4>Beds: ' + room.bedNumber + '</h4></td></tr>' +
+                tr.append('<td><table><tr><td><h3>Price per '+number+' night(s): ' + number * room.price + ' </h3></td></tr>' + '<tr><td><h4>Beds: ' + room.bedNumber + '</h4></td></tr>' +
                 '<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
                 '<tr><td><input type = "button" class="blueButton" id="viewRoom" value="More details" name="'+room.id+'"></td></tr>'+
         		'<tr><td><input type = "button" class="greenButton" id="'+reservation+'" value="Reserve room" name="'+room.id+'"></td></tr>');
@@ -387,6 +441,7 @@ function findRooms(){
 
 function displayRooms(data){
 	var token = getJwtToken(TOKEN_KEY);
+	var number = localStorage.getItem("nights");
 	var reservation = "login";
 	if(token){
 		reservation = "reserveRoom";
@@ -395,7 +450,7 @@ function displayRooms(data){
 	$.each(list, function(index, room){
 		var tr=$('<tr></tr>');
 		tr.append('<td><img src='+room.image+' class="room_display"/></td>');
-		tr.append('<td><table><tr><td><h3>Price per night: '+room.price+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr>'+
+		tr.append('<td><table><tr><td><h3>Price per '+number+' night(s): '+room.price * number+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr>'+
 		'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
 		'<tr><td><input type = "button" class="blueButton" id="viewRoom" value="More details" name="'+room.id+'"></td></tr>'+
 		'<tr><td><input type = "button" class="greenButton" id="'+reservation+'" value="Reserve room" name="'+room.id+'"></td></tr>');

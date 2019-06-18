@@ -1100,6 +1100,7 @@ function pokupiRezervisanaSedista(){
 		dataType:'json',
 		data:seatReservationToJSON(id, lab, total),
 		success:function(data){
+			localStorage.setItem("reservation", data.id);
 			$.bootstrapGrowl("uspesno !!", {
 				  ele: 'body', // which element to append to
 				  type: 'success', // (null, 'info', 'danger', 'success')

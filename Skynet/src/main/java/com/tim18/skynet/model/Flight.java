@@ -25,8 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Flight {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id", unique=true, nullable=false)
+	@GeneratedValue
 	private Long id;
 	
 	@ManyToOne

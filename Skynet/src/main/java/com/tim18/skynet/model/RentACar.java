@@ -29,9 +29,9 @@ public class RentACar {
 	private String description;
 	@Column(nullable = false)
 	private String image;
-	@Column(nullable = false)
+	@Column()
 	private Double score;
-	@Column(nullable = false)
+	@Column()
 	private Integer number;
 
 	

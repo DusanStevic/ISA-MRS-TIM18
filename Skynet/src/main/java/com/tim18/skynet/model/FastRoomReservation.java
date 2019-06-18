@@ -22,7 +22,6 @@ public class FastRoomReservation {
 	@GeneratedValue
 	private Long id;
 	
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "room_id", referencedColumnName = "id")
 	private Room room;
@@ -33,8 +32,9 @@ public class FastRoomReservation {
 	private Date startDate;
 	@Column(nullable = false)
 	private Date endDate;
+	@Column(nullable = false)
+	private double price;
 	
-	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "fast_room_offers", joinColumns = @JoinColumn(name="fast_reservation_id", referencedColumnName="id"),
                inverseJoinColumns = @JoinColumn(name="offer_id", referencedColumnName="id"))
@@ -80,12 +80,31 @@ public class FastRoomReservation {
 		this.offers = offers;
 	}
 
-	public FastRoomReservation(Room room, int discount, Date startDate, Date endDate, List<HotelOffer> offers) {
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public FastRoomReservation(Long id, Room room, int discount, Date startDate, Date endDate, double price,
+			List<HotelOffer> offers) {
 		super();
+		this.id = id;
 		this.room = room;
 		this.discount = discount;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.price = price;
 		this.offers = offers;
 	}
 

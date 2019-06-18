@@ -4,7 +4,7 @@ public class AirlineSearchDTO {
 	private String name;
 	private String departure;
 	private String arrival;
-	private int passangers;
+	private long passangers;
 	private String startDestination;
 	private String endDestination;
 	
@@ -39,10 +39,10 @@ public class AirlineSearchDTO {
 	public void setArrival(String arrival) {
 		this.arrival = arrival;
 	}
-	public int getPassangers() {
+	public long getPassangers() {
 		return passangers;
 	}
-	public void setPassangers(int passangers) {
+	public void setPassangers(long passangers) {
 		this.passangers = passangers;
 	}
 	public String getStartDestination() {

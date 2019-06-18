@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,11 +43,23 @@ public class Reservation {
 	@JsonIgnore
 	@OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private List<CarReservation> carReservations = new ArrayList<CarReservation>();
+	
+	@JsonIgnore
+	@ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(name = "inviting", joinColumns = @JoinColumn(name="reservation_id", referencedColumnName="id"),
+               inverseJoinColumns = @JoinColumn(name="user_id", referencedColumnName="id"))
+	private List<RegisteredUser> invites = new ArrayList<RegisteredUser>();
+	
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "reserving", joinColumns = @JoinColumn(name="reservation_id", referencedColumnName="id"),
                inverseJoinColumns = @JoinColumn(name="user_id", referencedColumnName="id"))
-	List<RegisteredUser> passangers = new ArrayList<RegisteredUser>();
+	private List<RegisteredUser> passangers = new ArrayList<RegisteredUser>();
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "initiator", referencedColumnName = "id")
+	private RegisteredUser initiator;
 	
 	public Long getId() {
 		return id;
@@ -91,9 +104,24 @@ public class Reservation {
 	public void setCompleted(boolean completed) {
 		this.completed = completed;
 	}
+	
+	public RegisteredUser getInitiator() {
+		return initiator;
+	}
+	public void setInitiator(RegisteredUser initiator) {
+		this.initiator = initiator;
+	}
+	
+	
+	public List<RegisteredUser> getInvites() {
+		return invites;
+	}
+	public void setInvites(List<RegisteredUser> invites) {
+		this.invites = invites;
+	}
 	public Reservation(Long id, double totalPrice, boolean completed, List<SeatReservation> seatReservations,
-			List<RoomReservation> roomReservations, List<CarReservation> carReservations,
-			List<RegisteredUser> passangers) {
+			List<RoomReservation> roomReservations, List<CarReservation> carReservations, List<RegisteredUser> invites,
+			List<RegisteredUser> passangers, RegisteredUser initiator) {
 		super();
 		this.id = id;
 		this.totalPrice = totalPrice;
@@ -101,7 +129,9 @@ public class Reservation {
 		this.seatReservations = seatReservations;
 		this.roomReservations = roomReservations;
 		this.carReservations = carReservations;
+		this.invites = invites;
 		this.passangers = passangers;
+		this.initiator = initiator;
 	}
 	public Reservation() {
 		super();

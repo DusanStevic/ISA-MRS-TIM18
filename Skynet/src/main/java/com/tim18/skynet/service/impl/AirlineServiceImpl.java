@@ -39,12 +39,12 @@ public class AirlineServiceImpl implements AirlineService{
 
 
 	@Override
-	public List<Airline> search(String name, String start, String end, Date date1, int passangers) {
+	public List<Airline> search(String name, String start, String end, Date date1, long passangers) {
 		if(name != null){
-			return airlineRepository.findByNameAndAddressAndDateAndBeds(name, start, end, date1, passangers);
+			return airlineRepository.findByNameAndAddressAndDate(name, start, end, date1, passangers);
 		}
 		else{
-			return airlineRepository.findByAddressAndDateAndBeds(start, end, date1, passangers);
+			return airlineRepository.findByAddressAndDate(start, end, date1, passangers);
 		}
 	}
 	

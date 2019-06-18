@@ -9,12 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tim18.skynet.dto.SeatReservationDTO;
+import com.tim18.skynet.model.HotelAdmin;
+import com.tim18.skynet.model.RegisteredUser;
 import com.tim18.skynet.model.Reservation;
 import com.tim18.skynet.model.Seat;
 import com.tim18.skynet.model.SeatReservation;
@@ -86,7 +89,8 @@ public class SeatReservationController {
 		
 	
 		
-		
+		RegisteredUser user = (RegisteredUser) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		reservation.setInitiator(user);
 		
 		reservation.setSeatReservations(seatReservations);
 		reservation.setTotalPrice(rezervacijaDTO.getTotal());
