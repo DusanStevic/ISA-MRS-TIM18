@@ -1,6 +1,7 @@
 package com.tim18.skynet.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tim18.skynet.dto.CarReservationDTO;
 import com.tim18.skynet.dto.MessageDTO;
@@ -20,9 +23,12 @@ import com.tim18.skynet.model.Car;
 import com.tim18.skynet.model.CarReservation;
 import com.tim18.skynet.model.RegisteredUser;
 import com.tim18.skynet.model.RentACar;
+import com.tim18.skynet.model.Reservation;
+import com.tim18.skynet.model.RoomReservation;
 import com.tim18.skynet.service.CarReservationService;
 import com.tim18.skynet.service.CarService;
 import com.tim18.skynet.service.RentACarService;
+import com.tim18.skynet.service.ReservationService;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
 
 
@@ -40,6 +46,9 @@ public class CarReservationController {
 
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
+	
+	@Autowired
+	private ReservationService reservationService;
 
 	@SuppressWarnings("deprecation")
 	@PutMapping(value = "/api/putCarOnFastRes/{carId}/{startDate}/{endDate}/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -251,6 +260,16 @@ public class CarReservationController {
 
 		return new ResponseEntity<>(carRes, HttpStatus.OK);
 
+	}
+	
+	@RequestMapping( value="/api/getCarReservations/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<CarReservation> getRoomReservations(@PathVariable(value = "id") Long id){
+		RegisteredUser user = (RegisteredUser) this.userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		if(user == null){
+			return null;
+		}
+		Reservation r = reservationService.findOne(id);
+		return r.getCarReservations();
 	}
 }
 

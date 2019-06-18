@@ -1,26 +1,26 @@
 var TOKEN_KEY = 'jwtToken';
 
 $(window).on("load",function(){
-	if (window.location.href.match('users-airlineProfile.html') != null){
+	if (window.location.href.match('users-RACProfile.html') != null){
 		var token = getJwtToken(TOKEN_KEY);
 		if(token){
 			//generateMenu();
 		}
-		$("#hotelInfo").empty();
-		$("#roomsDisp").empty();
+		$("#racInfo").empty();
+		$("#carDisp").empty();
 		
-		displayAirlineProfile();
-		displayFlights();
+		displayRACProfile();
+		displayCars();
 		displayFastReservations();
-		displayDestinations();
+		displayBranches();
 	}
 })
 
-function displayAirlineProfile(){
-	var id = localStorage.getItem("airlineid1");
+function displayRACProfile(){
+	var id = localStorage.getItem("racId1");
 	$.ajax({
         type: 'GET',
-        url: '/api/airlines/'+id,
+        url: '/api/racs/'+id,
         contentType: 'text/plain',
         success: function(data){
             var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
@@ -102,18 +102,18 @@ function displayAirlineProfile(){
                         '</div>' +
                     '</div>' +
                 '</td>');
-        		$('#airlineInfo').append(tr1);
-        		$('#airlineInfo').append(tr2);
-        		$('#airlineInfo').append(tr3);
-        		$('#airlineInfo').append(tr4);
+        		$('#racInfo').append(tr1);
+        		$('#racInfo').append(tr2);
+        		$('#racInfo').append(tr3);
+        		$('#racInfo').append(tr4);
             })
         },error: function(){
-        	alert("NEVALJA");
+        	alert("NE VALJA");
         }
     })
 }
 
-function displayFlights(){
+function displayCars(){
 	
 }
 
@@ -121,28 +121,30 @@ function displayFastReservations(){
 	
 }
 
-function displayDestinations(){
-	var id = localStorage.getItem("airlineid1");
+function displayBranches(){
+	/*
+	var id = localStorage.getItem("racId1");
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/getDestinations/" + id,
-		dataType: 'json',
+		url : "api/getConcreteBranches/" + id,
+		contentType: 'text/plain',
 		success : function(data){
 			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 			$.each(list, function(index, destinacija){
 				var tr1 = $('<tr></tr>');
-				tr1.append('<td><h2>'+destinacija.name+'</h2></td><td></td>');
+				tr1.append('<td><h2>'+destinacija.city+'</h2></td><td></td>');
 				var tr2 = $('<tr></tr>');
-				tr2.append('<td><p>'+destinacija.description+'</p></td>'+'<td align="right"><h3>Coordinates: '+destinacija.coordinates+'</h3></td>');
+				tr2.append('<td><p>'+destinacija.address+'</p></td>');
 				var tr4=$('<tr></tr>');
 				tr4.append('<td><hr /></td><td><hr /></td>');
-				$('#destinations').append(tr1);
-				$('#destinations').append(tr2);
-				$('#destinations').append(tr4);
+				$('#branches').append(tr1);
+				$('#branches').append(tr2);
+				$('#branches').append(tr4);
 			});
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("AJAX ERROR: " + errorThrown);
 		}
 	});	
+	*/
 }

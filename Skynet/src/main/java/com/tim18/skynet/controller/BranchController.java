@@ -1,8 +1,9 @@
 package com.tim18.skynet.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tim18.skynet.dto.BranchDTO;
 import com.tim18.skynet.model.Branch;
@@ -62,14 +65,12 @@ public class BranchController {
 		return new ResponseEntity<>(retVal, HttpStatus.CREATED);
 	}
 
-	@GetMapping(value = "/getConcreteBranches/{rentacarId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Branch>> getConcreteBranches(@PathVariable Long rentacarId) {
+	@RequestMapping(value = "api/getConcreteBranches/{rentacarId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Set<Branch> getConcreteBranches(@PathVariable(value = "rentacarId") Long rentacarId) {
 
 		RentACar rentacar = rentacarService.findOne(rentacarId);
 
-		List<Branch> retVal = branchService.findByRentacar(rentacar);
-
-		return new ResponseEntity<>(retVal, HttpStatus.CREATED);
+		return rentacar.getBranches();
 	}
 
 	@DeleteMapping(value = "/api/deleteBranch/{id}")

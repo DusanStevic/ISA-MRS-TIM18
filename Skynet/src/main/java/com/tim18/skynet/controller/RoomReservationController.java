@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.joda.time.Days;
 import org.joda.time.Interval;
@@ -191,6 +192,16 @@ public class RoomReservationController {
 		rr.setHotelOffers(null);
 		roomReservationService.delete(id);
 		return r;
+	}
+	
+	@RequestMapping( value="/api/getRoomReservations/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<RoomReservation> getRoomReservations(@PathVariable(value = "id") Long id){
+		RegisteredUser user = (RegisteredUser) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		if(user == null){
+			return null;
+		}
+		Reservation r = reservationService.findOne(id);
+		return r.getRoomReservations();
 	}
 	
 	@RequestMapping( value="/api/getDays",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

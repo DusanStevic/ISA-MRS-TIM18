@@ -69,6 +69,11 @@ public class RACController {
 		return new ResponseEntity<>(rentacarService.save(rac), HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/api/racs/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public RentACar getRACid(@PathVariable(value = "id") Long id) {
+		return rentacarService.findOne(id);
+	}
+	
 	
 	@RequestMapping(value = "/api/rac", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public RentACar createRAC(@RequestBody RentACar rac) {

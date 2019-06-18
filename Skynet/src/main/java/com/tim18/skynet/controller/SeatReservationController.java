@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +20,7 @@ import com.tim18.skynet.dto.SeatReservationDTO;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.RegisteredUser;
 import com.tim18.skynet.model.Reservation;
+import com.tim18.skynet.model.RoomReservation;
 import com.tim18.skynet.model.Seat;
 import com.tim18.skynet.model.SeatReservation;
 import com.tim18.skynet.service.ReservationService;
@@ -97,5 +99,15 @@ public class SeatReservationController {
 		reservation.setCompleted(false);
 		reservationService.save(reservation);
 		return new ResponseEntity<>(reservation, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping( value="/api/getSeatReservations/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<SeatReservation> getRoomReservations(@PathVariable(value = "id") Long id){
+		RegisteredUser user = (RegisteredUser) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		if(user == null){
+			return null;
+		}
+		Reservation r = reservationService.findOne(id);
+		return r.getSeatReservations();
 	}
 }

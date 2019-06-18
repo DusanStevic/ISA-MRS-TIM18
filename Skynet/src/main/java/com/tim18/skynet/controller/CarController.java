@@ -27,6 +27,7 @@ import com.tim18.skynet.model.Car;
 import com.tim18.skynet.model.CarReservation;
 import com.tim18.skynet.model.RACAdmin;
 import com.tim18.skynet.model.RentACar;
+import com.tim18.skynet.service.BranchService;
 import com.tim18.skynet.service.CarService;
 import com.tim18.skynet.service.RentACarService;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
@@ -43,6 +44,9 @@ public class CarController {
 
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
+	
+	@Autowired
+	BranchService branchService;
 
 	@GetMapping(value = "/gradeCar/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Car> create(@PathVariable Long id, @PathVariable Integer grade) {
