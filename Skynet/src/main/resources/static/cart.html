@@ -8,9 +8,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
     <script type="text/javascript" src="js/authorization.js"></script>
-    <script type="text/javascript" src="js/racDisplay.js"></script>
+    <script type="text/javascript" src="js/cart.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-inverse" id="menubar">
@@ -27,57 +28,39 @@
         </div>
     </nav>
     <div class="tab">
-        <button class="tablinks" onclick="openCity(event, 'Home')" id="defaultOpen">About</button>
-        <button class="tablinks" onclick="openCity(event, 'Cars')">Cars</button>
-        <button class="tablinks" onclick="openCity(event, 'FastReservations')">Fast Reservations</button>
-        <button class="tablinks" onclick="openCity(event, 'Branches')">Branches</button>
+        <button class="tablinks" onclick="openCity(event, 'FlightReservation')" id="defaultOpen">Flight Reservation</button>
+        <button class="tablinks" onclick="openCity(event, 'RoomReservation')">Room Reservation</button>
+        <button class="tablinks" onclick="openCity(event, 'CarReservation')">Car Reservation</button>
+        <input type="button" class="green_tab_button" value="Finish reservation" id="finishReservation" />
     </div>
 
-    <div class="tabcontent" id="Home">
-        <table class="content_table" id="racInfo">
+    <div class="tabcontent" id="FlightReservation">
+        <table id="flightResDisplay">
             
         </table>
     </div>
 
-    <div id="Cars" class="tabcontent">
-        <table class="content_table" id="carDisp">
+    <div id="RoomReservation" class="tabcontent">
+    	<table id="roomButtonDisplay"></table>
+        <table id="roomResDisplay">
 			
         </table>
     </div>
    
 
-    <div id="Branches" class="tabcontent">
-        <table class="table85" id="branches">
+    <div id="CarReservation" class="tabcontent">
+    	<table id="carButtonDisplay"></table>
+        <table id="carResDisplay">
         
         </table>
     </div>
     
-    <div class="tabcontent" id="FastReservations">
-        
-    </div>
-    
-	<div id="modal" class="modal">
-        <div class="ombre_div">
-            <span id="closeLogin">&times;</span>
-            <form id ="loginForm">
-                <table class="ombre_table">
-                    <tr>
-                        <td><h3>Username: </h3></td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" id="username"/></td>
-                    </tr>
-                    <tr>
-                        <td><h3>Password: </h3></td>
-                    </tr>
-                    <tr>
-                        <td><input type="password" id="password"/></td>
-                    </tr>
-                    <tr>
-                        <td><input type="submit" value="Log in" /></td>
-                    </tr>
+    <div id="fency" class="fency_modal">
+        <div class="fency_modal_content">
+                <table id="fencyBody">
                 </table>
-            </form>
+                
+                <table id="fencyButtons"></table>
         </div>
     </div>
     <script>

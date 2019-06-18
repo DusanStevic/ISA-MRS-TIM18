@@ -437,6 +437,16 @@ $(document).on('click','#moreInfoAirline',function(e){
 	//VIDI airlineDisplay.js
 });
 
+/* PRIKAZ PROFILA RAC */
+
+$(document).on('click','#moreInfoRAC',function(e){
+	var id=$(this).attr("name");
+	localStorage.setItem("racId1", id);
+	window.location.href = "users-RACProfile.html";
+	//Redirektuje se na users-airlineProfile.html
+	//VIDI airlineDisplay.js
+});
+
 function generateMenu(){
 	$('#menubar').empty();
 	$('#menubar').append('<div class="container-fluid">'+
