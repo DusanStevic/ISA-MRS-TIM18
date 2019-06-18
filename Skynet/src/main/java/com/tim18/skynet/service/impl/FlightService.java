@@ -1,5 +1,7 @@
 package com.tim18.skynet.service.impl;
 
+import java.util.Collection;
+import java.util.Date; 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,10 @@ public class FlightService {
 
 	public void remove(Long id) {
 		repository.deleteById(id);
+	}
+	
+	public List<Flight> search(long id, String start, String end, Date checkin, long l) {
+		return repository.findAvailable(id, start, end, checkin, l);
 	}
 
 }

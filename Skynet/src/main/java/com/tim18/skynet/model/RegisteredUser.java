@@ -39,7 +39,10 @@ public class RegisteredUser extends User {
 	
 
 	@ManyToMany(mappedBy = "passangers", cascade = CascadeType.REFRESH)
-	private List<Reservation> reservations = new ArrayList<Reservation>(); 
+	private List<Reservation> reservations = new ArrayList<Reservation>();
+	
+	@ManyToMany(mappedBy = "invites", cascade = CascadeType.REFRESH)
+	private List<Reservation> invites = new ArrayList<Reservation>();
 	
 	public RegisteredUser() {
 		// TODO Auto-generated constructor stub
@@ -107,22 +110,9 @@ public class RegisteredUser extends User {
 		this.reservations = reservations;
 	}
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "registredUser", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private List<CarReservation> carReservations = new ArrayList<>();
-
-	public List<CarReservation> getCarReservations() {
-		return carReservations;
-	}
-
-	public void setCarReservations(List<CarReservation> carReservations) {
-		this.carReservations = carReservations;
-	}
-
+	
 
 
 
 }
-
-
 

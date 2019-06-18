@@ -1,11 +1,11 @@
 package com.tim18.skynet.controller;
 
-import java.text.ParseException;
+import java.text.ParseException; 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
+import org.joda.time.Days;
 import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,20 +16,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tim18.skynet.dto.FastReserveDTO;
 import com.tim18.skynet.dto.HotelSearchDTO;
-import com.tim18.skynet.dto.ReservationDTO;
+import com.tim18.skynet.dto.ReservationInfo;
 import com.tim18.skynet.dto.RoomReservationDTO;
+import com.tim18.skynet.model.FastRoomReservation;
 import com.tim18.skynet.model.HotelOffer;
 import com.tim18.skynet.model.RegisteredUser;
 import com.tim18.skynet.model.Reservation;
 import com.tim18.skynet.model.Room;
 import com.tim18.skynet.model.RoomReservation;
-import com.tim18.skynet.model.SeatReservation;
+import com.tim18.skynet.service.FastRoomReservationService;
 import com.tim18.skynet.service.HotelOfferService;
-import com.tim18.skynet.service.ReservationService;
 import com.tim18.skynet.service.RoomReservationService;
 import com.tim18.skynet.service.RoomService;
-import com.tim18.skynet.service.UserService;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
 import com.tim18.skynet.service.impl.ReservationServiceImpl;
 
@@ -42,9 +42,6 @@ public class RoomReservationController {
 	
 	@Autowired
 	private CustomUserDetailsService userInfoService;
-
-	@Autowired
-	private UserService userService;
 	
 	@Autowired
 	private RoomService roomService;
@@ -53,10 +50,13 @@ public class RoomReservationController {
 	private ReservationServiceImpl reservationService;
 	
 	@Autowired
+	private FastRoomReservationService fastRoomReservationService;
+	
+	@Autowired
 	private HotelOfferService hotelOfferService;
 	
-	@RequestMapping( value="/api/roomReservation",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
-	public Reservation reserveRoom(@RequestBody RoomReservationDTO temp){
+	@RequestMapping( value="/api/roomReservation/{resid}",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
+	public Reservation reserveRoom(@RequestBody RoomReservationDTO temp, @PathVariable(value = "resid") Long resID){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		RegisteredUser user = (RegisteredUser) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		
@@ -64,8 +64,7 @@ public class RoomReservationController {
 			return null;
 		}
 		
-		long rid = 34;
-		Reservation reservation = reservationService.findOne(rid);
+		Reservation reservation = reservationService.findOne(resID);
 		
 		Room room = roomService.findOne(temp.getRoomId());
 		
@@ -117,17 +116,109 @@ public class RoomReservationController {
 		return reservationService.save(reservation);
 	}
 	
+	@RequestMapping(value="/api/fastReserve/{resid}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Reservation fastReserve(@RequestBody FastReserveDTO temp, @PathVariable(value = "resid") Long resID){
+		RegisteredUser user = (RegisteredUser) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		FastRoomReservation fr = fastRoomReservationService.findOne(temp.getFastId());
+		
+		if(user == null){
+			return null;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		RoomReservation roomReservation = new RoomReservation();
+		Date startDate = null;
+		Date endDate = null;
+		try {
+			startDate = sdf.parse(temp.getStartDate());
+			endDate = sdf.parse(temp.getEndDate());
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		Reservation reservation = reservationService.findOne(resID);
+		
+		Interval interval1 = new Interval(startDate.getTime(), endDate.getTime());
+		
+		for(RoomReservation reserv : fr.getRoom().getReservations()){
+			Interval interval2 = new Interval(reserv.getCheckIn().getTime(), reserv.getCheckOu().getTime());
+			Interval overlap = interval2.overlap(interval1);
+			if(overlap != null){
+				return null;
+			}
+		}
+		
+		double price = fr.getPrice();
+		
+		for(HotelOffer ho : fr.getOffers()){
+			price += ho.getPrice();
+		}
+		
+		roomReservation.setReservation(reservation);
+		roomReservation.setCheckIn(startDate);
+		roomReservation.setCheckOu(endDate);
+		roomReservation.setReservedRoom(fr.getRoom());
+		roomReservation.setPrice(price);
+		
+		fr.getRoom().getReservations().add(roomReservation);
+		reservation.getRoomReservations().add(roomReservation);
+		
+		roomReservationService.save(roomReservation);
+		roomService.save(fr.getRoom());
+		return reservationService.save(reservation);
+	}
 	
+	@RequestMapping( value="/api/removeRoomReservation/{id}",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Reservation removeRoomReservation(@PathVariable(value = "id") Long id){
+		RegisteredUser user = (RegisteredUser) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		if(user == null){
+			return null;
+		}
+		RoomReservation rr = roomReservationService.findOne(id);
+		
+		boolean isUser = false;
+		for(RegisteredUser u : rr.getReservation().getPassangers()){
+			if(u.getId() == user.getId()){
+				isUser = true;
+			}
+		}
+		if(isUser == false){
+			return null;
+		}
+		Reservation r = rr.getReservation();
+		rr.setReservation(null);
+		rr.setReservedRoom(null);
+		rr.setHotelOffers(null);
+		roomReservationService.delete(id);
+		return r;
+	}
 	
-	@RequestMapping( value="/api/getReservation",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ReservationDTO getReservation(){
-		SimpleDateFormat sdf = new SimpleDateFormat("dd. MM. yyyy.");
-		Date date = new Date();
-		String date1 = sdf.format(date);
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.add(Calendar.DATE, 10);
-		String date2 = sdf.format(calendar.getTime());
-		return new ReservationDTO(date1, date2, 10);
+	@RequestMapping( value="/api/getDays",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Room getReservation(@RequestBody HotelSearchDTO dto){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date1 = null;
+		Date date2 = null;
+		
+		try {
+			date1 = sdf.parse(dto.getCheckin());
+			date2 = sdf.parse(dto.getCheckout());
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		Calendar day1 = Calendar.getInstance();
+	    Calendar day2 = Calendar.getInstance(); 
+	    day1.setTime(date1);
+	    day2.setTime(date2);
+
+	    int daysBetween = day1.get(Calendar.DAY_OF_YEAR) - day2.get(Calendar.DAY_OF_YEAR);
+	    if(daysBetween < 0){
+	    	daysBetween = daysBetween * (-1);
+	    }
+	    Room r = new Room();
+	    r.setBedNumber(daysBetween);
+	    System.out.println("OVO JE BR " + r.getBedNumber());
+		return r;
 	}
 }

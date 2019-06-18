@@ -29,6 +29,7 @@ import com.tim18.skynet.dto.AirlineSearchDTO;
 import com.tim18.skynet.dto.DestinationBean;
 import com.tim18.skynet.dto.FlightBean;
 import com.tim18.skynet.dto.ImageDTO;
+import com.tim18.skynet.dto.RoomSearchDTO;
 import com.tim18.skynet.dto.SeatsBean;
 import com.tim18.skynet.model.Airline;
 import com.tim18.skynet.model.AirlineAdmin;
@@ -404,6 +405,18 @@ public class AirlineController {
 		
 	}
 	
+	@RequestMapping(value = "/api/getDestinations/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	// Method returns list of destinations on which flight company operates
+	public ResponseEntity<?> getDestinationsID(@PathVariable("id")Long id) throws Exception {
+		Airline a = airlineService.findOne(id);
+		if (a == null) {
+			System.out.println("Flight admin doesnt't have flight company.");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			
+		}
+		return new ResponseEntity<>(a.getDestinations(), HttpStatus.OK);
+	}
+	
 	
 	@RequestMapping(value = "/api/getDestination/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('ROLE_AIRLINE_ADMIN')")
@@ -513,7 +526,7 @@ public class AirlineController {
 			return null;
 		}
 		
-		int passangers = search.getPassangers();
+		long passangers = search.getPassangers();
 		String name = search.getName();
 		String start = search.getStartDestination();
 		String end = search.getEndDestination();
@@ -524,6 +537,23 @@ public class AirlineController {
 		
 		List<Airline> airlines = airlineService.search(name, start, end, date1, passangers);
 		return airlines;
+	}
+	
+	@RequestMapping(value = "/api/searchedFlights/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Collection<Flight> searchFlights(@PathVariable(value = "id") Long id, @RequestBody AirlineSearchDTO search) throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date d1 = null;
+		Date d2 = null;
+		try {
+			d1 = sdf.parse(search.getDeparture());
+			d2 = sdf.parse(search.getArrival());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+			
+		return flightService.search(id, search.getStartDestination(), search.getEndDestination(), d1, search.getPassangers());
 	}
 
 	

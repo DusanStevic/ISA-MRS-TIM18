@@ -72,6 +72,9 @@ public class RACController {
 	
 	@RequestMapping(value = "/api/rac", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public RentACar createRAC(@RequestBody RentACar rac) {
+		rac.setNumber(0);
+		double score = 0;
+		rac.setScore(score);
 		return rentacarService.save(rac);
 	}
 	
@@ -320,6 +323,7 @@ public class RACController {
 			}
 			
 			List<RentACar> racs = rentacarService.search2(name, address, date1, date2);
+			System.out.println(racs.size());
 			return racs;
 		}
 	}

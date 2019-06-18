@@ -317,7 +317,16 @@ table.mainTable thead th:first-child {
         }
         .content_table td, tr{
             padding: 5px;
-            min-width: 50px;
+            min-width: 300px;
+        }
+        
+        content_table2{
+            left: 2%;
+            position:absolute;
+        }
+        .content_table2 td, tr{
+            padding: 5px;
+            min-width: 300px;
         }
 
         .modal {
@@ -710,6 +719,17 @@ table.mainTable thead th:first-child {
         	text-align: center;
         } /* Blue */
         
+        .redButton {
+        	background-color: #ff0c00;
+        	color: white;
+        	min-width:150px;
+        	max-width: 50%;
+        	border: none;
+        	text-align: center;
+        	margin-left:15% auto;
+        	margin-right:15% auto;
+        } /* Red */
+        
         .reservation_modal_content{
         	background-color: white;
             margin: 5% auto;
@@ -764,4 +784,36 @@ table.mainTable thead th:first-child {
         .sub_table{
         	margin-right: 20%;
         	margin-left: 20%;
+        }
+        
+        .fast_modal_content{
+        	background-color: white;
+            margin: 5% auto;
+            padding: 2px;
+            width: 550px; 
+            color:black;
+        }
+        
+        
+        .green_box{
+        	background-color: #56f442;
+        	position:relative;
+        	padding:15px;
+        	width:100%;
+        	height:auto;
+        	margin: 5% auto;
+        	
+        }
+        
+        .blue_box{
+        	background-color: #60d2ff;
+        	position:relative;
+        	padding:15px;
+        	width:100%;
+        	height:auto;
+        	margin: 5% auto;
+        }
+        
+        .discount{
+        	font-size: 30px;
         }

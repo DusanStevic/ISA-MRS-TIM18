@@ -98,25 +98,26 @@ public class CarReservationController {
 	@PostMapping(value = "/createCarReservation/{carId}/{startDate}/{endDate}/{passengers}/{flight_res}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CarReservation> create(@PathVariable Long carId, @PathVariable String startDate,
 			@PathVariable String endDate, @PathVariable Integer passengers, @PathVariable String flight_res) {
+		/*
 		RegisteredUser user = (RegisteredUser) this.userDetailsService
 				.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
-		/*Integer flights = 0;
+		Integer flights = 0;
 		if (user.getFlightReservations() != null && !user.getFlightReservations().isEmpty()) {
 			flights = user.getFlightReservations().size();
 
-		}*/
+		}
 		Integer cars = 0;
 		if (user.getCarReservations() != null && !user.getCarReservations().isEmpty()) {
 			cars = user.getCarReservations().size();
-		}/*
+		}
 		Integer hotels = 0;
 		if (user.getRoomReservations() != null && !user.getRoomReservations().isEmpty()) {
 			hotels = user.getRoomReservations().size();
-		}*/
+		}
 
 		Integer discount;
-		Integer numberOfRes = /*flights +*/ cars /*+ hotels*/;
+		//Integer numberOfRes = //flights +// cars //+ hotels///;
 		if (numberOfRes >= 3 && numberOfRes < 10) {
 			discount = 5;
 		} else if (numberOfRes >= 10 && numberOfRes < 30) {
@@ -136,7 +137,7 @@ public class CarReservationController {
 		Date endDatee = new Date(Integer.parseInt(endDate.split("\\-")[0]) - 1900,
 				Integer.parseInt(endDate.split("\\-")[1]) - 1, Integer.parseInt(endDate.split("\\-")[2]));
 
-		/*
+		
 		List<FlightReservation> flightRes = user.getFlightReservations();
 
 		FlightReservation lastRes = null;
@@ -147,16 +148,16 @@ public class CarReservationController {
 					lastRes = fr;
 				}
 			}
-		}*/
+		}
 
 		CarReservationDTO dto = new CarReservationDTO(carId, startDatee, endDatee, passengers);
 		CarReservation newCarRes = new CarReservation(dto);
 		Car car = carService.findOne(dto.getCarId());
-		/*if (flight_res.equals("1")) {
+		if (flight_res.equals("1")) {
 			newCarRes.setFlightId(lastRes.getId());
 		} else {
 			newCarRes.setFlightId(Long.parseLong("-1"));
-		}*/
+		}
 
 		newCarRes.setCar(car);
 		if (discount == 0) {
@@ -179,6 +180,7 @@ public class CarReservationController {
 		car.getReservations().add(newCarRes);
 
 		return new ResponseEntity<>(newCarRes, HttpStatus.CREATED);
+		*/return null;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -223,7 +225,7 @@ public class CarReservationController {
 		newCarRes.setRentacarRes(rentacar);
 
 		carReservationService.save(newCarRes);
-		user.getCarReservations().add(newCarRes);
+		//user.getCarReservations().add(newCarRes);
 		rentacar.getCarReservations().add(newCarRes);
 		car.getReservations().add(newCarRes);
 

@@ -31,7 +31,7 @@ public interface RentACarRepository extends JpaRepository<RentACar, Long> {
 			   "WHERE lower(r.name) like lower(concat('%', ?1,'%')) " + 
 			   "AND r.id in" +
 			   		"(SELECT DISTINCT b.rentacar.id FROM Branch b " +
-			   		"WHERE lower(b.address) like lower(concat('%', ?2,'%'))) " +
+			   		"WHERE lower(b.city) like lower(concat('%', ?2,'%'))) " +
 			   "AND (r.id in "+
 				   "(SELECT DISTINCT v.branch.rentacar.id FROM Car v "+
 			   		"WHERE v.id NOT IN "+
@@ -48,7 +48,7 @@ public interface RentACarRepository extends JpaRepository<RentACar, Long> {
 		@Query("SELECT DISTINCT r FROM RentACar r " +
 			   "WHERE r.id in" +
 			   		"(SELECT DISTINCT b.rentacar.id FROM Branch b " +
-			   		"WHERE lower(b.address) like lower(concat('%', ?1,'%'))) " +
+			   		"WHERE lower(b.city) like lower(concat('%', ?1,'%'))) " +
 			   "AND (r.id in "+
 				   "(SELECT DISTINCT v.branch.rentacar.id FROM Car v "+
 			   		"WHERE v.id NOT IN "+

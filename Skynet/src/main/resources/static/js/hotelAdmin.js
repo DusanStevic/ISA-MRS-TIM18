@@ -289,7 +289,7 @@ function displayFastRooms(rooms){
 		$.each(list, function(index, room){
 			var tr=$('<tr></tr>');
 			tr.append('<td><img src='+room.image+' class="room_display"/></td>');
-			tr.append('<td><table><tr><td><input type="button" id="viewFastRes" name="'+room.id+'" value="Display fast reservations for this room" class="blueButton"/></td></tr><tr><td>Beds: '+room.bedNumber+'</td></tr><tr><td>Room number: '+room.roomNumber+'</td></tr>'+
+			tr.append('<td><table><tr><td><input type="button" id="viewFastRes" name="'+room.id+'" value="Display fast reservations for this room" class="blueButton"/></td></tr><tr><td>Original price: '+room.price+'$</td></tr><tr><td>Beds: '+room.bedNumber+'</td></tr><tr><td>Room number: '+room.roomNumber+'</td></tr>'+
 			'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
 			'</table></td>');
 			$('#fastRoomsDisp').append(tr);
@@ -302,6 +302,13 @@ function displayFastRooms(rooms){
 
 $(document).on('click','#viewFastRes',function(e){
 	var id=$(this).attr("name");
+	var modal = document.getElementById('fastModal');
+    modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 	$.ajax({
 		type : 'GET',
 		url : "/api/getfastRoomReservations/" + id,
@@ -317,8 +324,69 @@ $(document).on('click','#viewFastRes',function(e){
 })
 
 function displayFastReservations(data){
-	
+	$("#fastInfoShow").empty();
+	if(data != null && data != undefined){
+		var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+		$.each(list, function(index, res){
+			
+			var div=$('<div class="blue_box"></div>');
+			if(index % 2 == 0){
+				div=$('<div class="green_box"></div>');
+			}
+			
+			var d1 = res.startDate.toString().substr(0, 10);
+			var d2 = res.endDate.toString().substr(0, 10);
+
+			div.append('<h3><b>Fast reservation from '+d1 + ' to '+ d2 +'</b></h3>');
+			var price = res.price;
+			
+			
+			var list2 = res.offers == null ? [] : (res.offers instanceof Array ? res.offers : [ res.offers ]);
+			if(res.offers.length > 0){
+				div.append('<p><b>Discount: '+ res.discount +'%<br/>New room prce (per night): '+price+'$' + 
+				'<br/>Included hotel offers:</b><br/></p>');
+				var ul = $('<ul id="foffers'+res.id+'"></ul>');
+				$.each(res.offers, function(index2, off){
+					ul.append('<li><b>'+off.name+' ('+off.price+'$ per night)</b></li>');
+					price = price + off.price;
+				})
+				div.append(ul);
+			}
+			else {
+				div.append('<b><p>Discount: '+ res.discount +'<br/>New room prce (per night): '+price+'$' + 
+				'<br/>No included hotel offers for this fast reservation.</b><br/></p>');
+			}
+			
+			div.append('<p><b>Total price per night: '+price+'$</b></p>');
+			div.append('<input type="button" class="redButton" id="deleteFastRes" name="'+res.id+'" value="Delete fast reservation"/>');
+			var tr = $('<tr></tr>');
+			tr.append(div);
+			$("#fastInfoShow").append(tr);
+		})
+	}
 }
+
+$(document).on('click','#deleteFastRes',function(e){
+	var id=$(this).attr("name");
+	$.ajax({
+		type : 'DELETE',
+		url : "/api/deleteFastReservation/" + id,
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		dataType : "json",
+		success : function(data) {
+			if(data != null){
+				alert("Fast room reservation removed successfuly!");
+				location.reload();
+			}
+			else{
+				alert("Could not remove fast room reservation right now because it is booked by some user.");
+			}
+		},
+		error : function(){
+			alert("Could not remove fast room reservation right now because it is booked by some user.");
+		}
+	})
+})
 
 $(document).on('click','#editAdminProfile',function(e){
 	var modal = document.getElementById('HAModal');

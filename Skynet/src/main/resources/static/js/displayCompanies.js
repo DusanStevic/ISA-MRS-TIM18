@@ -17,30 +17,33 @@ $(document).ready(function(){
 		generateMenu();
 	}
 	var page = localStorage.getItem("page");
-	if(page == "hotel"){
-		localStorage.setItem("tab", "");
-		localStorage.setItem('searchCriteria', "");
-		var admin = localStorage.setItem("isAdmin", "");
-		generateHotelSearch();
+	if(window.location.href.match('search.html') != null){
+		if(page == "hotel"){
+			localStorage.setItem("tab", "");
+			localStorage.setItem('searchCriteria', "");
+			localStorage.setItem("isAdmin", "");
+			generateHotelSearch();
+		}
+		else if(page == "airline"){
+			generateAirlineSearch();
+		}
+		else if(page == "rac"){
+			generateRACSearch();
+		}
 	}
-	else if(page == "airline"){
-		generateAirlineSearch();
-	}
-	else if(page == "rac"){
-		generateRACSearch();
-		//findRACs();
-	}
-	//i ako je strana companies display
-	else if(page == "searchHotels"){
-		searchHotels();
+	else if(window.location.href.match('companiesDisplay.html') != null){
+		if(page == "searchHotels"){
+			searchHotels();
+		}
+		
+		else if(page == "searchAirlines"){
+			searchAirlines();
+		}
+		else if(page == "searchRacs"){
+			searchRacs();
+		}
 	}
 	
-	else if(page == "searchAirlines"){
-		searchAirlines();
-	}
-	else if(page == "searchRacs"){
-		//searchRacs();
-	}
 });
 
 function generateHotelSearch(){
@@ -222,8 +225,22 @@ function searchHotels(){
 		contentType: 'application/json',
 		data: searchToHotel(name,date1,date2,guests,address),
 		dataType: 'json',
-		success : displayData,
-		error : function() {
+		success : function(data) {
+			$.ajax({
+		        type: 'POST',
+		        url: '/api/getDays',
+		        contentType: 'application/json',
+		        data: searchToHotel(name,date1,date2,guests,address),
+		        dataType: 'json',
+		        success:function(data1) {
+		        	localStorage.setItem("nights", data1.bedNumber);
+		        	localStorage.setItem("curBeds", "0");
+		        	console.log(data1.bedNumber);
+		        }
+		    });
+			
+			displayData(data);
+		},error : function() {
 			alert("ERROR OCCURRED!!!");
 		}
 	});	
@@ -245,7 +262,7 @@ function searchAirlines(){
 		contentType: 'application/json',
 		data: searchToAirline(name,date1,date2,guests,start,end),
 		dataType: 'json',
-		success : displayData,
+		success : displayAirline,
 		error : function() {
 			alert("ERROR OCCURRED!!!");
 		}
@@ -267,8 +284,9 @@ function searchRacs(){
 		contentType: 'application/json',
 		data: searchToHotel(name,date1,date2,guests,address),
 		dataType: 'json',
-		success : displayData,
-		error : function() {
+		success : function(data) {
+			displayRAC(data);
+		},error : function() {
 			alert("ERROR OCCURRED!!!");
 		}
 	});	
@@ -288,7 +306,7 @@ function findAirlines(){
         type: 'GET',
         url: '/api/airlines',
         contentType: 'application/json',
-        success: displayData
+        success: displayAirline
     })
 }
 
@@ -297,7 +315,7 @@ function findRACs(){
         type: 'GET',
         url: '/api/racs',
         contentType: 'application/json',
-        success: displayData1
+        success: displayRAC
     })
 }
 
@@ -319,7 +337,9 @@ function displayData(data){
 	})
 }
 
-function displayData1(data){
+function displayAirline(data){
+	$('#display').empty();
+	$('#display').append('<table id="dataDisplay"></table>');
 	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 	$.each(list, function(index, data){
 		var tr1=$('<tr></tr>');
@@ -327,7 +347,25 @@ function displayData1(data){
 				+'<td><table class="min"><tr><td><h3>'+data.name+'</h3></td></tr>'
 				+'<tr><td><h4>' + data.address+'</h4></td></tr>'
 				+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
-				+'<td><a href="#" id="moreInfoHotel" name="'+data.id+'">More informations</a></td></tr></table></td>');
+				+'<td><table><tr><td><a href="#" id="showLocation" name="'+data.address+'"><i class="fa fa-map-marker" style="font-size:36px" color:red"></i> Show Location</a></td></tr><tr><td align="center"><input type="button" id="moreInfoAirline" name="'+data.id+'" value = "View profile and offers" class="blueButton"/></td></tr></table></td>');
+		var tr2=$('<tr></tr>');
+		tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
+		$('#dataDisplay').append(tr1);
+		$('#dataDisplay').append(tr2);
+	})
+}
+
+function displayRAC(data){
+	$('#display').empty();
+	$('#display').append('<table id="dataDisplay"></table>');
+	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	$.each(list, function(index, data){
+		var tr1=$('<tr></tr>');
+		tr1.append('<td><img src="'+data.image+'" class="small_image"/></td>'
+				+'<td><table class="min"><tr><td><h3>'+data.name+'</h3></td></tr>'
+				+'<tr><td><h4>' + data.address+'</h4></td></tr>'
+				+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
+				+'<td><table><tr><td><a href="#" id="showLocation" name="'+data.address+'"><i class="fa fa-map-marker" style="font-size:36px" color:red"></i> Show Location</a></td></tr><tr><td align="center"><input type="button" id="moreInfoRAC" name="'+data.id+'" value = "View profile and offers" class="blueButton"/></td></tr></table></td>');
 		var tr2=$('<tr></tr>');
 		tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
 		$('#dataDisplay').append(tr1);
@@ -388,6 +426,17 @@ function init(coordinates){
 	myMap.geoObjects.add(myPlacemark);
 }
 
+
+/* PRIKAZ PROFILA AVIOKOMPANIJE */
+
+$(document).on('click','#moreInfoAirline',function(e){
+	var id=$(this).attr("name");
+	localStorage.setItem("airlineid1", id);
+	window.location.href = "users-airlineProfile.html";
+	//Redirektuje se na users-airlineProfile.html
+	//VIDI airlineDisplay.js
+});
+
 function generateMenu(){
 	$('#menubar').empty();
 	$('#menubar').append('<div class="container-fluid">'+
@@ -413,9 +462,9 @@ function searchToHotel(name,checkin,checkout,beds, address){
 function searchToAirline(name,date1,date2,guests,start,end){
 	return JSON.stringify({
 		"name":name,
-		"departure":checkin,
-		"arrival":checkout,
-		"passangers":beds,
+		"departure":date1,
+		"arrival":date2,
+		"passangers":guests,
 		"startDestination":start,
 		"endDestination":end,
 	})

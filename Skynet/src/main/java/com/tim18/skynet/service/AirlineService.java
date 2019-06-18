@@ -10,5 +10,5 @@ public interface AirlineService {
 	public Airline findOne(Long id);
 	public List<Airline> findAll();
 	public void remove(Long id);
-	public List<Airline> search(String name, String start, String end, Date date1, int passangers);
+	public List<Airline> search(String name, String start, String end, Date date1, long passangers);
 }

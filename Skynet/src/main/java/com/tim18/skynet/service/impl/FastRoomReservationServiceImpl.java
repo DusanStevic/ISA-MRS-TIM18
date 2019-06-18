@@ -1,5 +1,6 @@
 package com.tim18.skynet.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,11 @@ public class FastRoomReservationServiceImpl implements FastRoomReservationServic
 	public void delete(Long id) {
 		fastRoomReservationRepository.deleteById(id);	
 		
+	}
+
+	@Override
+	public List<FastRoomReservation> getAvailbleFastReservaions(long hotelId, Date checkin, Date checkout, int beds) {
+		return fastRoomReservationRepository.getAvailbleFastReservaions(hotelId, checkin, checkout, beds);
 	}
 
 }
