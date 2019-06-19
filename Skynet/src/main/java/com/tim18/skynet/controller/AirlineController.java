@@ -37,6 +37,7 @@ import com.tim18.skynet.model.Destination;
 import com.tim18.skynet.model.Flight;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
+import com.tim18.skynet.model.RentACar;
 import com.tim18.skynet.model.Seat;
 import com.tim18.skynet.service.AirlineAdminService;
 import com.tim18.skynet.service.impl.AirlineServiceImpl;
@@ -569,4 +570,23 @@ public class AirlineController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping(value = "/gradeAirline/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Airline> createGradeAirline(@PathVariable Long id, @PathVariable Integer grade) {
+		Airline air = airlineService.findOne(id);
+		air.setScore(air.getScore() + grade);
+		air.setNumber(air.getNumber() + 1);
+		airlineService.save(air);
+		return new ResponseEntity<>(air, HttpStatus.CREATED);
+	}
+	
+	@GetMapping(value = "/gradeFlight/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Flight> createGradeFlight(@PathVariable Long id, @PathVariable Integer grade) {
+		Flight air = flightService.findOne(id);
+		air.setScore(air.getScore() + grade);
+		air.setNumber(air.getNumber() + 1);
+		flightService.save(air);
+		return new ResponseEntity<>(air, HttpStatus.CREATED);
+	}
+	
 }

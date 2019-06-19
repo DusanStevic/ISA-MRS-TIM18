@@ -26,14 +26,13 @@ public interface RentACarRepository extends JpaRepository<RentACar, Long> {
 			   "WHERE lower(r.address) like lower(concat('%', ?2,'%'))")
 	ArrayList<RentACar> findByAddress(String address);
 	
-	
 	@Query("SELECT DISTINCT r FROM RentACar r " +
 			   "WHERE lower(r.name) like lower(concat('%', ?1,'%')) " + 
 			   "AND r.id in" +
 			   		"(SELECT DISTINCT b.rentacar.id FROM Branch b " +
 			   		"WHERE lower(b.city) like lower(concat('%', ?2,'%'))) " +
 			   "AND (r.id in "+
-				   "(SELECT DISTINCT v.branch.rentacar.id FROM Car v "+
+				   "(SELECT DISTINCT v.rentacar.id FROM Car v "+
 			   		"WHERE v.id NOT IN "+
 			   			"(SELECT DISTINCT vr.car.id FROM CarReservation vr "+
 			   			"WHERE ((vr.startDate <= ?4 AND vr.endDate >= ?4) " +
@@ -50,7 +49,7 @@ public interface RentACarRepository extends JpaRepository<RentACar, Long> {
 			   		"(SELECT DISTINCT b.rentacar.id FROM Branch b " +
 			   		"WHERE lower(b.city) like lower(concat('%', ?1,'%'))) " +
 			   "AND (r.id in "+
-				   "(SELECT DISTINCT v.branch.rentacar.id FROM Car v "+
+				   "(SELECT DISTINCT v.rentacar.id FROM Car v "+
 			   		"WHERE v.id NOT IN "+
 			   			"(SELECT DISTINCT vr.car.id FROM CarReservation vr "+
 			   			"WHERE ((vr.startDate <= ?3 AND vr.endDate >= ?3) " +
@@ -61,8 +60,6 @@ public interface RentACarRepository extends JpaRepository<RentACar, Long> {
 			   		"(SELECT DISTINCT r2.branch.rentacar.id FROM Car r2 "+
 			   		"WHERE r2.id not in (SELECT vr2.car.id FROM CarReservation vr2)))")
 		ArrayList<RentACar> findByAddressAndDateAndBeds(String address, Date checkin, Date checkout);
-			
-			
 	
 	
 	

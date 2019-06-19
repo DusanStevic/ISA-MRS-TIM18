@@ -32,6 +32,11 @@ public class Room {
 	@Column(nullable = false)
 	private String image;
 	
+	@Column(nullable = false)
+	private String score;
+	@Column(nullable = false)
+	private String number;
+	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Hotel hotel;
 	
@@ -72,6 +77,24 @@ public class Room {
 		this.image = image;
 		this.hotel = hotel;
 		this.roomOffers = roomOffers;
+	}
+
+	
+	
+	public String getScore() {
+		return score;
+	}
+
+	public void setScore(String score) {
+		this.score = score;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
 	}
 
 	public Room(long id, double price, String description, int bedNumber, String image, Hotel hotel,
