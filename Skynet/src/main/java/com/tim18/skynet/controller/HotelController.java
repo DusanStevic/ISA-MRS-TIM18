@@ -22,6 +22,7 @@ import com.tim18.skynet.dto.CompanyDTO;
 import com.tim18.skynet.dto.HotelSearchDTO;
 import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.dto.RoomSearchDTO;
+import com.tim18.skynet.model.Airline;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.Room;
@@ -143,4 +144,14 @@ public class HotelController {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 		}
+	
+	
+	@GetMapping(value = "/gradeHotel/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Hotel> createGrade(@PathVariable Long id, @PathVariable Integer grade) {
+		Hotel hotel = hotelService.findOne(id);
+		hotel.setScore(hotel.getScore() + grade);
+		hotel.setNumber(hotel.getNumber() + 1);
+		hotelService.save(hotel);
+		return new ResponseEntity<>(hotel, HttpStatus.CREATED);
+	}
 }

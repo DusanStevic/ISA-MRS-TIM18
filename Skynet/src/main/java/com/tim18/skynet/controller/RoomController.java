@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.dto.RoomDTO;
 import com.tim18.skynet.dto.RoomOffersDTO;
 import com.tim18.skynet.dto.RoomSearchDTO;
+import com.tim18.skynet.model.Airline;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.Room;
@@ -232,5 +234,14 @@ public class RoomController {
 		room.setHotel(null);
 		roomService.delete(room_id);
 		return null;
+	}
+	
+	@GetMapping(value = "/gradeRoom/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Room> createGrade(@PathVariable Long id, @PathVariable Integer grade) {
+		Room room = roomService.findOne(id);
+		room.setScore(room.getScore() + grade);
+		room.setNumber(room.getNumber() + 1);
+		roomService.save(room);
+		return new ResponseEntity<>(room, HttpStatus.CREATED);
 	}
 }

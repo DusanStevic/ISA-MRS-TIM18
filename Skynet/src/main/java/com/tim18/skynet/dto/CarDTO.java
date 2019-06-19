@@ -19,7 +19,7 @@ public class CarDTO {
 	private String brand;
 	private String model;
 	private Integer seats;
-	private long branch;
+	
 	
 	public String getCarType() {
 		return carType;
@@ -33,20 +33,17 @@ public class CarDTO {
 		super();
 	}
 
-	
-
-	public CarDTO(long id, String name, Double price, Integer year, String carType, String brand, String model,
-			Integer seats, long branch) {
+	public CarDTO(String name, Double price, Integer year, Long id, String ct, String brand, String model, Integer seats) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.year = year;
-		this.carType = carType;
-		this.brand = brand;
-		this.model = model;
-		this.seats = seats;
-		this.branch = branch;
+		this.carType=ct;
+		this.brand=brand;
+		this.model=model;
+		this.seats=seats;
+		
 	}
 
 	public String getBrand() {
@@ -105,12 +102,4 @@ public class CarDTO {
 		this.id = id;
 	}
 
-	public long getBranch() {
-		return branch;
-	}
-
-	public void setBranch(long branch) {
-		this.branch = branch;
-	}
-	
 }

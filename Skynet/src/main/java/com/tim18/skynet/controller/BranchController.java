@@ -1,7 +1,6 @@
 package com.tim18.skynet.controller;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -65,12 +64,14 @@ public class BranchController {
 		return new ResponseEntity<>(retVal, HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "api/getConcreteBranches/{rentacarId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Set<Branch> getConcreteBranches(@PathVariable(value = "rentacarId") Long rentacarId) {
+	@GetMapping(value = "/getConcreteBranches/{rentacarId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Branch>> getConcreteBranches(@PathVariable Long rentacarId) {
 
 		RentACar rentacar = rentacarService.findOne(rentacarId);
 
-		return rentacar.getBranches();
+		List<Branch> retVal = branchService.findByRentacar(rentacar);
+
+		return new ResponseEntity<>(retVal, HttpStatus.CREATED);
 	}
 
 	@DeleteMapping(value = "/api/deleteBranch/{id}")
@@ -110,4 +111,14 @@ public class BranchController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@RequestMapping(value = "api/getConcreteBranchesSonja/{rentacarId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Set<Branch> getConcreteBranchesSonja(@PathVariable(value = "rentacarId") Long rentacarId) {
+
+		RentACar rentacar = rentacarService.findOne(rentacarId);
+
+
+		return rentacar.getBranches();
+	}
+	
 }

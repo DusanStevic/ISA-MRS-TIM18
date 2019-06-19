@@ -69,11 +69,6 @@ public class RACController {
 		return new ResponseEntity<>(rentacarService.save(rac), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/api/racs/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public RentACar getRACid(@PathVariable(value = "id") Long id) {
-		return rentacarService.findOne(id);
-	}
-	
 	
 	@RequestMapping(value = "/api/rac", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public RentACar createRAC(@RequestBody RentACar rac) {
@@ -81,6 +76,7 @@ public class RACController {
 		double score = 0;
 		rac.setScore(score);
 		return rentacarService.save(rac);
+		
 	}
 	
 	@GetMapping(value = "/api/reportRentacarAttendance")
@@ -145,6 +141,12 @@ public class RACController {
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/api/racs/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public RentACar getRACid(@PathVariable(value = "id") Long id) {
+		return rentacarService.findOne(id);
+	}
+	
+	
 	@GetMapping(value = "/api/findRentacarAmount/{startDate}/{endDate}")
 	public ResponseEntity<Double> findRentacarAmount(@PathVariable String startDate, @PathVariable String endDate)
 			throws ParseException {
@@ -304,33 +306,36 @@ public class RACController {
 		}*/
 		
 		
-		@RequestMapping(value = "/api/searchedRacs", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-		public Collection<RentACar> getSearched(@RequestBody HotelSearchDTO search) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date date1 = null;
-			Date date2 = null;
-			try {
-				date1 = sdf.parse(search.getCheckin());
-				date2 = sdf.parse(search.getCheckout());
-			} catch (ParseException e) {
-				System.out.println("Neuspesno parsiranje datuma");
-				return null;
-			}
-			if(date1.before(new Date()) || date2.before(new Date())){
-				return null;
-			}
-			
-			String name = search.getName();
-			String address = search.getAddress();
-			
-			if(name == "" || name == null){
-				name = null;
-			}
-			
-			List<RentACar> racs = rentacarService.search2(name, address, date1, date2);
-			System.out.println(racs.size());
-			return racs;
+
+	@RequestMapping(value = "/api/searchedRacs", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Collection<RentACar> getSearched(@RequestBody HotelSearchDTO search) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date1 = null;
+		Date date2 = null;
+		try {
+			date1 = sdf.parse(search.getCheckin());
+			date2 = sdf.parse(search.getCheckout());
+		} catch (ParseException e) {
+			System.out.println("Neuspesno parsiranje datuma");
+			return null;
 		}
+		if(date1.before(new Date()) || date2.before(new Date())){
+			return null;
+		}
+		
+		
+		String name = search.getName();
+		String address = search.getAddress();
+		
+		
+		if(name == "" || name == null){
+			name = null;
+		}
+		
+		List<RentACar> racs = rentacarService.search2(name, address, date1, date2);
+		System.out.println(racs.size());
+		return racs;
+	}
 	}
 
 
