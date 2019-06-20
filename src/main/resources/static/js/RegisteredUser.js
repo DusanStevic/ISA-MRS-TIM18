@@ -27,7 +27,7 @@ $(document).on('click', '#viewUserProfile_button', function(e){
 	e.preventDefault();
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/viewUserProfile",
+		url : "https://skynet-deployment.herokuapp.com/api/viewUserProfile",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : viewUserProfile,		
@@ -59,7 +59,7 @@ $(document).on('click', '#izmenaProfila_btn', function(e){
 	e.preventDefault();
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/viewUserProfile",
+		url : "https://skynet-deployment.herokuapp.com/api/viewUserProfile",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : prikazPodatakaZaIzmenu,
@@ -109,7 +109,7 @@ $(document).on('submit', '.posaljiIzmeneZaProfil', function(e){
 	}	
 	$.ajax({
 		type : 'PUT',
-		url : 'http://localhost:8080/api/updateUserProfile',
+		url : 'https://skynet-deployment.herokuapp.com/api/updateUserProfile',
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType: 'application/json',
 		data: formToJSON_profilIZ(password,name,surname,  email),
@@ -220,7 +220,7 @@ $(document).on('submit', '#pretragaForma', function(e){
 	
 	$.ajax({
 		type : 'POST',
-		url : "http://localhost:8080/api/flightSearch",
+		url : "https://skynet-deployment.herokuapp.com/api/flightSearch",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType: 'application/json',
 		dataType: 'json',
@@ -341,7 +341,7 @@ $(document).on('submit', '#addFriendsForm', function(e){
 	}
 	$.ajax({
 		type : 'POST',
-		url : "http://localhost:8080/api/potentialFriends",
+		url : "https://skynet-deployment.herokuapp.com/api/potentialFriends",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType: 'application/json',
 		dataType : 'json',
@@ -426,7 +426,7 @@ $(document).on('submit', '.addFriend', function(e){
 	e.preventDefault();
 	var id = $(this).find('input[type=hidden]').val(); 
 	//var adresa = '../Projekat/rest/admini/pronadjiDestinaciju/' + nazivDest;
-	var adresa = "http://localhost:8080/api/addFriend/" + id;
+	var adresa = "https://skynet-deployment.herokuapp.com/api/addFriend/" + id;
 	
 	$.ajax({
 		type : 'POST',
@@ -470,7 +470,7 @@ $(document).on('click', '#viewFriendRequests_button', function(e){
 	e.preventDefault();
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/getMyRequests",
+		url : "https://skynet-deployment.herokuapp.com/api/getMyRequests",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : prikazPodatakaFriendsRequests,
@@ -565,7 +565,7 @@ function prikazPodatakaFriendsRequests(data){
 $(document).on('submit', '.accept', function(e){	
 	e.preventDefault();
 	var id = $(this).find('input[type=hidden]').val(); 
-	var adresa = "http://localhost:8080/api/acceptRequest/" + id;
+	var adresa = "https://skynet-deployment.herokuapp.com/api/acceptRequest/" + id;
 	
 	$.ajax({
 		type : 'PUT',
@@ -607,7 +607,7 @@ $(document).on('submit', '.reject', function(e){
 	e.preventDefault();
 	var id = $(this).find('input[type=hidden]').val(); 
 	//var adresa = '../Projekat/rest/admini/pronadjiDestinaciju/' + nazivDest;
-	var adresa = "http://localhost:8080/api/rejectRequest/" + id;
+	var adresa = "https://skynet-deployment.herokuapp.com/api/rejectRequest/" + id;
 	
 	$.ajax({
 		type : 'DELETE',
@@ -654,7 +654,7 @@ $(document).on('click', '#viewFriends_button', function(e){
 	e.preventDefault();
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/getMyFriends",
+		url : "https://skynet-deployment.herokuapp.com/api/getMyFriends",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : prikazPodatakaFriends,
@@ -736,7 +736,7 @@ function prikazPodatakaFriends(data){
 $(document).on('submit', '.remove', function(e){	
 	e.preventDefault();
 	var id = $(this).find('input[type=hidden]').val(); 
-	var adresa = "http://localhost:8080/api/removeFriend/" + id;
+	var adresa = "https://skynet-deployment.herokuapp.com/api/removeFriend/" + id;
 	
 	$.ajax({
 		type : 'DELETE',
@@ -799,7 +799,7 @@ $(document).on('submit', '#rezervacija', function(e){
 	var brLeta = $(this).find('input[type=hidden]').val();
 	alert("OVO JE BROJ LETA KOJI HOCEMO DA REZERVISEMO: " + brLeta);
 	//var adresa = '../Projekat/rest/letovi/pronadjiLet/' + brLeta;
-	var adresa = "http://localhost:8080/api/getFlight/" + brLeta;
+	var adresa = "https://skynet-deployment.herokuapp.com/api/getFlight/" + brLeta;
 	
 	
 	
@@ -858,7 +858,7 @@ $(document).on('submit', '#sedista', function(e){
 	alert("OVO JE BROJ LETA KOJI HOCEMO DA REZERVISEMO: " + brLeta);
 	//var adresa = '../Projekat/rest/letovi/pronadjiLet/' + brLeta;
 	localStorage.setItem("flightID", brLeta);
-	var adresa = "http://localhost:8080/api/getSeatsOnFlight/" + brLeta;
+	var adresa = "https://skynet-deployment.herokuapp.com/api/getSeatsOnFlight/" + brLeta;
 	
 	
 	

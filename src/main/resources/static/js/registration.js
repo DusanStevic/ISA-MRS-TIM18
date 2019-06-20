@@ -39,7 +39,7 @@ $(document).on('submit', "#registrationForm", function(e){
 })
 
 function sendEmail(email, user_id){
-	var text = "Thanks for registering on Skynet! To confirm your registration, follow this <a href='http://localhost:8080/auth/confirmRegistration/"+user_id+"'>link<a>.";
+	var text = "Thanks for registering on Skynet! To confirm your registration, follow this <a href='https://skynet-deployment.herokuapp.com/auth/confirmRegistration/"+user_id+"'>link<a>.";
 	var body = "<html><head></head><body>"+text+"</body></html>";
 	var subject = "Skynet: Confirm your registration";
 	$.ajax({

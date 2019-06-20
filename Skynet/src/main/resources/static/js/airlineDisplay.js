@@ -176,7 +176,7 @@ function displayFlights(){
 	
 	$.ajax({
 		type : 'POST',
-		url : "http://localhost:8080/api/searchedFlights/" + id,
+		url : "https://skynet-deployment.herokuapp.com/api/searchedFlights/" + id,
 		dataType: 'json',
 		contentType: 'application/json',
 		data: AirlineSearchDTO2JSON(departure,arrival,passangers,startDestination,endDestination),
@@ -229,7 +229,7 @@ $(document).on('click', '.reserve', function(e){
 	
 	$.ajax({
         type : 'GET',
-        url : "http://localhost:8080/api/getSeatsOnFlight/" + brLeta,
+        url : "https://skynet-deployment.herokuapp.com/api/getSeatsOnFlight/" + brLeta,
         headers : createAuthorizationTokenHeader(TOKEN_KEY),
         dataType: 'json',
         success: prikazLetaZaRezervaciju,
@@ -285,7 +285,7 @@ $(document).on('submit', '#sedista', function(e){
 	
 	$.ajax({
         type : 'GET',
-        url : "http://localhost:8080/api/getSeatsOnFlight/" + brLeta,
+        url : "https://skynet-deployment.herokuapp.com/api/getSeatsOnFlight/" + brLeta,
         headers : createAuthorizationTokenHeader(TOKEN_KEY),
         dataType: 'json',
         success: prikazSedistaZaRezervaciju,
@@ -514,7 +514,7 @@ function recalculateTotal(sc) {
 
 	$.ajax({
 		type:'POST',
-		url:"http://localhost:8080/api/seatReservation",
+		url:"https://skynet-deployment.herokuapp.com/api/seatReservation",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',
@@ -567,7 +567,7 @@ $(document).on('click','.checkout-button',function(e){
 
 	$.ajax({
 		type:'POST',
-		url:"http://localhost:8080/api/seatReservation",
+		url:"https://skynet-deployment.herokuapp.com/api/seatReservation",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',
@@ -602,7 +602,7 @@ function displayFastReservations(){
 	alert("ID LETA AVIONA: " + id);
 	$.ajax({                           
 		type : 'GET',
-		url : "http://localhost:8080/api/getFastSeatReservations/" + id,
+		url : "https://skynet-deployment.herokuapp.com/api/getFastSeatReservations/" + id,
 		dataType: 'json',
 		success : function(data){
 			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
@@ -642,7 +642,7 @@ function displayDestinations(){
 	var id = localStorage.getItem("airlineid1");
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/getDestinations/" + id,
+		url : "https://skynet-deployment.herokuapp.com/api/getDestinations/" + id,
 		dataType: 'json',
 		success : function(data){
 			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);

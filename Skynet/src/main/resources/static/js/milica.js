@@ -23,7 +23,7 @@ $(document).on('click', '#viewUserProfile_button', function(e){
 	e.preventDefault();
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/viewUserProfile",
+		url : "https://skynet-deployment.herokuapp.com/api/viewUserProfile",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : viewUserProfile,		
@@ -55,7 +55,7 @@ $(document).on('click', '#izmenaProfila_btn', function(e){
 	e.preventDefault();
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/viewUserProfile",
+		url : "https://skynet-deployment.herokuapp.com/api/viewUserProfile",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : prikazPodatakaZaIzmenu,
@@ -102,7 +102,7 @@ $(document).on('submit', '.posaljiIzmeneZaProfil', function(e){
 	}	
 	$.ajax({
 		type : 'PUT',
-		url : 'http://localhost:8080/api/updateUserProfile',
+		url : 'https://skynet-deployment.herokuapp.com/api/updateUserProfile',
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType: 'application/json',
 		data: formToJSON_profilIZ(password,name,surname,  email),

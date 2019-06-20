@@ -420,7 +420,7 @@ $(document).on('submit','#editHAInfo',function(e){
 	var newPass = $('#newPasswordEdit').val();
 	$.ajax({
 		type : 'PUT',
-		url : 'http://localhost:8080/api/updateUserProfile',
+		url : 'https://skynet-deployment.herokuapp.com/api/updateUserProfile',
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType: 'application/json',
 		data: formToJSON_profilIZ(newPass,name,surname,  email),

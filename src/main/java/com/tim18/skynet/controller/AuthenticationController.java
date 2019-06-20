@@ -228,7 +228,8 @@ public class AuthenticationController {
 		if (user != null) {
 			user.setEnabled(true);
 			userService.saveUser(user);
-			return new RedirectView("http://localhost:8080/confirmed.html");
+			return new RedirectView("https://skynet-deployment.herokuapp.com/confirmed.html");
+			
 		}
 		return null;
 	}

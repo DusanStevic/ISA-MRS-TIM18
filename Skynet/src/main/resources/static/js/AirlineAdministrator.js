@@ -14,7 +14,7 @@ function getAirline() {
 	if (token) {
 		$.ajax({
 			type : 'GET',
-			url : "/api/getAirline",
+			url : "https://skynet-deployment.herokuapp.com/api/getAirline",
 			headers : createAuthorizationTokenHeader(TOKEN_KEY),
 			dataType : "json",
 			success : function(data) {
@@ -277,7 +277,7 @@ $(document).on('click', '#viewUserProfile_button', function(e){
 	e.preventDefault();
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/viewUserProfile",
+		url : "https://skynet-deployment.herokuapp.com/api/viewUserProfile",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : viewUserProfile,		
@@ -312,7 +312,7 @@ $(document).on('click', '#izmenaProfila_btn', function(e){
 	e.preventDefault();
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/viewUserProfile",
+		url : "https://skynet-deployment.herokuapp.com/api/viewUserProfile",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : prikazPodatakaZaIzmenu,
@@ -359,7 +359,7 @@ $(document).on('submit', '.posaljiIzmeneZaProfil', function(e){
 	}	
 	$.ajax({
 		type : 'PUT',
-		url : 'http://localhost:8080/api/updateUserProfile',
+		url : 'https://skynet-deployment.herokuapp.com/api/updateUserProfile',
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType: 'application/json',
 		data: formToJSON_profilIZ(password,name,surname,  email),
@@ -450,7 +450,7 @@ $(document).on('submit', '#dodajDestForma', function(e){
 	}
 	$.ajax({
 		type : 'POST',
-		url : "http://localhost:8080/api/addDestination",
+		url : "https://skynet-deployment.herokuapp.com/api/addDestination",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		//url : '../Projekat/rest/admini/dodajDestinaciju',
 		contentType: 'application/json',
@@ -491,7 +491,7 @@ function formToJSON_dest(name, coordinates,  description){
 function getDestinations(){
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/getDestinations",
+		url : "https://skynet-deployment.herokuapp.com/api/getDestinations",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : prikazDestinacija,
@@ -583,7 +583,7 @@ $(document).on('click', '.izmenaDestinacije', function(e){
 	e.preventDefault();
 	var id = $(this).attr("name");
 	//var adresa = '../Projekat/rest/admini/pronadjiDestinaciju/' + nazivDest;
-	var adresa = "http://localhost:8080/api/getDestination/" + id;
+	var adresa = "https://skynet-deployment.herokuapp.com/api/getDestination/" + id;
 	
 	$.ajax({
 		type : 'GET',
@@ -632,7 +632,7 @@ $(document).on('submit', '.posaljiIzmeneZaDestinaciju', function(e){
 	$.ajax({
 		type : 'PUT',
 		//url : '../Projekat/rest/admini/izmeniDestinaciju',
-		url : "http://localhost:8080/api/updateDestination",
+		url : "https://skynet-deployment.herokuapp.com/api/updateDestination",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType: 'application/json',
 		dataType : 'json',
@@ -674,7 +674,7 @@ $(document).on('click', '#dodajLet_btn', function(e){
 	e.preventDefault();
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/getDestinations",
+		url : "https://skynet-deployment.herokuapp.com/api/getDestinations",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : prikazFormeZaNoviLet,
@@ -797,7 +797,7 @@ $(document).on('submit', '.dodajNoviLet', function(e){
 	
 	$.ajax({
 		type : 'POST',
-		url : "http://localhost:8080/api/addFlight",
+		url : "https://skynet-deployment.herokuapp.com/api/addFlight",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType: 'application/json',
 		dataType : 'text',
@@ -865,7 +865,7 @@ function airlineAdminEditToJSON(username, password1, firstName, lastName,
 function getFlights(){
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/getFlights",
+		url : "https://skynet-deployment.herokuapp.com/api/getFlights",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : prikazFlights,
@@ -912,7 +912,7 @@ function prikazFlights(data){
 function getFastSeatReservations(){
 	$.ajax({
 		type : 'GET',
-		url : "http://localhost:8080/api/getFastSeatReservations",
+		url : "https://skynet-deployment.herokuapp.com/api/getFastSeatReservations",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		dataType: 'json',
 		success : prikazFastSeatReservations,
@@ -959,7 +959,7 @@ function prikazFastSeatReservations(data){
 $(document).on('click', '.removeFastSeatReservation', function(e){	
 	e.preventDefault();
 	var id = $(this).attr("name");
-	var adresa = "http://localhost:8080/api/removeFastSeatReservation/" + id;
+	var adresa = "https://skynet-deployment.herokuapp.com/api/removeFastSeatReservation/" + id;
 	
 	$.ajax({
 		type : 'DELETE',
@@ -1067,7 +1067,7 @@ $(document).on('submit', '#pretragaForma', function(e){
 	
 	$.ajax({
 		type : 'POST',
-		url : "http://localhost:8080/api/flightSearch",
+		url : "https://skynet-deployment.herokuapp.com/api/flightSearch",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType: 'application/json',
 		dataType: 'json',
@@ -1168,7 +1168,7 @@ function formToJSON_pretraga(flightCompany,startDestination,endDestination,start
 $(document).on('click', '.addFastSeatReservation', function(e){	
 	e.preventDefault();
 	var brLeta = $(this).attr("name");
-	var adresa = "http://localhost:8080/api/getFlight/" + brLeta;
+	var adresa = "https://skynet-deployment.herokuapp.com/api/getFlight/" + brLeta;
 	
 	
 	
@@ -1231,7 +1231,7 @@ $(document).on('submit', '#sedista', function(e){
 	alert("OVO JE BROJ LETA KOJI HOCEMO DA REZERVISEMO: " + brLeta);
 	//var adresa = '../Projekat/rest/letovi/pronadjiLet/' + brLeta;
 	localStorage.setItem("flightID", brLeta);
-	var adresa = "http://localhost:8080/api/getSeatsOnFlight/" + brLeta;
+	var adresa = "https://skynet-deployment.herokuapp.com/api/getSeatsOnFlight/" + brLeta;
 	
 	
 	
@@ -1470,7 +1470,7 @@ $(document).on('click','.checkout-button',function(e){
 
 	$.ajax({
 		type:'POST',
-		url:"http://localhost:8080/api/addFastSeatReservation",
+		url:"https://skynet-deployment.herokuapp.com/api/addFastSeatReservation",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',
@@ -1534,7 +1534,7 @@ function seatReservationToJSON(flight_id, seats, discount){
 
 	$.ajax({
 		type:'POST',
-		url:"http://localhost:8080/api/addFastSeatReservation",
+		url:"https://skynet-deployment.herokuapp.com/api/addFastSeatReservation",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',

@@ -1,4 +1,4 @@
-var urlRoot18 = "http://localhost:8080/searchCarUnregistered";
+var urlRoot18 = "https://skynet-deployment.herokuapp.com/searchCarUnregistered";
 
 var TOKEN_KEY = 'jwtToken';
 
