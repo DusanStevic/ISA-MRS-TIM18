@@ -1,0 +1,1 @@
+insert into airline (id,name,address, description, image ) values (1, 'JAT','Batajnica', 'Low cost', 'images/airline1.jpg');
