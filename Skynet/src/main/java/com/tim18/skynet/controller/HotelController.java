@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,8 +71,13 @@ public class HotelController {
 		if(dto.getName().equals("") == false){
 			hotel.setName(dto.getName());
 		}
-		user.setHotel(hotel);
-		return new ResponseEntity<>(hotelService.save(hotel), HttpStatus.OK);
+		Hotel h = null;
+		try {
+			h = hotelService.save(h);
+		} catch (JpaSystemException e) {
+		}
+		
+		return new ResponseEntity<>(h, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/api/editHotelImage", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -94,6 +100,8 @@ public class HotelController {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date1 = null;
 		Date date2 = null;
+		System.out.println(search.getCheckin());
+		System.out.println(search.getCheckout());
 		try {
 			date1 = sdf.parse(search.getCheckin());
 			date2 = sdf.parse(search.getCheckout());

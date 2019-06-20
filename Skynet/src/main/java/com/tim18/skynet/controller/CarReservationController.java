@@ -113,16 +113,6 @@ public class CarReservationController {
 		}
 
 	}
-	
-	@RequestMapping( value="/api/getCarReservations/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<CarReservation> getRoomReservations(@PathVariable(value = "id") Long id){
-		RegisteredUser user = (RegisteredUser) this.userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		if(user == null){
-			return null;
-		}
-		Reservation r = reservationService.findOne(id);
-		return r.getCarReservations();
-	}
 
 	@GetMapping(value = "/findRentacarFromRes/{resId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RentACar> findRentacarFromRes(@PathVariable Long resId) {
@@ -198,6 +188,14 @@ public class CarReservationController {
 		return new ResponseEntity<>(newCarRes, HttpStatus.CREATED);
 	}
 
-	
+	@RequestMapping( value="/api/getCarReservations/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<CarReservation> getCarReservations(@PathVariable(value = "id") Long id){
+		RegisteredUser user = (RegisteredUser) this.userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		if(user == null){
+			return null;
+		}
+		Reservation r = reservationService.findOne(id);
+		return r.getCarReservations();
+	}
 }
 

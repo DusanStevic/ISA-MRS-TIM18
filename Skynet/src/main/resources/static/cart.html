@@ -26,9 +26,8 @@
             <ul class="nav navbar-nav"></ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="registration.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-     			<li><a href="#login" id="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            </ul>
+      			<li> <a id = "logout" href = ""><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+    		</ul>
         </div>
     </nav>
     <div class="tab">
@@ -53,18 +52,10 @@
    
    
    <div id="rentACars" class="tabcontent">
-		<div class="container">
-			<h2>Rent a cars:</h2>
-		
-			<button style="background: #69a7c5; color: white"
-				class="sortByAddressRentACars" class="btn btn-primary">Sort
-				by address</button>
-			<br>
-			<table class="table table-hover" id="tableOfRentacars">
-
-			</table>
-			<br>
-		</div>
+		<table id="carButtonDisplay"></table>
+        <table id="carResDisplay">
+			
+        </table>
 	</div>
 	
 		<div id="rentacarReservation" class="tabcontent">

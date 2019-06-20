@@ -1,11 +1,13 @@
 package com.tim18.skynet.service.impl;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.repository.HotelRepository;
@@ -17,7 +19,8 @@ public class HotelServiceImpl implements HotelService{
 	@Autowired
 	private HotelRepository hotelRepository;
 
-	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Hotel save(Hotel hotel) {
 		return hotelRepository.save(hotel);
 	}

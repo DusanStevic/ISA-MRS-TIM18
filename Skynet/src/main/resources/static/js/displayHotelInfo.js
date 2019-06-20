@@ -1,7 +1,14 @@
 var TOKEN_KEY = 'jwtToken';
 
-$(window).on("load",function(){
-	if (window.location.href.match('users-hotelProfile.html') != null){
+$(window).on("load",function(){//dodati token provere
+	var look = localStorage.getItem("justLook");
+	if(window.location.href.match('users-hotelProfile.html') != null && look == "1"){
+		displayHotelProfile();
+		printHotelOffers();
+		getAllRoomsOfHotel();
+		displayUnregisteredFast()
+	}
+	else if (window.location.href.match('users-hotelProfile.html') != null){
 		var token = getJwtToken(TOKEN_KEY);
 		if(token){
 			generateMenu();
@@ -161,6 +168,55 @@ $(window).on("load",function(){
 	}
 })
 
+/* ---------------------------------------------------- */
+function getAllRoomsOfHotel(){
+	var id = localStorage.getItem("hotelId1");
+	$.ajax({
+		type : 'GET',
+		url : "/api/getAllRooms/"+id,
+		contentType: 'text/plain',
+		success : function(data) {
+			displayAllRooms(data);
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			alert(jqXHR.status);
+			alert(textStatus);
+			alert(errorThrown);
+		}
+
+	})
+}
+
+function displayAllRooms(data){
+	$('#Rooms').empty();
+	$('#Rooms').append('<table class="content_table" id="roomsDisp"></table>');
+	if(data != null && data != undefined){
+		var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+		$.each(list, function(index, room){
+			var tr=$('<tr></tr>');
+			tr.append('<td><img src='+room.image+' class="room_display"/></td>');
+			tr.append('<td><table><tr><td><h3>Price per night: '+room.price+'$ </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr><tr><td>Room number: '+room.roomNumber+'</td></tr>'+
+			'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
+			'<tr><td><input type="button" class="blueButton" id="viewRoom" name="'+room.id+'" value="More Details"/></td></tr>');
+			$('#roomsDisp').append(tr);
+		})
+		if(list.length == 0){
+			var tr = $('<tr></tr>');
+			tr.append('<td><div class="notification">This hotel has no rooms to show.</div></td>')
+			$('#roomsDisp').append(tr);
+		}
+	}
+}
+
+function displayUnregisteredFast(){
+	var tr = $('<tr></tr>');
+	tr.append('<td><div class="notification">Informations about fast room reservation are not available right now. If you are not registered, register and start your search in order to get informations about fast reservations.</div></td>')
+	$('#fastDisp').append(tr);
+	
+	
+}
+/* ---------------------------------------------------- */
+
 $(document).on('click','#uploadRoomImg',function(e){
     var modal = document.getElementById('roomModal');
 	var span = document.getElementById("closeRoom");
@@ -253,6 +309,14 @@ function printHotelOffers(){
 				$('#hotelOffers').append(tr2);
 				$('#hotelOffers').append(tr4);
 			});
+			
+			if(list.length == 0){
+				if(list.length == 0){
+					var tr = $('<tr></tr>');
+					tr.append('<td><div class="notification">This hotel has no offers to show.</div></td>')
+					$('#Other_offers').append(tr);
+				}
+			}
 		}
 	});
 }
@@ -552,8 +616,8 @@ function generateMenu(){
       			'<a class="navbar-brand" href="RegisteredUser.html"><span class="glyphicon glyphicon-plane"></span> SKYNET</a>'+
     		'</div>'+
 		    ' <ul class="nav navbar-nav navbar-right">'+
+		    	'<li> <a href = "cart.html" id = "cart" > <span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>'+
       			'<li> <a id = "logout" href = ""><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>'+
-      			'<li> <a href = "cart.html" id = "cart" > <span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>'+
     		'</ul>'+
         '</div>');
 }

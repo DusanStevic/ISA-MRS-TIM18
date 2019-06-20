@@ -2,7 +2,14 @@ var TOKEN_KEY = 'jwtToken';
 
 
 $(window).on("load",function(){
-	if (window.location.href.match('users-RACProfile.html') != null){
+	var look = localStorage.getItem("justLook");
+	if(window.location.href.match('users-RACProfile.html') != null && look == "1"){
+		displayRACProfile();
+		displayFastInfo();
+		displayBranches();
+		displayCars();
+	}
+	else if (window.location.href.match('users-RACProfile.html') != null){
 		var token = getJwtToken(TOKEN_KEY);
 		if(token){
 			//generateMenu();
@@ -13,9 +20,15 @@ $(window).on("load",function(){
 		displayRACProfile();
 		displayFastReservations();
 		displayBranches();
+		displayCars();
 	}
 })
 
+function displayFastInfo(){
+	var tr5=$('<tr></tr>');
+	tr5.append('<td><div class="notification">Informations about fast reservation are not available right now. If you are not registered, register and start your search in order to get informations about fast reservations.</div></td>');
+	$('#fast').append(tr5);
+}
 
 function displayRACProfile(){
 	var id = localStorage.getItem("racId1");

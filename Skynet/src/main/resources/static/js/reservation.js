@@ -3,11 +3,11 @@ var clickedBeds;
 
 $(document).on('click','#reserveRoom',function(e){
 	e.preventDefault();
-	//var able = localStorage.getItem("reservation");
-	//if(able == null || able == undefined || able == ""){
-	//	alert("Room can not be reserved before flight. Please reserve flight first.");
-	//	return;
-	//}
+	var able = localStorage.getItem("reservation");
+	if(able == null || able == undefined || able == ""){
+		alert("Room can not be reserved before flight. Please reserve flight first.");
+		return;
+	}
 	var hid = localStorage.getItem("hotelId1");
 	var id=$(this).attr("name");
 	localStorage.setItem("roomID", id);
@@ -36,11 +36,11 @@ $(document).on('click','#makeRes',function(e){
 		var x = parseInt(this.id);
 		offers.push(x);
 	});
-	//var able = localStorage.getItem("reservation");
-	//if(able == null || able == undefined || able == ""){
-		//alert("Room can not be reserved before flight. Please reserve flight first.");
-		//return;
-	//}
+	var able = localStorage.getItem("reservation");
+	if(able == null || able == undefined || able == ""){
+		alert("Room can not be reserved before flight. Please reserve flight first.");
+		return;
+	}
 	var beds = parseInt(localStorage.getItem("guests"));
 	var curBeds = parseInt(localStorage.getItem("curBeds"));
 	var nowBeds = clickedBeds + curBeds;
@@ -71,11 +71,11 @@ $(document).on('click','#makeRes',function(e){
 	}
 	console.log(offers);
 	var days = 10;
-	//var resID = able;
+	var resID = able;
 	var roomID = localStorage.getItem("roomID");
 	$.ajax({
 		type:'POST',
-		url:'/api/roomReservation/'+'1000',
+		url:'/api/roomReservation/'+able,
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',
@@ -107,14 +107,14 @@ $(document).on('click','#makeRes',function(e){
 
 $(document).on('click','#fastReserve',function(e){
 	var able = localStorage.getItem("reservation");
-	//if(able == null || able == undefined || able == ""){
-	//	alert("Room can not be reserved before flight. Please reserve flight first.");
-	//	return;
-	//}
+	if(able == null || able == undefined || able == ""){
+		alert("Room can not be reserved before flight. Please reserve flight first.");
+		return;
+	}
 	var id=$(this).attr("name");
 	$.ajax({
 		type:'POST',
-		url:'/api/fastReserve/'+'1000',
+		url:'/api/fastReserve/'+able,
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',
@@ -124,7 +124,8 @@ $(document).on('click','#fastReserve',function(e){
 				alert("Room could not be reserved. You have already reservd this room, or you have not completed flight reservation.");
 			}
 			else{
-				alert("Room reserved!");
+				alert("Room successfuly reserved! Now go to cart to complete your reservation.");
+				window.location.replace("cart.html");
 			}
 		},
 		error:function(){

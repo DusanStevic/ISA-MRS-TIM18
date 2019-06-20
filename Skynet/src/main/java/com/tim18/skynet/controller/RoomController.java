@@ -75,6 +75,12 @@ public class RoomController {
 		}
 	}
 	
+	@RequestMapping( value="/api/getAllRooms/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Room> getAllRooms(@PathVariable(value = "id") Long id) {
+		Hotel h = hotelService.findOne(id);
+		return h.getRooms();
+	}
+	
 	
 	
 	@RequestMapping( value="/api/getAvailableRooms/{h_id}",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
