@@ -51,8 +51,6 @@ public class SeatReservationController {
 		
 		System.out.println("ULETEO SAM U REZERVACIJE");
 		
-		//User user = (User) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		
 		List<SeatReservation> seatReservations = new ArrayList<SeatReservation>();
 		
 		Reservation reservation = new Reservation();
@@ -93,7 +91,7 @@ public class SeatReservationController {
 		
 		RegisteredUser user = (RegisteredUser) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		reservation.setInitiator(user);
-		
+		reservation.getPassangers().add(user);
 		reservation.setSeatReservations(seatReservations);
 		reservation.setTotalPrice(rezervacijaDTO.getTotal());
 		reservation.setCompleted(false);
