@@ -57,6 +57,9 @@ public class Seat {
     @Column(name = "unavailable", unique = false, nullable = false)
    	private boolean unavailable;
     
+    @Column(name = "fast", unique = false, nullable = false)
+   	private boolean fast;
+    
     
     //to do promeni listu u hash set
     @JsonIgnore
@@ -169,6 +172,16 @@ public class Seat {
 
 	public void setFlight(Flight flight) {
 		this.flight = flight;
+	}
+
+
+	public boolean isFast() {
+		return fast;
+	}
+
+
+	public void setFast(boolean fast) {
+		this.fast = fast;
 	}
 
 

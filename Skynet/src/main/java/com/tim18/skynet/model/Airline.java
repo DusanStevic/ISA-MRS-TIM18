@@ -36,11 +36,24 @@ public class Airline implements Serializable{
 	@OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Flight>  flights = new  HashSet<Flight>();
 	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<FastSeatReservation> fastSeatReservation = new HashSet<FastSeatReservation>();
 	
 	
 	
 	
-	
+
+
+
+	public Set<FastSeatReservation> getFastSeatReservation() {
+		return fastSeatReservation;
+	}
+
+
+
+	public void setFastSeatReservation(Set<FastSeatReservation> fastSeatReservation) {
+		this.fastSeatReservation = fastSeatReservation;
+	}
 
 
 
@@ -126,7 +139,4 @@ public class Airline implements Serializable{
 
 
 
-	/*public static long getSerialversionuid() {
-		return serialVersionUID;
-	}*/
 }

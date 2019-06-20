@@ -2,7 +2,8 @@
  * 
  */
 var TOKEN_KEY = 'jwtToken';
-
+//array labela koje se salju na server
+var lab=[];
 $(document).ready(function(e){
 	checkFirstTime();
 	getAirline();
@@ -38,7 +39,7 @@ function displayAirline(data){
         '<button class="tablinks" onclick="openCity(event, \'Home\')" id="defaultOpen">About</button>'+
         '<button class="tablinks" onclick="openCity(event, \'Destinations\')" id="roomsOpen">Destinations</button>'+
         '<button class="tablinks" onclick="openCity(event, \'Flights\')" id="offersOpen">Flights</button>'+
-        '<button class="tablinks" onclick="openCity(event, \'Flights\')" id="offersOpen">Flights</button>'+
+        '<button class="tablinks" onclick="openCity(event, \'Fast\')" id="offersOpen">Fast Reservations</button>'+
     '</div>'+
     '<div class="tabcontent" id="Home">'+
         '<table class="content_table" id="airlineInfo">'+ 
@@ -51,7 +52,10 @@ function displayAirline(data){
 		'<div id="Flights" class="tabcontent">'+
         '<table class="content_table" id="flightsDisp">'+
         '</table>'+
-    '</div>';
+    '</div>'+'<div id="Fast" class="tabcontent">'+
+    '<table class="content_table" id="fastRes">'+
+    '</table>'+
+'</div>';
 	$('#main').append(tab);
 	
 	var modal = '<div id="modal" class="modal">'+
@@ -206,6 +210,7 @@ function displayAirline(data){
 	})
 	getDestinations();
 	getFlights();
+	getFastSeatReservations();
 }
 
 function openCity(evt, cityName) {
@@ -833,32 +838,7 @@ function formToJSON_let(startDestination, endDestination,  economicPrice,busines
 	});
 }
 
-/*function formToJSON_let(startDestination, endDestination,  economicPrice,businessPrice,firstClassPrice,  flightDuration,flightLength,seats,startDate_str,endDate_str){
-	return JSON.stringify({
-		"startDestination" : startDestination,
-		"endDestination" : endDestination,
-		"economicPrice" : economicPrice,
-		"businessPrice" : businessPrice,
-		"firstClassPrice" : firstClassPrice,
-		"flightDuration" : flightDuration,
-		"flightLength" : flightLength,
-		"seats" : seats,
-		"startDate_str" : startDate_str,
-		"endDate_str" : endDate_str
-	});
-}*/
 
-
-/*function formToJSON_dest(nazivDestinacije, drzava,  nazivAerodroma,  kodAerodoma,  lokacija,  stanjeDestinacije){
-	return JSON.stringify({
-		"nazivDestinacije" : nazivDestinacije,
-		"drzava" : drzava,
-		"nazivAerodroma" : nazivAerodroma,
-		"kodAerodroma" : kodAerodoma,
-		"lokacija" : lokacija,
-		"stanjeDestinacije" : stanjeDestinacije.toUpperCase()
-	});
-}*/
 
 
 
@@ -906,62 +886,7 @@ function getFlights(){
 
 function prikazFlights(data){
 	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
-	//var tabela = $('<table class = "mainTable"></table>')
-	/*zagalvlje tabele*/
-	/*var tr_h = $('<tr></tr>');
-		
-		tr_h.append('<th>Naziv destinacije</th>');
-		tr_h.append('<th>Opis destinacije</th>');
-		tr_h.append('<th>Koordinate destinacije</th>');
-		tr_h.append('<th></th>');
-		*/
-		/*tr_h.append('<th>Naziv destinacije</th>');
-		tr_h.append('<th>Drzava</th>');
-		tr_h.append('<th>Naziv aerodroma</th>');
-		tr_h.append('<th>Kod</th>');
-		tr_h.append('<th>Lokacija</th>');
-		tr_h.append('<th>Stanje destinacije</th>');
-		tr_h.append('<th></th>');
-		tr_h.append('<th></th>');*/
-	/*
-	var t_head = $('<thead></thead>');
-	t_head.append(tr_h);
-	tabela.append(t_head);
-	//telo tabele
-	var t_body = $('<tbody></tbody>')
-		var tr = $('<tr></tr>');
-		tr.append('<td>'+ destinacija.name + '</td>');
-		tr.append('<td>'+ destinacija.description + '</td>');
-		tr.append('<td>'+ destinacija.coordinates + '</td>');
-		*/
-		/*tr.append('<td>'+ '<img src= "' + destinacija.slikaDestinacije + '" alt = "nisam nasao" width= "261px" height= "121">' + '</td>');
-		tr.append('<td>'+ destinacija.nazivDestinacije + '</td>');
-		tr.append('<td>'+ destinacija.drzava + '</td>');
-		tr.append('<td>'+ destinacija.nazivAerodroma + '</td>');
-		tr.append('<td>'+ destinacija.kodAerodroma + '</td>');
-		tr.append('<td>'+ destinacija.lokacija + '</td>');
-		tr.append('<td id = "stanje_' + destinacija.nazivDestinacije + '">'+ destinacija.stanjeDestinacije + '</td>');
-		var forma = $('<form class = "arhiviranje"></form>')
-		forma.append('<input type = "hidden" value="' + destinacija.nazivDestinacije +'">');
-		if (destinacija.stanjeDestinacije == "ARHIVIRANA"){
-			
-			forma.append('<input type = "submit" id = "arhiviranje_' + destinacija.nazivDestinacije +'" value = "Aktiviraj">')
-		}
-		else{
-			forma.append('<input type = "submit" id = "arhiviranje_' + destinacija.nazivDestinacije +'" value = "Arhiviraj">')
-		}*/
-	/*
-		var forma2 = $('<form class = "izmenaDestinacije"></form>')
-		forma2.append('<input type = "hidden" value="' + destinacija.id +'">');
-		forma2.append('<input type = "submit" value = "Izmena">');
-		//var td = $('<td></td>');
-		var td2 = $('<td></td>');
-		//td.append(forma);
-		td2.append(forma2);
-		//tr.append(td);
-		tr.append(td2);
-		t_body.append(tr);
-	*/
+
 	$.each(list, function(index, flight){
 		var tr1 = $('<tr></tr>');
 		tr1.append('<td><h2>'+flight.startDestination.name+"-"+flight.endDestination.name+'</h2></td><td></td>');
@@ -969,7 +894,8 @@ function prikazFlights(data){
 		var tr3 = $('<tr></tr>');
 		tr2.append('<td><p>'+"Departure:"+flight.startDate+'</p></td>'+'<td align="right"><h3>Coordinates: '+flight.coordinates+'</h3></td>');
 		tr3.append('<td><p>'+"Arival:"+flight.endDate+'</p></td>'+'<td align="right"><h3>Coordinates: '+flight.coordinates+'</h3></td>');
-		var forma2 = $('<tr><td><input type = "button" name="' + flight.id +'" class="editFlight" value="Edit flight"></td></tr>');
+		var forma2 = $('<tr><td><input type = "button" name="' + flight.id +'" class="editFlight" value="Edit flight"></td><td><input type = "button" name="' + flight.id +'" class="addFastSeatReservation" value="Add fast seat reservation"></td></tr>');
+		
 		var tr4=$('<tr></tr>');
 		tr4.append('<td><hr /></td><td><hr /></td>');
 		$('#flightsDisp').append(tr1);
@@ -978,10 +904,664 @@ function prikazFlights(data){
 		$('#flightsDisp').append(forma2);
 		$('#flightsDisp').append(tr4);
 	});
-	/*
-	tabela.append(t_body);
-	$('#main').empty();
-	$('#main').append(tabela);
-	*/
+	
 }
+
+
+/*PRIKAZ FAST SEAT RESERVATIONS*/
+function getFastSeatReservations(){
+	$.ajax({
+		type : 'GET',
+		url : "http://localhost:8080/api/getFastSeatReservations",
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		dataType: 'json',
+		success : prikazFastSeatReservations,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			$.bootstrapGrowl("An error occurred while trying to show flights!", {
+				  ele: 'body', // which element to append to
+				  type: 'danger', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If true then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+		}
+	});	
+}
+
+function prikazFastSeatReservations(data){
+	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+
+	$.each(list, function(index, fastSeatReservation){
+		var tr1 = $('<tr></tr>');
+		tr1.append('<td><h2>'+fastSeatReservation.startDestination+"-"+fastSeatReservation.flight+'</h2></td><td></td>');
+		var tr2 = $('<tr></tr>');
+		var tr3 = $('<tr></tr>');
+		tr2.append('<td><p>'+"Departure:"+fastSeatReservation.startDate+'</p></td>'+'<td align="right"><h3>Coordinates: '+fastSeatReservation.startDate+'</h3></td>');
+		tr3.append('<td><p>'+"Arival:"+fastSeatReservation.endDate+'</p></td>'+'<td align="right"><h3>Coordinates: '+fastSeatReservation.startDate+'</h3></td>');
+		var forma2 = $('<tr><td><input type = "button" name="' + fastSeatReservation.id +'" class="removeFastSeatReservation" value="Remove Fast Seat Reservation"></td></tr>');
+		
+		var tr4=$('<tr></tr>');
+		tr4.append('<td><hr /></td><td><hr /></td>');
+		$('#fastRes').append(tr1);
+		$('#fastRes').append(tr2);
+		$('#fastRes').append(tr3);
+		$('#fastRes').append(forma2);
+	
+		$('#fastRes').append(tr4);
+	});
+	
+}
+
+/*BRISANJE FAST SEAT RESERVATION*/
+$(document).on('click', '.removeFastSeatReservation', function(e){	
+	e.preventDefault();
+	var id = $(this).attr("name");
+	var adresa = "http://localhost:8080/api/removeFastSeatReservation/" + id;
+	
+	$.ajax({
+		type : 'DELETE',
+		url : adresa,
+        headers : createAuthorizationTokenHeader(TOKEN_KEY),
+        dataType: 'json',
+        success: window.location.replace("AirlineAdministrator.html"),
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+        	$.bootstrapGrowl("An error occurred while trying to remove fast seat reservations!", {
+				  ele: 'body', // which element to append to
+				  type: 'danger', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If true then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+		}
+	});
+})
+
+
+
+
+
+
+
+//GENERISANJE BRZE REZERVACIJE SEDISTA OD STRANE AIRLINEADMIN-A
+/*$(document).on('click', '#dodajFast_btn', function(e){
+	console.log("Kliknuo");
+	e.preventDefault();
+	alert("USAO JE U PRETRAGU: ");
+	var tabela = $('<table></table>');
+	tabela.append('<tr><td> Naziv avioprevoznika:</td><td>' +  '<input type = "text" name = "flightCompany" ></td></tr>');
+	tabela.append('<tr><td> Pocetna destinacija:</td><td>' +  '<input type = "text" name = "startDestination" ></td></tr>');
+	tabela.append('<tr><td> Krajnja destinacija:</td><td>' +  '<input type = "text" name = "endDestination" ></td></tr>');
+	
+	tabela.append('<tr><td> Datum poletanja:</td><td>' +  '<input type = "date" name = "startDate"> </td></tr>');
+	tabela.append('<tr><td> Datum sletanja:</td><td>' +  '<input type = "date" name = "endDate"> </td></tr>');
+	tabela.append('<tr><td> Duzina trajanja leta u minutima:</td><td>' +  '<input type = "text" name = "flightDuration" ></td></tr>');
+	tabela.append('<tr><td> Duzina leta u kilometrima:</td><td>' +  '<input type = "text" name = "flightLength" ></td></tr>');
+	tabela.append('<tr><td> Minimalna cena:</td><td>' +  '<input type = "text" name = "MinPrice" ></td></tr>');
+	tabela.append('<tr><td> Maximalna cena:</td><td>' +  '<input type = "text" name = "MaxPrice" ></td></tr>');
+
+	
+	tabela.append('<tr><td> Klasa aviona:</td> <td><select name = "klasaAviona">'
+			+ '<option>Ekonomska</option>'
+			+ '<option>Biznis</option>'
+			+ '<option>Prva</option>'
+			+'</select></td></tr>');
+	
+	tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Pretrazi" ></td></tr>');
+	var forma = $('<form id = "pretragaForma"></form>');
+	forma.append(tabela);
+	$('#main').empty();
+	$('#main').append('<h1>Pretraga</h1>')
+	$('#main').append(forma)
+	alert("IZSAO JE IZ PRETRAGE: ");
+})
+
+$(document).on('submit', '#pretragaForma', function(e){
+	e.preventDefault();
+	var minBusiness = 0;
+	var minEconomic = 0;
+	var minFirstClass = 0;
+	var maxBusiness = 0;
+	var maxEconomic = 0;
+	var maxFirstClass = 0;
+	
+	 
+	
+	var flightCompany = $(this).find('input[name=flightCompany]').val();
+	var startDestination = $(this).find('input[name=startDestination]').val();
+	var endDestination = $(this).find('input[name=endDestination]').val();
+	
+	var startDate = $(this).find('input[name=startDate]').val();
+	var endDate = $(this).find('input[name=endDate]').val();
+	var flightDuration = $(this).find('input[name=flightDuration]').val();
+	var flightLength = $(this).find('input[name=flightLength]').val();
+	var MinPrice = $(this).find('input[name=MinPrice]').val();
+	var MaxPrice = $(this).find('input[name=MaxPrice]').val();
+	
+	var klasaAviona = $(this).find("select[name = klasaAviona]").val();
+	
+	alert(klasaAviona);
+	
+	
+	if (klasaAviona == "Ekonomska") {
+		alert("izabrana je ekonomksa klasa");
+		minEconomic = MinPrice;
+		maxEconomic = MaxPrice;
+		
+	}
+	else if (klasaAviona == "Biznis"){
+		alert("izabrana je biznis klasa");
+		minBusiness = MinPrice;
+		maxBusiness = MaxPrice;
+	}else{
+		alert("izabrana je Prva klasa");
+		minFirstClass = MinPrice;
+		maxFirstClass = MaxPrice;
+	}
+	
+	
+	$.ajax({
+		type : 'POST',
+		url : "http://localhost:8080/api/flightSearch",
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		contentType: 'application/json',
+		dataType: 'json',
+		data: formToJSON_pretraga(flightCompany,startDestination,endDestination,startDate,endDate,flightDuration,flightLength,minBusiness,minEconomic,minFirstClass,maxBusiness,maxEconomic,maxFirstClass),
+		success : prikazLetova,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});	
+})
+
+*/
+/*function prikazLetova(data){
+	if (data == null){
+		$('#main').empty();
+		$('#main').append("Nema pronadjenih letova.");
+		return;
+	}
+	$('#main').empty();
+	var filter = $('<table></table>')
+	filter.append('<tr><td> Filtriraj po:</td> <td><select name = "filter">'
+			+ '<option>Datumu</option>'
+			+ '<option>Klasi</option>'
+			+ '<option>Broju leta</option>'
+			+'</select></td></tr>');
+	filter.append('<tr><td>' +  '<input type = "submit" value = "Primeni filter" ></td></tr>');
+	var formaZaFilter = $('<form id = "filtriranje"></form>')
+	formaZaFilter.append(filter);
+	$('#main').append(formaZaFilter);
+	$('#main').append('<br><br>')
+	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	var tabela = $('<table class = "mainTable"></table>')
+	var tr_h = $('<tr></tr>');
+	
+		tr_h.append('<th>Pocetna destinacija</th>');
+		tr_h.append('<th>Krajnja destinacija</th>');
+		tr_h.append('<th>Cena</th>');
+		tr_h.append('<th> Model aviona</th>');
+		tr_h.append('<th> Datum Polaska</th>');
+		tr_h.append('<th> Datum Dolaska</th>');
+		tr_h.append('<th>Klasa Aviona</th>');
+		tr_h.append('<th></th>');
+	var t_head = $('<thead></thead>');
+	t_head.append(tr_h);
+	tabela.append(t_head);
+	var t_body = $('<tbody></tbody>')
+	$.each(list, function(index, let_){
+		var tr = $('<tr></tr>');
+		
+		tr.append('<td>'+ let_.startDestination + '</td>');
+		tr.append('<td>'+ let_.endDestination + '</td>');
+		tr.append('<td>'+ let_.cenaKarte + '</td>');
+		tr.append('<td>'+ let_.modelAviona + '</td>');
+		tr.append('<td>'+ let_.startDate_str + '</td>');
+		tr.append('<td>'+ let_.endDate_str + '</td>');
+		tr.append('<td>'+ let_.klasaAviona + '</td>');
+		var forma = $('<form id = "addFastSeatReservation"></form>')
+		forma.append('<input type = "hidden" value="' + let_.id +'">');
+		forma.append('<input type = "submit" value = "Add fast seat reservation">')
+		var td = $('<td></td>');
+		td.append(forma);
+		tr.append(td);
+		t_body.append(tr);
+	});
+	tabela.append(t_body);
+	$('#main').append(tabela);
+}
+
+function formToJSON_pretraga(flightCompany,startDestination,endDestination,startDate,endDate,flightDuration,flightLength,minBusiness,minEconomic,minFirstClass,maxBusiness,maxEconomic,maxFirstClass){
+	return JSON.stringify({
+		"flightCompany" : flightCompany,
+		"startDestination" : startDestination,
+		"endDestination" : endDestination,
+		"startDate" : startDate,
+		"endDate" : endDate,
+		"flightDuration": flightDuration,
+		"flightLength": flightLength,
+		
+		"minBusiness" : minBusiness,
+		"minEconomic" : minEconomic,
+		"minFirstClass" : minFirstClass,
+		"maxBusiness" : maxBusiness,
+		"maxEconomic" : maxEconomic,
+		"maxFirstClass" :maxFirstClass
+		
+	});
+}
+*/
+
+
+
+
+
+
+
+
+
+$(document).on('click', '.addFastSeatReservation', function(e){	
+	e.preventDefault();
+	var brLeta = $(this).attr("name");
+	var adresa = "http://localhost:8080/api/getFlight/" + brLeta;
+	
+	
+	
+	$.ajax({
+        type : 'GET',
+        url : adresa,
+        headers : createAuthorizationTokenHeader(TOKEN_KEY),
+        dataType: 'json',
+        success: prikazLetaZaRezervaciju,
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});
+})
+
+
+
+var firstSeatLabel = 1;
+function prikazLetaZaRezervaciju(data){
+	alert("OVO JE ONO STO JE POSLATO IZ BAZE NA FRONT: " + data.id);
+	var tabela = $('<table></table>');
+	//tabela.append('<tr><td> Broj leta:</td><td>'+ data.brLeta + '</td></tr>');
+	
+	tabela.append('<tr><td> Pocetna destinacija:</td><td>'+ data.startDestination + '</td></tr>');
+	tabela.append('<tr><td> Krajnja destinacija:</td><td>'+ data.endDestination + '</td></tr>');
+	/*tabela.append('<tr><td> Cena:</td><td>'+ data.cenaKarte + '</td></tr>');
+	tabela.append('<tr><td> Datum:</td><td>'+ data.datumLeta + '</td></tr>');
+	tabela.append('<tr><td> Model aviona:</td><td>'+ data.modelAviona + '</td></tr>');
+	tabela.append('<tr><td> Klasa aviona:</td><td>'+ data.klasaAviona + '</td></tr>');*/
+	tabela.append('<tr><td> Discount:</td><td>' +  '<input type = "text" name = "discount"> </td></tr>');
+	
+	
+	//tabela.append('<tr><td> Maximalna cena:</td><td>' +  '<input type = "text" name = "MaxPrice" ></td></tr>');
+	//var economicCapacity_columns = $(this).find("input[name = economicCapacity_columns]").val();
+	
+	
+	
+	
+	//tabela.append('<tr><td></td><td>' +  '<input type = "submit" value = "Posalji" ></td></tr>');
+	//var forma = $('<form id = "posaljiPodatkeZaRezervaciju"></form>');
+	//forma.append(tabela);
+	var forma = $('<form id = "sedista"></form>')
+	forma.append(tabela);
+	
+	forma.append('<input type = "hidden" value="' + data.id +'">');
+	forma.append('<input type = "submit" value = "Prikaz sedista">')
+	$('#main').empty();
+	$('#main').append('<h1>Rezervacija leta:</h1>')
+	$('#main').append(forma)
+
+
+};
+
+$(document).on('submit', '#sedista', function(e){
+	var discount = $(this).find("input[name=discount]").val();
+	alert("OVO JE VREDNOST KOJA JE POKUPLJEN SA FROME: " + discount);
+	localStorage.setItem("discount", discount);
+	e.preventDefault();
+	var brLeta = $(this).find('input[type=hidden]').val();
+	alert("OVO JE BROJ LETA KOJI HOCEMO DA REZERVISEMO: " + brLeta);
+	//var adresa = '../Projekat/rest/letovi/pronadjiLet/' + brLeta;
+	localStorage.setItem("flightID", brLeta);
+	var adresa = "http://localhost:8080/api/getSeatsOnFlight/" + brLeta;
+	
+	
+	
+	$.ajax({
+        type : 'GET',
+        url : adresa,
+        headers : createAuthorizationTokenHeader(TOKEN_KEY),
+        dataType: 'json',
+        success: prikazSedistaZaRezervaciju,
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});
+})
+
+
+
+var firstSeatLabel = 1;
+function prikazSedistaZaRezervaciju(data){
+	
+	
+	
+	
+	$('#main').append('<div class="container">'+
+			'<h3 id="relacija-leta"></h3>'+
+			'<div id="seat-map">'+
+				'<div class="front-indicator">Front</div>'+
+
+			'</div>'+
+			'<div class="booking-details">'+
+				'<h2>Booking Details</h2>'+
+
+				'<h3>'+
+					'Selected Seats (<span id="counter">0</span>):'+
+				'</h3>'+
+				'<ul id="selected-seats"></ul>'+
+				
+				'Total: <b>$<span id="total">0</span></b>'+
+
+				'<button class="checkout-button">Checkout &raquo;</button>'+
+				'<button class=\'next-button\' onclick="$(\'#uzas\').click()">Next &raquo;</button>'+
+				'<br><br><br>'+
+				'<div id="legend"></div>'+
+			'</div>'+
+		'</div>');
+	 
+	
+	var firstClassCapacity_rows=data.firstClassCapacity_rows;
+	alert("row first: " + firstClassCapacity_rows);
+	var firstClassCapacity_columns=data.firstClassCapacity_columns;
+	alert("cols first: " + firstClassCapacity_columns);
+	
+	var economicCapacity_rows=data.economicCapacity_rows;
+	alert("row eco: " + economicCapacity_rows);
+	var economicCapacity_columns=data.economicCapacity_columns;
+	alert("col eco: " + economicCapacity_columns);
+	
+	var buisinesssCapacity_rows=data.buisinesssCapacity_rows;
+	alert("row bus: " + buisinesssCapacity_rows);
+	var buisinesssCapacity_columns=data.buisinesssCapacity_columns;
+	alert("col bus: " + buisinesssCapacity_columns);
+	
+	
+	
+	 var lista=[];
+	 for(var i=1; i<=firstClassCapacity_rows; i++){
+		var red='';
+		for(var j=1; j<=firstClassCapacity_columns; j++){
+			red+='f';
+		}
+		lista.push(red);
+	 }
+	 for(var i=1; i<=economicCapacity_rows; i++){
+		var red='';
+		for(var j=1; j<=economicCapacity_columns; j++){
+			red+='e';
+		}
+		lista.push(red);
+	 }
+	 for(var i=1; i<=buisinesssCapacity_rows; i++){
+		var red='';
+		for(var j=1; j<=buisinesssCapacity_columns; j++){
+			red+='b';
+		}
+		lista.push(red);
+	 }
+	 console.log(lista)
+	 var $cart = $('#selected-seats'),
+     $counter = $('#counter'),
+     $total = $('#total'),
+     sc = $('#seat-map').seatCharts({
+     map: lista,
+     seats: {
+       f: {
+         price   : data.firstClassPrice,
+         classes : 'first-class', //your custom CSS class
+         category: 'First Class'
+       },
+       e: {
+         price   : data.economicPrice,
+         classes : 'economy-class', //your custom CSS class
+         category: 'Economy Class'
+       },
+       
+       b: {
+			price:data.businessPrice,
+			classes:'business-class',
+			category:'Business Class'
+		}
+     
+     },
+     naming : {
+       top : false,
+       getLabel : function (character, row, column) {
+         return firstSeatLabel++;
+       },
+     },
+     legend : {
+       node : $('#legend'),
+         items : [
+         [ 'f', 'available',   'First Class' ],
+         [ 'e', 'available',   'Economy Class'],
+         [ 'b', 'available',   'Business Class'],
+         [ 'f', 'unavailable', 'Already Booked']
+         ]         
+     },
+     click: function () {
+       if (this.status() == 'available') {
+         //let's create a new <li> which we'll add to the cart items
+         $('<li>'+this.data().category+' Seat # '+this.settings.label+': <b>$'+this.data().price+'</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
+           .attr('id', 'cart-item-'+this.settings.id)
+           .data('seatId', this.settings.id)
+           .appendTo($cart);
+         alert('duzina: '+$('#selected-seats li').length);
+         alert('labela:'+this.settings.label)
+         //punim array lab sa labelama
+         lab.push(this.settings.label);
+         /*
+          * Lets up<a href="https://www.jqueryscript.net/time-clock/">date</a> the counter and total
+          *
+          * .find function will not find the current seat, because it will change its stauts only after return
+          * 'selected'. This is why we have to add 1 to the length and the current seat price to the total.
+          */
+         $counter.text(sc.find('selected').length+1);
+         $total.text(recalculateTotal(sc)+this.data().price);
+         
+         return 'selected';
+       } else if (this.status() == 'selected') {
+         //update the counter
+         $counter.text(sc.find('selected').length-1);
+         //and total
+         $total.text(recalculateTotal(sc)-this.data().price);
+       
+         //remove the item from our cart
+         $('#cart-item-'+this.settings.id).remove();
+       
+         //seat has been vacated
+         
+         //ukoliko je odustao od rezervacije sedista moram iz lab da izbacim to sediste(lab)
+         var indeks = lab.indexOf(this.settings.label);
+         if (indeks > -1) {
+             lab.splice(indeks, 1);
+         }
+         return 'available';
+       } else if (this.status() == 'unavailable') {
+         //seat has been already booked
+         return 'unavailable';
+       } else {
+         return this.style();
+       }
+     }
+   });
+
+   //this will handle "[cancel]" link clicks
+   $('#selected-seats').on('click', '.cancel-cart-item', function () {
+     //let's just trigger Click event on the appropriate seat, so we don't have to repeat the logic here
+     sc.get($(this).parents('li:first').data('seatId')).click();
+     
+     
+   });
+
+   //let's pretend some seats have already been booked
+   //sc.get(['1_2', '4_1', '7_1', '7_2']).status('unavailable');
+   
+   
+	$.each(data.seats, function(index, seat){
+		if(seat.taken==true){
+			sc.status(seat.seatRow+'_'+seat.seatColumn, 'unvailable');
+		}
+	})
+	
+
+	
+
+};
+
+function recalculateTotal(sc) {
+ var total = 0;
+
+ //basically find every selected seat and sum its price
+ sc.find('selected').each(function () {
+   total += this.data().price;
+   
+ });
+ 
+ return total;
+}
+
+$(document).on('click','.checkout-button',function(e){
+	var id = localStorage.getItem("flightID");
+	alert("OVO JE BROJ LETA KOJI HOCEMO DA SALJEMO NA SERVER IZ METODE POKUPI SEDISTA: " + id);
+	var id = localStorage.getItem("flightID");
+	alert("OVO JE BROJ LETA KOJI HOCEMO DA SALJEMO NA SERVER: " + id);
+	var discount = localStorage.getItem("discount");
+	alert("OVO JE POPUST KOJI HOCEMO DA SALJEMO NA SERVER: " + discount);
+	if(lab.length==0){
+		$.bootstrapGrowl("You must select at least one seat!", {
+			  ele: 'body', // which element to append to
+			  type: 'danger', // (null, 'info', 'danger', 'success')
+			  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+			  align: 'right', // ('left', 'right', or 'center')
+			  width: 'auto', // (integer, or 'auto')
+			  delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+			  allow_dismiss: false, // If true then will display a cross to close the popup.
+			  stackup_spacing: 10 // spacing between consecutively stacked growls.
+			});
+		
+	}
+		
+	var total=parseInt($('#total').text(), 10)
+	console.log('total: '+total);
+	
+	
+	
+	
+
+	$.ajax({
+		type:'POST',
+		url:"http://localhost:8080/api/addFastSeatReservation",
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		contentType:'application/json',
+		dataType:'json',
+		data:seatReservationToJSON(id, lab, total),
+		success:function(data){
+			$.bootstrapGrowl("Fast reservation has been successfully created!", {
+				  ele: 'body', // which element to append to
+				  type: 'success', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If false then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+			
+		}
+	});
+});
+
+function seatReservationToJSON(flight_id, seats, discount){
+	return JSON.stringify({
+		"seats":seats,
+		"flight_id":flight_id,
+		"discount":discount,
+	});
+}
+
+
+
+
+
+/*$(document).on('click','.addFastSeatReservation',function(e){
+
+	var id = localStorage.getItem("flightID");
+	alert("OVO JE BROJ LETA KOJI HOCEMO DA SALJEMO NA SERVER IZ METODE POKUPI SEDISTA: " + id);
+	var id = localStorage.getItem("flightID");
+	alert("OVO JE BROJ LETA KOJI HOCEMO DA SALJEMO NA SERVER: " + id);
+	var discount = localStorage.getItem("discount");
+	alert("OVO JE POPUST KOJI HOCEMO DA SALJEMO NA SERVER: " + discount);
+	if(lab.length==0){
+		$.bootstrapGrowl("You must select at least one seat!", {
+			  ele: 'body', // which element to append to
+			  type: 'danger', // (null, 'info', 'danger', 'success')
+			  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+			  align: 'right', // ('left', 'right', or 'center')
+			  width: 'auto', // (integer, or 'auto')
+			  delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+			  allow_dismiss: false, // If true then will display a cross to close the popup.
+			  stackup_spacing: 10 // spacing between consecutively stacked growls.
+			});
+		
+	}
+		
+	var total=parseInt($('#total').text(), 10)
+	console.log('total: '+total);
+	
+	
+	
+	
+
+	$.ajax({
+		type:'POST',
+		url:"http://localhost:8080/api/addFastSeatReservation",
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		contentType:'application/json',
+		dataType:'json',
+		data:seatReservationToJSON(id, lab, total),
+		success:function(data){
+			$.bootstrapGrowl("Fast reservation has been successfully created!", {
+				  ele: 'body', // which element to append to
+				  type: 'success', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If false then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+			window.location.replace("cart.html");
+		}
+	});
+});
+*/
+
+
+
+
+
+
+
+
+
 

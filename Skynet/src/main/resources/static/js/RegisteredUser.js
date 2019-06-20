@@ -1111,6 +1111,7 @@ function pokupiRezervisanaSedista(){
 				  allow_dismiss: false, // If true then will display a cross to close the popup.
 				  stackup_spacing: 10 // spacing between consecutively stacked growls.
 				});
+			window.location.replace("cart.html");
 		}
 	});
 	
