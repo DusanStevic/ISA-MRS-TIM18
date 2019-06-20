@@ -53,10 +53,7 @@ public class Flight {
 	@Column(name="rating", nullable = true)
 	private double rating;
 	
-	@Column(nullable = false)
-	private String score;
-	@Column(nullable = false)
-	private String number;
+	
 	
 	
 	
@@ -68,24 +65,7 @@ public class Flight {
 	List<Room> rooms = new ArrayList<Room>();
 	*/
 	
-	public String getScore() {
-		return score;
-	}
-
-
-	public void setScore(String score) {
-		this.score = score;
-	}
-
-
-	public String getNumber() {
-		return number;
-	}
-
-
-	public void setNumber(String number) {
-		this.number = number;
-	}
+	
 
 
 	@JsonIgnore

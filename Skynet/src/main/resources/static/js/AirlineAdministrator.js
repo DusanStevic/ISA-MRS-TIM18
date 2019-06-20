@@ -38,6 +38,7 @@ function displayAirline(data){
         '<button class="tablinks" onclick="openCity(event, \'Home\')" id="defaultOpen">About</button>'+
         '<button class="tablinks" onclick="openCity(event, \'Destinations\')" id="roomsOpen">Destinations</button>'+
         '<button class="tablinks" onclick="openCity(event, \'Flights\')" id="offersOpen">Flights</button>'+
+        '<button class="tablinks" onclick="openCity(event, \'Flights\')" id="offersOpen">Flights</button>'+
     '</div>'+
     '<div class="tabcontent" id="Home">'+
         '<table class="content_table" id="airlineInfo">'+ 
@@ -204,6 +205,7 @@ function displayAirline(data){
 		
 	})
 	getDestinations();
+	getFlights();
 }
 
 function openCity(evt, cityName) {
@@ -876,3 +878,110 @@ function airlineAdminEditToJSON(username, password1, firstName, lastName,
 		
 	})
 }
+
+
+
+/*PRIKAZ LETOVA*/
+function getFlights(){
+	$.ajax({
+		type : 'GET',
+		url : "http://localhost:8080/api/getFlights",
+		headers : createAuthorizationTokenHeader(TOKEN_KEY),
+		dataType: 'json',
+		success : prikazFlights,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			$.bootstrapGrowl("An error occurred while trying to show flights!", {
+				  ele: 'body', // which element to append to
+				  type: 'danger', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If true then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
+		}
+	});	
+}
+
+function prikazFlights(data){
+	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	//var tabela = $('<table class = "mainTable"></table>')
+	/*zagalvlje tabele*/
+	/*var tr_h = $('<tr></tr>');
+		
+		tr_h.append('<th>Naziv destinacije</th>');
+		tr_h.append('<th>Opis destinacije</th>');
+		tr_h.append('<th>Koordinate destinacije</th>');
+		tr_h.append('<th></th>');
+		*/
+		/*tr_h.append('<th>Naziv destinacije</th>');
+		tr_h.append('<th>Drzava</th>');
+		tr_h.append('<th>Naziv aerodroma</th>');
+		tr_h.append('<th>Kod</th>');
+		tr_h.append('<th>Lokacija</th>');
+		tr_h.append('<th>Stanje destinacije</th>');
+		tr_h.append('<th></th>');
+		tr_h.append('<th></th>');*/
+	/*
+	var t_head = $('<thead></thead>');
+	t_head.append(tr_h);
+	tabela.append(t_head);
+	//telo tabele
+	var t_body = $('<tbody></tbody>')
+		var tr = $('<tr></tr>');
+		tr.append('<td>'+ destinacija.name + '</td>');
+		tr.append('<td>'+ destinacija.description + '</td>');
+		tr.append('<td>'+ destinacija.coordinates + '</td>');
+		*/
+		/*tr.append('<td>'+ '<img src= "' + destinacija.slikaDestinacije + '" alt = "nisam nasao" width= "261px" height= "121">' + '</td>');
+		tr.append('<td>'+ destinacija.nazivDestinacije + '</td>');
+		tr.append('<td>'+ destinacija.drzava + '</td>');
+		tr.append('<td>'+ destinacija.nazivAerodroma + '</td>');
+		tr.append('<td>'+ destinacija.kodAerodroma + '</td>');
+		tr.append('<td>'+ destinacija.lokacija + '</td>');
+		tr.append('<td id = "stanje_' + destinacija.nazivDestinacije + '">'+ destinacija.stanjeDestinacije + '</td>');
+		var forma = $('<form class = "arhiviranje"></form>')
+		forma.append('<input type = "hidden" value="' + destinacija.nazivDestinacije +'">');
+		if (destinacija.stanjeDestinacije == "ARHIVIRANA"){
+			
+			forma.append('<input type = "submit" id = "arhiviranje_' + destinacija.nazivDestinacije +'" value = "Aktiviraj">')
+		}
+		else{
+			forma.append('<input type = "submit" id = "arhiviranje_' + destinacija.nazivDestinacije +'" value = "Arhiviraj">')
+		}*/
+	/*
+		var forma2 = $('<form class = "izmenaDestinacije"></form>')
+		forma2.append('<input type = "hidden" value="' + destinacija.id +'">');
+		forma2.append('<input type = "submit" value = "Izmena">');
+		//var td = $('<td></td>');
+		var td2 = $('<td></td>');
+		//td.append(forma);
+		td2.append(forma2);
+		//tr.append(td);
+		tr.append(td2);
+		t_body.append(tr);
+	*/
+	$.each(list, function(index, flight){
+		var tr1 = $('<tr></tr>');
+		tr1.append('<td><h2>'+flight.startDestination.name+"-"+flight.endDestination.name+'</h2></td><td></td>');
+		var tr2 = $('<tr></tr>');
+		var tr3 = $('<tr></tr>');
+		tr2.append('<td><p>'+"Departure:"+flight.startDate+'</p></td>'+'<td align="right"><h3>Coordinates: '+flight.coordinates+'</h3></td>');
+		tr3.append('<td><p>'+"Arival:"+flight.endDate+'</p></td>'+'<td align="right"><h3>Coordinates: '+flight.coordinates+'</h3></td>');
+		var forma2 = $('<tr><td><input type = "button" name="' + flight.id +'" class="editFlight" value="Edit flight"></td></tr>');
+		var tr4=$('<tr></tr>');
+		tr4.append('<td><hr /></td><td><hr /></td>');
+		$('#flightsDisp').append(tr1);
+		$('#flightsDisp').append(tr2);
+		$('#flightsDisp').append(tr3);
+		$('#flightsDisp').append(forma2);
+		$('#flightsDisp').append(tr4);
+	});
+	/*
+	tabela.append(t_body);
+	$('#main').empty();
+	$('#main').append(tabela);
+	*/
+}
+

@@ -37,7 +37,6 @@ import com.tim18.skynet.model.Destination;
 import com.tim18.skynet.model.Flight;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
-import com.tim18.skynet.model.RentACar;
 import com.tim18.skynet.model.Seat;
 import com.tim18.skynet.service.AirlineAdminService;
 import com.tim18.skynet.service.impl.AirlineServiceImpl;
@@ -189,6 +188,40 @@ public class AirlineController {
 					sdf2.format(f.getEndDate()));
 			System.out.println("ONO STO JE PRONADJENO U BAZI"+f.toString());
 			return new ResponseEntity<>(fb, HttpStatus.OK);
+			
+
+			
+		}
+		
+		
+		@RequestMapping(value = "/api/getFlights/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<Set<Flight>> getFlights(@PathVariable("id")Long id){
+			Airline a = airlineService.findOne(id);
+			if (a == null) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				
+			}
+			Set<Flight> flights = a.getFlights();
+			return new ResponseEntity<>(flights, HttpStatus.OK);
+		}
+		
+		
+		@RequestMapping(value = "/api/getFlights", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		@PreAuthorize("hasAuthority('ROLE_AIRLINE_ADMIN')")
+		public ResponseEntity<?> getFlights(){
+			System.out.println("ULETEO SAM U PRIKAZ SVIH LETOVA");
+			AirlineAdmin airlineAdmin = (AirlineAdmin) this.userInfoService
+					.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+			Airline a = airlineAdmin.getAirline();
+			if (a == null) {
+				
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				
+			}
+			
+			
+			Set<Flight> flights = a.getFlights();
+			return new ResponseEntity<>(flights, HttpStatus.OK);
 			
 
 			
@@ -518,14 +551,15 @@ public class AirlineController {
 			date1 = sdf.parse(search.getDeparture());
 			if(search.getArrival() != ""){
 				date2 = sdf.parse(search.getArrival());
+				if(date1.before(new Date()) || date2.before(new Date())){
+					return null;
+				}
 			}
 		} catch (ParseException e) {
 			System.out.println("Neuspesno parsiranje datuma");
 			return null;
 		}
-		if(date1.before(new Date()) || date2.before(new Date())){
-			return null;
-		}
+		
 		
 		long passangers = search.getPassangers();
 		String name = search.getName();
@@ -540,14 +574,12 @@ public class AirlineController {
 		return airlines;
 	}
 	
-	@RequestMapping(value = "/api/searchedFlights/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/api/searchedFlights/{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Collection<Flight> searchFlights(@PathVariable(value = "id") Long id, @RequestBody AirlineSearchDTO search) throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date d1 = null;
-		Date d2 = null;
 		try {
 			d1 = sdf.parse(search.getDeparture());
-			d2 = sdf.parse(search.getArrival());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -570,23 +602,4 @@ public class AirlineController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	@GetMapping(value = "/gradeAirline/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Airline> createGradeAirline(@PathVariable Long id, @PathVariable Integer grade) {
-		Airline air = airlineService.findOne(id);
-		air.setScore(air.getScore() + grade);
-		air.setNumber(air.getNumber() + 1);
-		airlineService.save(air);
-		return new ResponseEntity<>(air, HttpStatus.CREATED);
-	}
-	
-	@GetMapping(value = "/gradeFlight/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Flight> createGradeFlight(@PathVariable Long id, @PathVariable Integer grade) {
-		Flight air = flightService.findOne(id);
-		air.setScore(air.getScore() + grade);
-		air.setNumber(air.getNumber() + 1);
-		flightService.save(air);
-		return new ResponseEntity<>(air, HttpStatus.CREATED);
-	}
-	
 }

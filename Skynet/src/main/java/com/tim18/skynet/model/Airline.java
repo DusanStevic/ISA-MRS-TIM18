@@ -37,34 +37,10 @@ public class Airline implements Serializable{
 	private Set<Flight>  flights = new  HashSet<Flight>();
 	
 	
-	@Column(nullable = false)
-	private String score;
-	@Column(nullable = false)
-	private String number;
 	
 	
 	
-	public String getScore() {
-		return score;
-	}
-
-
-
-	public void setScore(String score) {
-		this.score = score;
-	}
-
-
-
-	public String getNumber() {
-		return number;
-	}
-
-
-
-	public void setNumber(String number) {
-		this.number = number;
-	}
+	
 
 
 
