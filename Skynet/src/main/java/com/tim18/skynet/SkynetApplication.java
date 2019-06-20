@@ -6,10 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 import com.tim18.skynet.properties.FileStorageProperties;
 
-@SpringBootApplication
-@EnableConfigurationProperties({
-    FileStorageProperties.class
-})
+
 public class SkynetApplication {
 
 	public static void main(String[] args) {
