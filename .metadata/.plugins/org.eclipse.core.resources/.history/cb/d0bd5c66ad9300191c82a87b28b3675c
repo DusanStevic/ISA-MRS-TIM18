@@ -44,7 +44,7 @@ function sendEmail(email, user_id){
 	var subject = "Skynet: Confirm your registration";
 	$.ajax({
 		type : 'POST',
-		url : "https://skynet-deployment.herokuapp.com/sendEmail",
+		url : "/sendEmail",
 		contentType : 'application/json',
 		data : emailToJSON(subject, body, email),
 		success : function(data) {
