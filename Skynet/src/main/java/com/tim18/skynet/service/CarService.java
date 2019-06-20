@@ -1,5 +1,7 @@
 package com.tim18.skynet.service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.tim18.skynet.model.Car;
@@ -10,6 +12,6 @@ public interface CarService {
 	public Car findOne(Long id);
 	public List<Car> findAll();
 	public void delete(Long id);
-	//public ArrayList<Room> findAvailable(long racId, Date checkin, Date checkout);
+	public ArrayList<Car> findAvailable(long racId, Date checkin, Date checkout);
 	public List<Car> findByRentACar(RentACar r);
 }

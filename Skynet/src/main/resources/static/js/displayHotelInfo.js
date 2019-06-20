@@ -176,6 +176,7 @@ $(document).on('click','#uploadRoomImg',function(e){
 })
 
 function getFastReservations(){
+	console.log("Usao sam");
 	var id = localStorage.getItem("hotelId1");
 	var reservation = "login";
 	var token = getJwtToken(TOKEN_KEY);
@@ -192,6 +193,7 @@ function getFastReservations(){
 		data: inputToRoomSearchDTO(sort,arr),
 		dataType:'json',
 		success:function(data){
+			console.log(data);
 			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 			$.each(list, function(index, res){
 				var real_price = res.room.price;
@@ -223,6 +225,10 @@ function getFastReservations(){
 				}
                 $('#fastDisp').append(tr);
 			});
+		},error : function(jqXHR, textStatus, errorThrown) {
+			alert(jqXHR.status);
+			alert(textStatus);
+			alert(errorThrown);
 		}
 	});
 }
@@ -533,6 +539,12 @@ function inputToOffersSort(string_offers, sort){
 	})
 }
 
+$(document).on('click', "#logout", function (e) {
+	removeJwtToken(TOKEN_KEY);
+	localStorage.clear();
+	window.location.replace("index.html");
+});
+
 function generateMenu(){
 	$('#menubar').empty();
 	$('#menubar').append('<div class="container-fluid">'+
@@ -541,6 +553,7 @@ function generateMenu(){
     		'</div>'+
 		    ' <ul class="nav navbar-nav navbar-right">'+
       			'<li> <a id = "logout" href = ""><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>'+
+      			'<li> <a href = "cart.html" id = "cart" > <span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>'+
     		'</ul>'+
         '</div>');
 }

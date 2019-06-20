@@ -48,5 +48,33 @@ public interface HotelRepository extends JpaRepository<Hotel, Long>{
 			   		"(SELECT DISTINCT r2.hotel.id FROM Room r2 "+
 			   		"WHERE r2.id not in (SELECT rr2.reservedRoom.id FROM RoomReservation rr2) AND r2.bedNumber <= ?4))")
 		ArrayList<Hotel> findByAddressAndDateAndBeds(String address, Date checkin, Date checkout, int beds);
+		
+		
+		@Query("SELECT COALESCE(SUM(rr.reservedRoom.bedNumber),0), rr.checkIn FROM RoomReservation rr " +
+				"WHERE rr.reservedRoom.hotel.id = ?1 " +
+				"AND rr.checkIn <= NOW() " +
+				"GROUP BY WEEKDAY(rr.checkIn)" +
+				"ORDER BY WEEKDAY(rr.checkIn )")
+		ArrayList<Object[]> dailyReport(long id);
+		
+		@Query("SELECT COALESCE(SUM(rr.reservedRoom.bedNumber),0), rr.checkIn FROM RoomReservation rr " +
+				"WHERE rr.reservedRoom.hotel.id = ?1 " +
+				"AND rr.checkIn <= NOW() " +
+				"GROUP BY week(rr.checkIn)"+
+				"ORDER BY week(rr.checkIn)" )
+		ArrayList<Object[]> weeklyReport(long id);
+		
+		@Query("SELECT COALESCE(SUM(rr.reservedRoom.bedNumber),0), rr.checkIn FROM RoomReservation rr " +
+				"WHERE rr.reservedRoom.hotel.id = ?1 " +
+				"AND rr.checkIn <= NOW() " +
+				"GROUP BY MONTH(rr.checkIn)"+
+				"ORDER BY MONTH(rr.checkIn)")
+		ArrayList<Object[]> monthlyReport(long id);
+		
+		@Query("SELECT rr.price FROM RoomReservation rr " +
+				"WHERE rr.reservedRoom.hotel.id = ?1 " +
+				"AND rr.checkIn >= ?2 AND rr.checkIn <= ?3")
+		Long incomeReport(long id, Date date1, Date date2);
 
 }
+

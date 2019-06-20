@@ -62,6 +62,9 @@ public class RoomOfferController {
 		for(RoomOffer rof : room.getRoomOffers()){
 			if(roomOffers.getRoomOffers().contains(rof.getOffer()) == false){
 				rof.getRooms().remove(room);
+				if(rof.getRooms().size() == 0){
+					roomOfferService.delete(rof.getId());
+				}
 			}
 		}
 		room.setRoomOffers(newOffers);

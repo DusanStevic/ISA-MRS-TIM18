@@ -8,10 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class TimeProvider implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3301695478208950415L;
 
 	public Date now() {
 		return new Date();
 	}
 }
-
