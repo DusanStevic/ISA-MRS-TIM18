@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tim18.skynet.dto.CarDTO;
 import com.tim18.skynet.dto.MessageDTO;
@@ -26,9 +27,12 @@ import com.tim18.skynet.model.Branch;
 import com.tim18.skynet.model.Car;
 import com.tim18.skynet.model.CarReservation;
 import com.tim18.skynet.model.RACAdmin;
+import com.tim18.skynet.model.RegisteredUser;
 import com.tim18.skynet.model.RentACar;
+import com.tim18.skynet.model.Reservation;
 import com.tim18.skynet.service.CarService;
 import com.tim18.skynet.service.RentACarService;
+import com.tim18.skynet.service.ReservationService;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
 
 
@@ -40,6 +44,9 @@ public class CarController {
 
 	@Autowired
 	RentACarService rentacarService;
+	
+	@Autowired
+	ReservationService reservationService;
 
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
@@ -57,6 +64,16 @@ public class CarController {
 			}
 		}
 		return new ResponseEntity<>(carsOnFast, HttpStatus.OK);
+	}
+	
+	@RequestMapping( value="/api/getCarReservations/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<CarReservation> getCarReservations(@PathVariable(value = "id") Long id){
+		RegisteredUser user = (RegisteredUser) this.userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		if(user == null){
+			return null;
+		}
+		Reservation r = reservationService.findOne(id);
+		return r.getCarReservations();
 	}
 	
 	@GetMapping(value = "/searchCarUnregistered/{lowestPrice}/{highestPrice}/{racID}")
@@ -174,6 +191,15 @@ public class CarController {
 		}
 	}
 
+	@GetMapping(value = "/gradeCar/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Car> createGrade(@PathVariable Long id, @PathVariable Integer grade) {
+		Car car = carService.findOne(id);
+		car.setScore(car.getScore() + grade);
+		car.setNumber(car.getNumber() + 1);
+		carService.save(car);
+		return new ResponseEntity<>(car, HttpStatus.CREATED);
+	}
+	
 	@SuppressWarnings("deprecation")
 	@GetMapping(value = "/findSuitCars/{rentacarId}/{startDate}/{endDate}/{startCity}/{endCity}/{carType}/{passengers}/{fromPrice}/{toPrice}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Car>> findSuitCars(@PathVariable Long rentacarId, @PathVariable String startDate,

@@ -74,6 +74,27 @@ public class CarReservationController {
 		return new ResponseEntity<>(carsOnFast, HttpStatus.OK);
 	}
 	
+	
+	@DeleteMapping(value = "/cancelCarReservation/{resId}")
+	public ResponseEntity<?> cancelCarReservation(@PathVariable Long resId) {
+		RegisteredUser user = (RegisteredUser) this.userDetailsService
+				.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		userDetailsService.saveUser(user);
+		CarReservation carRes = carReservationService.getOne(resId);
+		Car car = carRes.getCar();
+		int brojac2 = -1;
+		for (CarReservation cr : car.getReservations()) {
+			brojac2++;
+			if (cr.getId().equals(resId)) {
+				car.getReservations().remove(brojac2);
+			}
+		}
+		carService.save(car);
+		carReservationService.delete(resId);
+
+		return new ResponseEntity<>(carRes, HttpStatus.OK);
+
+	}
 
 	@SuppressWarnings("deprecation")
 	@PutMapping(value = "/api/putCarOnFastRes/{carId}/{startDate}/{endDate}/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -113,6 +134,8 @@ public class CarReservationController {
 		}
 
 	}
+	
+
 
 	@GetMapping(value = "/findRentacarFromRes/{resId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RentACar> findRentacarFromRes(@PathVariable Long resId) {
@@ -179,23 +202,15 @@ public class CarReservationController {
 		reservationService.save(r);
 		newCarRes.setReservation(r);
 		newCarRes.setRegistredUser(user);
-		user.setReservations(reservationService.findAll());
 		rentacar.getCarReservations().add(newCarRes);
 		car.getReservations().add(newCarRes);
-		
+		user.save(newCarRes);
+		userDetailsService.saveUser(user);
 		
 
 		return new ResponseEntity<>(newCarRes, HttpStatus.CREATED);
 	}
 
-	@RequestMapping( value="/api/getCarReservations/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<CarReservation> getCarReservations(@PathVariable(value = "id") Long id){
-		RegisteredUser user = (RegisteredUser) this.userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		if(user == null){
-			return null;
-		}
-		Reservation r = reservationService.findOne(id);
-		return r.getCarReservations();
-	}
+	
 }
 

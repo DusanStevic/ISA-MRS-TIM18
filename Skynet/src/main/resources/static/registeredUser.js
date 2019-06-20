@@ -99,7 +99,8 @@ function fillTableRentacars(data) {
 		cell1.innerHTML = response[counter].name;
 		cell2.innerHTML = response[counter].address;
 
-			cell3.innerHTML = '<button style="background: ##69a7c5; color: white" id=\"'
+
+			cell3.innerHTML = '<button style="background: #69a7c5; color: white" id=\"'
 				+ response[counter].id
 				+ '\" class=\"chooseRentacarSingle\" class="btn btn-primary">Choose</button>';
 
@@ -110,9 +111,11 @@ function fillTableRentacars(data) {
 	var cell3 = row.insertCell(2);
 
 
+
 	cell1.innerHTML = '<p style= "font-weight: 200%; font-size:150%">Name</p>';
 	cell2.innerHTML = '<p style= "font-weight: 200%; font-size:150%">Address</p>';
 	cell3.innerHTML = '<p style= "font-weight: 200%; font-size:150%"></p>';
+
 	
 	}
 
@@ -376,6 +379,42 @@ function searchForCars(rentacarId) {
 		
 	}
 }
+
+$(document).on('click','#showLocation',function(e){
+	e.preventDefault();
+	var modal = document.getElementById('mapModal');
+	modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    var addr=$(this).attr("name");
+    var coordinates;
+    $.ajax({
+		type : 'GET',
+		url : "https://geocode-maps.yandex.ru/1.x/?apikey=18116907-79b6-47b3-97aa-0db7c335b7e0&format=json&geocode="
+				+ addr + "&lang=en_US",
+		dataType : "json",
+		async : false,
+		success : function(data) {
+			var found = data.response.GeoObjectCollection.featureMember;
+			if (found.length != 0) {
+				coordinates = found[0].GeoObject.Point.pos.split(" ");
+				ymaps.ready(init(coordinates));
+			} else {
+				coordinates = [ -1, -1 ];
+				alert("Location could not be found. Maybe this address does not exist?");
+			}
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			alert(jqXHR.status);
+			alert(textStatus);
+			alert(errorThrown);
+		}
+
+	})
+})
 
 function takeCar(id, startDate, endDate, passengers, typeOfRes) {
 	sessionStorage.removeItem("choosenSeats");

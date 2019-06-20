@@ -54,7 +54,11 @@ public class RegisteredUser extends User {
 
 	
 	
-
+	public static void save(CarReservation cr) {
+		 ArrayList<CarReservation> reservationMy = new ArrayList<>();
+		 reservationMy.add(cr);
+		 
+		}
 	
 	
 	

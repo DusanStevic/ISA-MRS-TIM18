@@ -210,14 +210,7 @@ public class RACController {
 		return new ResponseEntity<>(retVal, HttpStatus.CREATED);
 	}
 
-	@GetMapping(value = "/gradeRentacar/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RentACar> create(@PathVariable Long id, @PathVariable Integer grade) {
-		RentACar rentacar = rentacarService.findOne(id);
-		rentacar.setScore(rentacar.getScore() + grade);
-		rentacar.setNumber(rentacar.getNumber() + 1);
-		rentacarService.save(rentacar);
-		return new ResponseEntity<>(rentacar, HttpStatus.CREATED);
-	}
+	
 
 	@GetMapping(value = "/api/myRAC", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RentACar> findRentacar() {
@@ -264,7 +257,7 @@ public class RACController {
 		return new ResponseEntity<>(rentACars, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/api/findRentacars/{field}")
+	@GetMapping(value = "/findRentacars/{field}")
 	public ResponseEntity<List<RentACar>> findRentacars(@PathVariable String field) {
 		List<RentACar> rentACars = (List<RentACar>) rentacarService.findByName(field);
 		if (rentACars.size() == 0) {
@@ -272,6 +265,16 @@ public class RACController {
 		}
 
 		return new ResponseEntity<>(rentACars, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping(value = "/gradeRentacar/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RentACar> createGrade(@PathVariable Long id, @PathVariable Integer grade) {
+		RentACar rentacar = rentacarService.findOne(id);
+		rentacar.setScore(rentacar.getScore() + grade);
+		rentacar.setNumber(rentacar.getNumber() + 1);
+		rentacarService.save(rentacar);
+		return new ResponseEntity<>(rentacar, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/findRentacar/{address}", produces = MediaType.APPLICATION_JSON_VALUE)

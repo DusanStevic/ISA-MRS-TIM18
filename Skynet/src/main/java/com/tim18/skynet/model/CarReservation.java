@@ -42,7 +42,10 @@ public class CarReservation {
 	@ManyToOne(fetch = FetchType.EAGER)
 	Reservation reservation;
 	
-	
+	public void save(RegisteredUser ru) {
+		ArrayList<RegisteredUser> user = new ArrayList<RegisteredUser>();
+		user.add(ru);
+	}
 	
 	public Reservation getReservation() {
 		return reservation;
