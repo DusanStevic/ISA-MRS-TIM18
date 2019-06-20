@@ -1,37 +1,29 @@
 package com.tim18.skynet.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tim18.skynet.payload.UploadFileResponse;
-import com.tim18.skynet.service.FileStorageService;
+import com.tim18.skynet.service.ReservationService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
 public class FileController {
 
-    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
-
     @Autowired
-    private FileStorageService fileStorageService;
+    private ReservationService fileStorageService;
    
     
     @PostMapping(value="/api/uploadFile", produces = MediaType.APPLICATION_JSON_VALUE)
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+    	/*
     	String fileName = fileStorageService.storeFile(file);
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
@@ -40,20 +32,25 @@ public class FileController {
         
         System.out.println(fileDownloadUri);
         fileName = "addedImages/"+fileName;
-        return new UploadFileResponse(fileName, fileDownloadUri,file.getContentType(), file.getSize());
+        */
+        return null;
     }
 
     @PostMapping("/api/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
+        /*
+    	return Arrays.asList(files)
                 .stream()
                 .map(file -> uploadFile(file))
                 .collect(Collectors.toList());
+    	*/
+    	return null;
     }
 
     @GetMapping("/api/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
+    	/*
         Resource resource = fileStorageService.loadFileAsResource(fileName);
 
         // Try to determine file's content type
@@ -73,5 +70,7 @@ public class FileController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+                */
+    	return null;
     }
 }
