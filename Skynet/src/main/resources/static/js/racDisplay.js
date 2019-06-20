@@ -1,5 +1,6 @@
 var TOKEN_KEY = 'jwtToken';
 
+
 $(window).on("load",function(){
 	if (window.location.href.match('users-RACProfile.html') != null){
 		var token = getJwtToken(TOKEN_KEY);
@@ -10,11 +11,11 @@ $(window).on("load",function(){
 		$("#carDisp").empty();
 		
 		displayRACProfile();
-		displayCars();
 		displayFastReservations();
 		displayBranches();
 	}
 })
+
 
 function displayRACProfile(){
 	var id = localStorage.getItem("racId1");
@@ -114,19 +115,89 @@ function displayRACProfile(){
 }
 
 function displayCars(){
-	
-}
-
-function displayFastReservations(){
-	
-}
-
-function displayBranches(){
-	/*
 	var id = localStorage.getItem("racId1");
 	$.ajax({
 		type : 'GET',
-		url : "api/getConcreteBranches/" + id,
+		url : "/findConcreteCars/" + id,
+		contentType: 'text/plain',
+		success : function(data){
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			$.each(list, function(index, destinacija){
+				var tr1 = $('<tr></tr>');
+				tr1.append('<td><h2>'+destinacija.name+'</h2></td><td></td>');
+				var tr2 = $('<tr></tr>');
+				tr2.append('<td><p>Type</p></td>');
+				tr2.append('<td><p>'+destinacija.carType+'</p></td>');
+				var tr3 = $('<tr></tr>');
+				tr3.append('<td><p>Brand</p></td>');
+				tr3.append('<td><p>'+destinacija.brand+'</p></td>');
+				var tr4 = $('<tr></tr>');
+				tr4.append('<td><p>Price</p></td>');
+				tr4.append('<td><p>'+destinacija.price+'</p></td>');
+				var tr5 = $('<tr></tr>');
+				tr5.append('<td><p>Price</p></td>');
+				tr5.append('<td><button style="background: #69a7c5; color: white" id="reserveCar">Make reservation</button></td>');
+				var tr6=$('<tr></tr>');
+				tr6.append('<td><hr /></td><td><hr /></td>');
+				$('#carDisp').append(tr1);
+				$('#carDisp').append(tr2);
+				$('#carDisp').append(tr3);
+				$('#carDisp').append(tr4);
+				$('#carDisp').append(tr5);
+				$('#carDisp').append(tr6);
+			});
+			
+			
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});	
+}
+
+
+
+
+function displayFastReservations(){
+	var id = localStorage.getItem("racId1");
+	$.ajax({
+		type : 'GET',
+		url : "/showCarsOnFastRes/" + id,
+		contentType: 'text/plain',
+		success : function(data){
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			$.each(list, function(index, destinacija){
+				var tr1 = $('<tr></tr>');
+				tr1.append('<td><h2>'+destinacija.name+'</h2></td><td></td>');
+				var tr2 = $('<tr></tr>');
+				tr2.append('<td><p>Old price</p></td>');
+				tr2.append('<td><p>'+destinacija.price+'</p></td>');
+				var tr3 = $('<tr></tr>');
+				tr3.append('<td><p>New price</p></td>');
+				tr3.append('<td><p>'+destinacija.fastResPrice+'</p></td>');
+				var tr5=$('<tr></tr>');
+				tr5.append('<td><hr /></td><td><hr /></td>');
+				$('#fast').append(tr1);
+				$('#fast').append(tr2);
+				$('#fast').append(tr3);
+				$('#fast').append(tr5);
+
+			});
+			
+			
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});	
+}
+
+function displayBranches(){
+	
+	var id = localStorage.getItem("racId1");
+	$.ajax({
+		type : 'GET',
+		url : "/getConcreteBranches/" + id,
 		contentType: 'text/plain',
 		success : function(data){
 			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
@@ -146,5 +217,5 @@ function displayBranches(){
 			alert("AJAX ERROR: " + errorThrown);
 		}
 	});	
-	*/
+	
 }

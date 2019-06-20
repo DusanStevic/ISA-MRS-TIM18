@@ -146,12 +146,5 @@ public class HotelController {
 		}
 	
 	
-	@GetMapping(value = "/gradeHotel/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Hotel> createGrade(@PathVariable Long id, @PathVariable Integer grade) {
-		Hotel hotel = hotelService.findOne(id);
-		hotel.setScore(hotel.getScore() + grade);
-		hotel.setNumber(hotel.getNumber() + 1);
-		hotelService.save(hotel);
-		return new ResponseEntity<>(hotel, HttpStatus.CREATED);
-	}
+	
 }

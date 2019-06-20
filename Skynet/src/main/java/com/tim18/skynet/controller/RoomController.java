@@ -236,12 +236,5 @@ public class RoomController {
 		return null;
 	}
 	
-	@GetMapping(value = "/gradeRoom/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Room> createGrade(@PathVariable Long id, @PathVariable Integer grade) {
-		Room room = roomService.findOne(id);
-		room.setScore(room.getScore() + grade);
-		room.setNumber(room.getNumber() + 1);
-		roomService.save(room);
-		return new ResponseEntity<>(room, HttpStatus.CREATED);
-	}
+	
 }

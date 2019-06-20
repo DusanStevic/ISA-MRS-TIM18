@@ -9,6 +9,10 @@
     <script type="text/javascript" src="js/login.js"></script>
     <script type="text/javascript" src="js/authorization.js"></script>
     <script type="text/javascript" src="js/cart.js"></script>
+    <script type="text/javascript" src="registeredUser.js"></script>
+    <link href="toastr.css" rel="stylesheet" />
+    <script type="text/javascript" src="toastr.js"></script>
+    
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
@@ -30,8 +34,8 @@
     <div class="tab">
         <button class="tablinks" onclick="openCity(event, 'FlightReservation')" id="defaultOpen">Flight Reservation</button>
         <button class="tablinks" onclick="openCity(event, 'RoomReservation')">Room Reservation</button>
-        <button class="tablinks" onclick="openCity(event, 'CarReservation')">Car Reservation</button>
-        <input type="button" class="green_tab_button" value="Finish reservation" id="finishReservation" />
+		<button id="rentACarButton" class="tablinks" onclick="openCity(event, 'rentACars')">Car Reservation</button>          
+		<input type="button" class="green_tab_button" value="Finish reservation" id="finishReservation" />
     </div>
 
     <div class="tabcontent" id="FlightReservation">
@@ -47,13 +51,120 @@
         </table>
     </div>
    
+   
+   <div id="rentACars" class="tabcontent">
+		<div class="container">
+			<h2>Rent a cars:</h2>
+		
+			<button style="background: #69a7c5; color: white"
+				class="sortByAddressRentACars" class="btn btn-primary">Sort
+				by address</button>
+			<br>
+			<table class="table table-hover" id="tableOfRentacars">
 
-    <div id="CarReservation" class="tabcontent">
-    	<table id="carButtonDisplay"></table>
-        <table id="carResDisplay">
-        
-        </table>
-    </div>
+			</table>
+			<br>
+		</div>
+	</div>
+	
+		<div id="rentacarReservation" class="tabcontent">
+		
+		<div class="container">
+			<input type="hidden" id="mainStartDate3"> <input
+				type="hidden" id="mainEndDate3"> <input type="hidden"
+				id="rentacarId">
+			<input type="hidden" id="typeOfRes"> 
+			
+			<h2>Reservation of rentacar:</h2>
+			<form class="form-horizontal" id="carReservationForm">
+
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="pickupDateCar">Pickup
+						date: </label>
+					<div class="col-sm-10">
+						<input type="date" class="form-control" id="pickupDateCar"
+							 name="pickupDateCar">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="endDateCar">End
+						date: </label>
+					<div class="col-sm-10">
+						<input type="date" class="form-control" id="endDateCar"
+						 name="endDateCar">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="pickupCity">Pickup
+						city: </label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="pickupCity"
+							 name="pickupCity">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="endCity">End
+						city: </label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="endCity"
+							name="endCity">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="carType">Car
+						type: </label>
+						<select id="carType">
+							<option value="Family">Family</option>
+							<option value="Sports">Sports</option>
+							<option value="Van">Van</option>
+						</select>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="passengers">Number
+						of passengers: </label>
+					<div class="col-sm-10">
+						<input type="number" class="form-control" id="passengers"
+							 name="passengers">
+					</div>
+				</div>
+				<br>
+				<h2>Price range:</h2>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="fromPrice">From:
+					</label>
+					<div class="col-sm-10">
+						<input type="number" class="form-control" id="fromPrice"
+							placeholder="Insert start price" name="fromPrice">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="toPrice">To: </label>
+					<div class="col-sm-10">
+						<input type="number" class="form-control" id="toPrice"
+							placeholder="Insert maximum price" name="toPrice">
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button style="background: #69a7c5; color: white" type="submit"
+							class="btn btn-default" id="button3">Submit</button>
+					</div>
+				</div>
+			</form>
+			<br>
+
+			<table class="table table-hover" id="showSuitableCars">
+			</table>
+			<p class="messageSuitableCarsTwo"></p>
+			<p class="messageSuitableCars"></p>
+			<div id = "singleRentacar"></div>
+		</div>
+	</div>
     
     <div id="fency" class="fency_modal">
         <div class="fency_modal_content">
