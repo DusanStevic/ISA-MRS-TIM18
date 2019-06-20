@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;Skynet/pom.xml&apos;" deleteContents="false" description="Delete resource &apos;Skynet/pom.xml&apos;" element1="/Skynet/pom.xml" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1561062212284"/>&#x0A;<refactoring comment="Delete resource &apos;Skynet/src/main/resources/application.properties&apos;" deleteContents="false" description="Delete resource &apos;Skynet/src/main/resources/application.properties&apos;" element1="/Skynet/src/main/resources/application.properties" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1561062271813"/>
+</session>
