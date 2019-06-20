@@ -1,0 +1,2 @@
+INDEX VERSION 1.3+C:\Users\Dule\Desktop\ISA-MRS\ISA-MRS-TIM18\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+108872515.index
