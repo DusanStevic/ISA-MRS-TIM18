@@ -64,16 +64,15 @@ public class RoomReservationController {
 		if(user == null){
 			return null;
 		}
-		
 		Reservation reservation = reservationService.findOne(resID);
 		
 		Room room = roomService.findOne(temp.getRoomId());
 		
 		RoomReservation roomReservation = new RoomReservation();
 		
-		//if(reservation.getPassangers().isEmpty() || reservation.getSeatReservations().isEmpty()){
-			//return null;
-		//}
+		if(reservation.getPassangers().isEmpty() || reservation.getSeatReservations().isEmpty()){
+			return null;
+		}
 		Date startDate = null;
 		Date endDate = null;
 		try {
@@ -83,6 +82,15 @@ public class RoomReservationController {
 			e.printStackTrace();
 			return null;
 		}
+		
+		Calendar day1 = Calendar.getInstance();
+	    Calendar day2 = Calendar.getInstance(); 
+	    day1.setTime(startDate);
+	    day2.setTime(endDate);
+	    int daysBetween = day1.get(Calendar.DAY_OF_YEAR) - day2.get(Calendar.DAY_OF_YEAR);
+	    if(daysBetween < 0){
+	    	daysBetween = daysBetween * (-1);
+	    }
 		
 		Interval interval1 = new Interval(startDate.getTime(), endDate.getTime());
 		
@@ -94,7 +102,7 @@ public class RoomReservationController {
 			}
 		}
 		
-		double price = room.getPrice();
+		double price = room.getPrice() *daysBetween ;
 		for(long id : temp.getHotelOffers()){
 			HotelOffer hotelOffer = hotelOfferService.findOne(id);
 			if(hotelOffer != null){
@@ -136,6 +144,7 @@ public class RoomReservationController {
 			e.printStackTrace();
 			return null;
 		}
+		
 		
 		Reservation reservation = reservationService.findOne(resID);
 		

@@ -181,7 +181,11 @@ public class AirlineController {
 			return new ResponseEntity<>(airlineService.save(airline), HttpStatus.OK);
 		}
 		
-		
+		@RequestMapping(value = "/api/getAllFlights/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<?> getAllFlights(@PathVariable("id") Long id){
+			Airline a = airlineService.findOne(id);
+			return new ResponseEntity<>(a.getFlights(), HttpStatus.OK);		
+		}
 		
 		@RequestMapping(value = "/api/getFlight/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<FlightBean> getFlight(@PathVariable("id")Long id){
@@ -554,15 +558,8 @@ public class AirlineController {
 	public Collection<Airline> getSearched(@RequestBody AirlineSearchDTO search) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date1 = null;
-		Date date2 = null;
 		try {
 			date1 = sdf.parse(search.getDeparture());
-			if(search.getArrival() != ""){
-				date2 = sdf.parse(search.getArrival());
-				if(date1.before(new Date()) || date2.before(new Date())){
-					return null;
-				}
-			}
 		} catch (ParseException e) {
 			System.out.println("Neuspesno parsiranje datuma");
 			return null;

@@ -20,15 +20,41 @@ $(document).ready(function(){
 	if(window.location.href.match('search.html') != null){
 		if(page == "hotel"){
 			localStorage.setItem("tab", "");
+			localStorage.getItem("tab", "");
 			localStorage.setItem('searchCriteria', "");
 			localStorage.setItem("isAdmin", "");
-			generateHotelSearch();
+			if(token){
+				generateHotelSearch();
+			}
+			else{
+				generateHotelList();
+			}
 		}
 		else if(page == "airline"){
-			generateAirlineSearch();
+			if(token){
+				generateAirlineSearch();
+			}
+			else{
+				generateAirlineList();
+			}
 		}
 		else if(page == "rac"){
-			generateRACSearch();
+			if(token){
+				generateRACSearch();
+			}
+			else{
+				generateRACList();
+			}
+			
+		}
+		else if(page == "hotelList"){
+			generateHotelList();
+		}
+		else if(page == "airlineList"){
+			generateAirlineList();
+		}
+		else if(page == "racList"){
+			generateRACList();
 		}
 	}
 	else if(window.location.href.match('companiesDisplay.html') != null){
@@ -46,7 +72,121 @@ $(document).ready(function(){
 	
 });
 
+$(document).on('click', "#airlinesProfiles", function(e){
+	localStorage.setItem("page", "airlineList");
+	window.location.href = 'search.html';
+})
+$(document).on('click', "#hotelsProfiles", function(e){
+	localStorage.setItem("page", "hotelList");
+	window.location.href = 'search.html';
+})
+$(document).on('click', "#racsProfiles", function(e){
+	localStorage.setItem("page", "racList");
+	window.location.href = 'search.html';
+})
+
+function generateHotelList(){
+	localStorage.setItem("justLook", "1");
+	$('#searchDiv').empty();
+	var form = '<form id="hotelListForm">'
+    	+'<table class="ombre_table">'
+    	+'<tr><th><h1>Select hotel from list</h1></th></tr>'
+    	+'<tr><td align="center"><select id="lista"></select></td></tr>'
+    	+'<tr><td><input type="submit" value="Search"></td></tr>'
+    	+'</table>'
+    	+'</form>';
+	$('#searchDiv').append(form);
+	$.ajax({
+        type: 'GET',
+        url: '/api/hotels',
+        contentType: 'application/json',
+        success: fillCompanies
+    })
+}
+
+function generateAirlineList(){
+	localStorage.setItem("justLook", "1");
+	$('#searchDiv').empty();
+	var form = '<form id="airlineListForm">'
+    	+'<table class="ombre_table">'
+    	+'<tr><th><h1>Select airline from list</h1></th></tr>'
+    	+'<tr><td align="center"><select id="lista"></select></td></tr>'
+    	+'<tr><td><input type="submit" value="Search"></td></tr>'
+    	+'</table>'
+    	+'</form>';
+	$('#searchDiv').append(form);
+	$.ajax({
+        type: 'GET',
+        url: '/api/airlines',
+        contentType: 'application/json',
+        success: fillCompanies
+    })
+}
+
+function generateRACList(){
+	localStorage.setItem("justLook", "1");
+	$('#searchDiv').empty();
+	var form = '<form id="racListForm">'
+    	+'<table class="ombre_table">'
+    	+'<tr><th><h1>Select Rent-A-Car from list</h1></th></tr>'
+    	+'<tr><td align="center"><select id="lista"></select></td></tr>'
+    	+'<tr><td><input type="submit" value="Search"></td></tr>'
+    	+'</table>'
+    	+'</form>';
+	$('#searchDiv').append(form);
+	$.ajax({
+        type: 'GET',
+        url: '/api/racs',
+        contentType: 'application/json',
+        success: fillCompanies
+    })
+}
+
+function fillCompanies(data){
+	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	$.each(list, function(index, airline){
+		var opt=$('<option value="'+airline.id+'">'+airline.name+'</option>');
+		$('#lista').append(opt);
+	})
+}
+
+$(document).on('submit', "#hotelListForm", function(e){
+	e.preventDefault();
+	var company = $("#lista :selected").val();
+	if(company == ""){
+		alert("Comany empty.");
+		return;
+	}
+	localStorage.setItem("hotelId1", company);
+	window.location.replace("users-hotelProfile.html");
+	
+})
+$(document).on('submit', "#airlineListForm", function(e){
+	e.preventDefault();
+	var company = $("#lista :selected").val();
+	if(company == ""){
+		alert("Comany empty.");
+		return;
+	}
+	localStorage.setItem("airlineid1", company);
+	window.location.replace("users-AirlineProfile.html");
+	
+})
+
+$(document).on('submit', "#racListForm", function(e){
+	e.preventDefault();
+	var company = $("#lista :selected").val();
+	if(company == ""){
+		alert("Comany empty.");
+		return;
+	}
+	localStorage.setItem("racId1", company);
+	window.location.replace("users-RACProfile.html");
+	
+})
+
 function generateHotelSearch(){
+	localStorage.setItem("justLook", "");
 	$('#searchDiv').empty();
 	var form = '<form id="hotelSearchForm">'
     	+'<table class="ombre_table">'
@@ -65,9 +205,21 @@ function generateHotelSearch(){
     	+'</table>'
     	+'</form>';
 	$('#searchDiv').append(form);
+	var d1 = localStorage.getItem("checkin");
+	var g = localStorage.getItem("end");
+	var g1 = localStorage.getItem("guests");
+	if(d1 != null && d1 != undefined && d1 != "" && g != null && g != "" && g != undefined){
+		$('#checkin').val(d1);
+		document.getElementById("checkin").readOnly = true;
+		$('#address').val(g);
+		document.getElementById("address").readOnly = true;
+		$('#guests').val(g1);
+		document.getElementById("guests").readOnly = true;
+	}
 }
 
 function generateRACSearch(){
+	localStorage.setItem("justLook", "");
 	$('#searchDiv').empty();
 	var form = '<form id="racSearchForm">'
     	+'<table class="ombre_table">'
@@ -84,9 +236,18 @@ function generateRACSearch(){
     	+'</table>'
     	+'</form>';
 	$('#searchDiv').append(form);
+	var d1 = localStorage.getItem("checkin");
+	var g = localStorage.getItem("end");
+	if(d1 != null && d1 != undefined && g != null && g != undefined){
+		$('#checkin').val(d1);
+		document.getElementById("checkin").readOnly = true;
+		$('#address').val(g);
+		document.getElementById("address").readOnly = true;
+	}
 }
 
 function generateAirlineSearch(){
+	localStorage.setItem("justLook", "");
 	$('#searchDiv').empty();
 	var form = '<form id="airlineSearchForm">'
     	+'<table class="ombre_table">'
@@ -99,8 +260,6 @@ function generateAirlineSearch(){
     	+'<tr><td><input type="text" id="endaddress" /></td></tr>'
     	+'<tr><td>*Date of departure:</td></tr>'
     	+'<tr><td><input type="date" id="checkin" /></td></tr>'
-    	+'<tr><td>Date of return (optional):</td></tr>'
-    	+'<tr><td><input type="date" id="checkout" /></td></tr>'
     	+'<tr><td>*Passangers:</td></tr>'
     	+'<tr><td><input type="number" id="guests" step="1" /></td></tr>'
     	+'<tr><td><input type="submit" value="Search"></td></tr>'
@@ -116,6 +275,11 @@ $(document).on('submit','#hotelSearchForm',function(e){
 	var guests = $('#guests').val();
 	var name = $('#name').val();
 	var address = $('#address').val();
+	var d1 = localStorage.getItem("checkin");
+	
+	if(d1 !== null && d1 != undefined && d1 != ""){
+		date1 = d1;
+	}
 	
 	if(date1 == "" || date2 == "" || guests == "" || address == ""){
 		alert("You did not filled all required fields.");
@@ -145,7 +309,6 @@ $(document).on('submit','#hotelSearchForm',function(e){
 $(document).on('submit','#airlineSearchForm',function(e){
 	e.preventDefault();
 	var date1 = $(this).find("input[id = checkin]").val();
-	var date2 = $(this).find("input[id = checkout]").val();
 	var guests = $('#guests').val();
 	var name = $('#name').val();
 	var start = $('#startaddress').val();
@@ -166,7 +329,6 @@ $(document).on('submit','#airlineSearchForm',function(e){
 	}
 	
 	localStorage.setItem("checkin",date1);
-	localStorage.setItem("checkout",date2);
 	localStorage.setItem("guests",guests);
 	if(name != ""){
 		localStorage.setItem("name",name);
@@ -260,7 +422,7 @@ function searchAirlines(){
 		type : 'POST',
 		url : "/api/searchedAirlines",
 		contentType: 'application/json',
-		data: searchToAirline(name,date1,date2,guests,start,end),
+		data: searchToAirline(name,date1,guests,start,end),
 		dataType: 'json',
 		success : displayAirline,
 		error : function() {
@@ -320,57 +482,72 @@ function findRACs(){
 }
 
 function displayData(data){
-	$('#display').empty();
-	$('#display').append('<table id="dataDisplay"></table>');
 	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
-	$.each(list, function(index, data){
-		var tr1=$('<tr></tr>');
-		tr1.append('<td><img src="'+data.image+'" class="small_image"/></td>'
-				+'<td><table class="min"><tr><td><h3>'+data.name+'</h3></td></tr>'
-				+'<tr><td><h4>' + data.address+'</h4></td></tr>'
-				+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
-				+'<td><table><tr><td><a href="#" id="showLocation" name="'+data.address+'"><i class="fa fa-map-marker" style="font-size:36px" color:red"></i> Show Location</a></td></tr><tr><td align="center"><input type="button" id="moreInfoHotel" name="'+data.id+'" value = "View profile and offers" class="blueButton"/></td></tr></table></td>');
-		var tr2=$('<tr></tr>');
-		tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
-		$('#dataDisplay').append(tr1);
-		$('#dataDisplay').append(tr2);
-	})
+	$('#display').empty();
+	if(list.length == 0){
+		$('#display').append('<table><tr><td><div class="notification">We could not find companies that matches with your search criteria..</div></td></tr></table>');	
+	}
+	else{
+		$('#display').append('<table id="dataDisplay"></table>');
+		$.each(list, function(index, data){
+			var tr1=$('<tr></tr>');
+			tr1.append('<td><img src="'+data.image+'" class="small_image"/></td>'
+					+'<td><table class="min"><tr><td><h3>'+data.name+'</h3></td></tr>'
+					+'<tr><td><h4>' + data.address+'</h4></td></tr>'
+					+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
+					+'<td><table><tr><td><a href="#" id="showLocation" name="'+data.address+'"><i class="fa fa-map-marker" style="font-size:36px" color:red"></i> Show Location</a></td></tr><tr><td align="center"><input type="button" id="moreInfoHotel" name="'+data.id+'" value = "View profile and offers" class="blueButton"/></td></tr></table></td>');
+			var tr2=$('<tr></tr>');
+			tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
+			$('#dataDisplay').append(tr1);
+			$('#dataDisplay').append(tr2);
+		})
+	}
 }
 
 function displayAirline(data){
-	$('#display').empty();
-	$('#display').append('<table id="dataDisplay"></table>');
 	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
-	$.each(list, function(index, data){
-		var tr1=$('<tr></tr>');
-		tr1.append('<td><img src="'+data.image+'" class="small_image"/></td>'
-				+'<td><table class="min"><tr><td><h3>'+data.name+'</h3></td></tr>'
-				+'<tr><td><h4>' + data.address+'</h4></td></tr>'
-				+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
-				+'<td><table><tr><td><a href="#" id="showLocation" name="'+data.address+'"><i class="fa fa-map-marker" style="font-size:36px" color:red"></i> Show Location</a></td></tr><tr><td align="center"><input type="button" id="moreInfoAirline" name="'+data.id+'" value = "View profile and offers" class="blueButton"/></td></tr></table></td>');
-		var tr2=$('<tr></tr>');
-		tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
-		$('#dataDisplay').append(tr1);
-		$('#dataDisplay').append(tr2);
-	})
+	$('#display').empty();
+	if(list.length == 0){
+		$('#display').append('<table><tr><td><div class="notification">We could not find companies that matches with your search criteria..</div></td></tr></table>');	
+	}
+	else{
+		$('#display').append('<table id="dataDisplay"></table>');
+		$.each(list, function(index, data){
+			var tr1=$('<tr></tr>');
+			tr1.append('<td><img src="'+data.image+'" class="small_image"/></td>'
+					+'<td><table class="min"><tr><td><h3>'+data.name+'</h3></td></tr>'
+					+'<tr><td><h4>' + data.address+'</h4></td></tr>'
+					+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
+					+'<td><table><tr><td><a href="#" id="showLocation" name="'+data.address+'"><i class="fa fa-map-marker" style="font-size:36px" color:red"></i> Show Location</a></td></tr><tr><td align="center"><input type="button" id="moreInfoAirline" name="'+data.id+'" value = "View profile and offers" class="blueButton"/></td></tr></table></td>');
+			var tr2=$('<tr></tr>');
+			tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
+			$('#dataDisplay').append(tr1);
+			$('#dataDisplay').append(tr2);
+		})
+	}
 }
 
 function displayRAC(data){
-	$('#display').empty();
-	$('#display').append('<table id="dataDisplay"></table>');
 	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
-	$.each(list, function(index, data){
-		var tr1=$('<tr></tr>');
-		tr1.append('<td><img src="'+data.image+'" class="small_image"/></td>'
-				+'<td><table class="min"><tr><td><h3>'+data.name+'</h3></td></tr>'
-				+'<tr><td><h4>' + data.address+'</h4></td></tr>'
-				+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
-				+'<td><table><tr><td><a href="#" id="showLocation" name="'+data.address+'"><i class="fa fa-map-marker" style="font-size:36px" color:red"></i> Show Location</a></td></tr><tr><td align="center"><input type="button" id="moreInfoRAC" name="'+data.id+'" value = "View profile and offers" class="blueButton"/></td></tr></table></td>');
-		var tr2=$('<tr></tr>');
-		tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
-		$('#dataDisplay').append(tr1);
-		$('#dataDisplay').append(tr2);
-	})
+	$('#display').empty();
+	if(list.length == 0){
+		$('#display').append('<table><tr><td><div class="notification">We could not find companies that matches with your search criteria..</div></td></tr></table>');	
+	}
+	else{
+		$('#display').append('<table id="dataDisplay"></table>');
+		$.each(list, function(index, data){
+			var tr1=$('<tr></tr>');
+			tr1.append('<td><img src="'+data.image+'" class="small_image"/></td>'
+					+'<td><table class="min"><tr><td><h3>'+data.name+'</h3></td></tr>'
+					+'<tr><td><h4>' + data.address+'</h4></td></tr>'
+					+'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr></table></td>'
+					+'<td><table><tr><td><a href="#" id="showLocation" name="'+data.address+'"><i class="fa fa-map-marker" style="font-size:36px" color:red"></i> Show Location</a></td></tr><tr><td align="center"><input type="button" id="moreInfoRAC" name="'+data.id+'" value = "View profile and offers" class="blueButton"/></td></tr></table></td>');
+			var tr2=$('<tr></tr>');
+			tr2.append('<td><hr /></td><td><hr /></td><td><hr /></td>');
+			$('#dataDisplay').append(tr1);
+			$('#dataDisplay').append(tr2);
+		})
+	}
 }
 
 $(document).on('click','#showLocation',function(e){
@@ -469,11 +646,11 @@ function searchToHotel(name,checkin,checkout,beds, address){
 	})
 }
 
-function searchToAirline(name,date1,date2,guests,start,end){
+function searchToAirline(name,date1,guests,start,end){
 	return JSON.stringify({
 		"name":name,
 		"departure":date1,
-		"arrival":date2,
+		"arrival":"11-11-111",
 		"passangers":guests,
 		"startDestination":start,
 		"endDestination":end,

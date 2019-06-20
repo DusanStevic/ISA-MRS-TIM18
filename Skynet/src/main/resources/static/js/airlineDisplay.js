@@ -3,7 +3,14 @@ var TOKEN_KEY = 'jwtToken';
 //array labela koje se salju na server
 var lab=[];
 $(window).on("load",function(){
-	if (window.location.href.match('users-airlineProfile.html') != null){
+	var look = localStorage.getItem("justLook");
+	if(window.location.href.match('users-AirlineProfile.html') != null && look == "1"){
+		displayAirlineProfile();
+		displayAllFlights();
+		displayFastInfo();
+		displayDestinations();
+	}
+	else if (window.location.href.match('users-airlineProfile.html') != null){
 		var token = getJwtToken(TOKEN_KEY);
 		if(token){
 			//generateMenu();
@@ -17,6 +24,49 @@ $(window).on("load",function(){
 		displayDestinations();
 	}
 })
+
+$(document).on('click','#next-button',function(e){
+	window.location.replace("cart.html");
+});
+
+/* ------------------------------------------------------------- */
+function displayAllFlights(){
+	var id = localStorage.getItem("airlineid1");
+	$.ajax({
+		type : 'GET',
+		url : "/api/getAllFlights/" + id,
+		contentType: 'text/plain',
+		success : function(data){
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			if(list.length > 0){
+				var tr = $('<tr></tr>');
+				tr.append('<th>Start destination</th><th>End destination</th><th>Departure</th><th>Arrival</th><th>Price</th>');
+				$('#flightDisp').append(tr);
+			}
+			$.each(list, function(index, flight){
+				var tr2 = $('<tr></tr>');
+				tr2.append('<td>'+flight.startDestination.name+'</td><td>'+flight.endDestination.name+'</td>'+'<td>'+flight.startDate.toString()+'</td>'+'<td>'+flight.endDate.toString()+'</td>'+'<td>'+flight.economicPrice +'-'+flight.firstClassPrice+'</td>');
+				$('#flightDisp').append(tr2);
+			});
+			if(list.length == 0){
+				var tr = $('<tr></tr>');
+				tr.append('<td><div class="notification">This airline has no flights to display.</div></td>')
+				$('#Fligts').append(tr);
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});	
+}
+
+function displayFastInfo(){
+	var tr = $('<tr></tr>');
+	tr.append('<td><div class="notification">Informations about fast reservation are not available right now. If you are not registered, register and start your search in order to get informations about fast reservations.</div></td>')
+	$('#FastReservations').append(tr);
+}
+/* ------------------------------------------------------------- */
+
 
 function displayAirlineProfile(){
 	var id = localStorage.getItem("airlineid1");
@@ -132,18 +182,17 @@ function displayFlights(){
 		data: AirlineSearchDTO2JSON(departure,arrival,passangers,startDestination,endDestination),
 		success : function(data){
 			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			if(list.length > 0){
+				var tr = $('<tr></tr>');
+				tr.append('<th>Start destination</th><th>End destination</th><th>Departure</th><th>Arrival</th><th>Price</th>');
+				$('#flightDisp').append(tr);
+			}
 			$.each(list, function(index, flight){
-				var tr1 = $('<tr></tr>');
-				tr1.append('<td><h2>'+flight.startDestination.name+'</h2></td><td></td>');
 				var tr2 = $('<tr></tr>');
-				tr2.append('<td><p>'+flight.endDestination.name+'</p></td>'+'<td align="right"><h3>Coordinates: '+flight.endDestination.name+'</h3></td>');
+				tr2.append('<td>'+flight.startDestination.name+'</td><td>'+flight.endDestination.name+'</td>'+'<td>'+flight.startDate.toString()+'</td>'+'<td>'+flight.endDate.toString()+'</td>'+'<td>'+flight.economicPrice +'-'+flight.firstClassPrice+'</td>');
 				var forma2 = $('<tr><td><input type = "button" name="' + flight.id +'" class="reserve" value="Reserve"></td></tr>');
-				var tr4=$('<tr></tr>');
-				tr4.append('<td><hr /></td><td><hr /></td>');
-				$('#flightDisp').append(tr1);
 				$('#flightDisp').append(tr2);
 				$('#flightDisp').append(forma2);
-				$('#flightDisp').append(tr4);
 				
 				
 				
@@ -273,7 +322,7 @@ function prikazSedistaZaRezervaciju(data){
 				'Total: <b>$<span id="total">0</span></b>'+
 
 				'<button class="checkout-button">Checkout &raquo;</button>'+
-				'<button class=\'next-button\' onclick="$(\'#uzas\').click()">Next &raquo;</button>'+
+				'<button id="next-button" onclick="$(\'#uzas\').click()">Next &raquo;</button>'+
 				'<br><br><br>'+
 				'<div id="legend"></div>'+ 
 			'</div>'+

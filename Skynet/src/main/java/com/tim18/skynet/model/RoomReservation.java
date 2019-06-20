@@ -28,7 +28,6 @@ public class RoomReservation {
 	@Column(nullable = false)
 	private double price;
 	
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "room_id", referencedColumnName = "id")
 	private Room reservedRoom;

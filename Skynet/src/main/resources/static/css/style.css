@@ -863,3 +863,10 @@ table.mainTable thead th:first-child {
         	height: 20px;
         }
         
+        .notification{
+        	padding: 30px;
+        	color:blue;
+        	background-color:rgba(0,0,255,0.3);
+        	width:90%;
+        }
+        

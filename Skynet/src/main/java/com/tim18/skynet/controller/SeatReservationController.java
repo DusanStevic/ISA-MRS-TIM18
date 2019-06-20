@@ -108,4 +108,11 @@ public class SeatReservationController {
 		Reservation r = reservationService.findOne(id);
 		return r.getSeatReservations();
 	}
+	
+	@RequestMapping( value="/api/finishReservation/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Reservation finishReservation(@PathVariable(value = "id") Long id){
+		Reservation r = reservationService.findOne(id);
+		r.setCompleted(true);
+		return reservationService.save(r);
+	}
 }
