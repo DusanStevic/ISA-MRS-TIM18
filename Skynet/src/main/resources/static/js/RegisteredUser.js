@@ -1327,7 +1327,7 @@ function generateWelcomePage(){
 	                    '<tr>'+
 	                        '<td><div class="hover_image"><a href="search.html" id="airlineSearch"><img src="images/plane.png" class="hover_image" /></a></div></td>'+
 	                        '<td><div class="hover_image"><a href="search.html" id="hotelSearch"><img src="images/hotel.png" class="hover_image" /></a></div></td>'+
-	                        '<td><div class="hover_image"><a href="search.html" id="racSearch"><img src="images/rac.png" class="hover_image" /></a></div></td>'+
+	                        '<td><div class="hover_image"><a href="search1.html" id="racSearch"><img src="images/rac.png" class="hover_image" /></a></div></td>'+
 	                    '</tr>'+
 	                    '<tr>'+
 	                        '<td class="central"><h4><b>Airline</b></h4></td>'+

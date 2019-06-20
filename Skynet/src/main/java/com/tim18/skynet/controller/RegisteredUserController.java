@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +21,13 @@ import com.tim18.skynet.dto.FriendRequestDTO;
 import com.tim18.skynet.dto.PotentialFriendsDTO;
 import com.tim18.skynet.dto.UserDTO;
 import com.tim18.skynet.enums.FriendRequestState;
+import com.tim18.skynet.model.CarReservation;
 import com.tim18.skynet.model.FriendRequest;
 
 import com.tim18.skynet.model.RegisteredUser;
+import com.tim18.skynet.service.CarReservationService;
 import com.tim18.skynet.service.FriendRequestService;
+import com.tim18.skynet.service.impl.CustomUserDetailsService;
 import com.tim18.skynet.service.impl.RegisteredUserService;
 
 
@@ -52,6 +56,20 @@ public class RegisteredUserController {
 	}
 	
 
+	@Autowired
+	private CustomUserDetailsService userDetailsService;
+	@Autowired
+	CarReservationService carReservationService;
+	
+	@GetMapping(value = "/getMyResCars")
+	public ResponseEntity<List<CarReservation>> getMyResCars() {
+		RegisteredUser logged = (RegisteredUser) this.userDetailsService
+				.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		List<CarReservation> res = carReservationService.findByRegistredUser(logged);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+
+	
 	
 	@RequestMapping(value = "/api/potentialFriends", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('ROLE_USER')")
