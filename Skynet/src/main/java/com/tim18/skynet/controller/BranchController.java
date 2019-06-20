@@ -111,14 +111,6 @@ public class BranchController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	@RequestMapping(value = "api/getConcreteBranchesSonja/{rentacarId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Set<Branch> getConcreteBranchesSonja(@PathVariable(value = "rentacarId") Long rentacarId) {
 
-		RentACar rentacar = rentacarService.findOne(rentacarId);
-
-
-		return rentacar.getBranches();
-	}
 	
 }

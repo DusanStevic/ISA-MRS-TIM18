@@ -27,10 +27,7 @@ public class Hotel {
 	private String description;
 	@Column(nullable = false)
 	private String image;
-	@Column(nullable = false)
-	private String score;
-	@Column(nullable = false)
-	private String number;
+	
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
@@ -46,28 +43,7 @@ public class Hotel {
 	
 	
 	
-	public String getScore() {
-		return score;
-	}
-
-
-
-	public void setScore(String score) {
-		this.score = score;
-	}
-
-
-
-	public String getNumber() {
-		return number;
-	}
-
-
-
-	public void setNumber(String number) {
-		this.number = number;
-	}
-
+	
 
 
 	public Hotel(String name, String address, String description, String image) {

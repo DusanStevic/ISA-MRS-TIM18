@@ -44,15 +44,7 @@ public class CarController {
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
 
-	@GetMapping(value = "/gradeCar/{id}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Car> create(@PathVariable Long id, @PathVariable Integer grade) {
-		Car car = carService.findOne(id);
-		car.setScore(car.getScore() + grade);
-		car.setNumber(car.getNumber() + 1);
-		carService.save(car);
-		return new ResponseEntity<>(car, HttpStatus.CREATED);
-	}
-	
+
 	@GetMapping(value = "/showCarsOnFastRes")
 	public ResponseEntity<List<Car>> showCarsOnFastRes() {
 		RACAdmin ra = (RACAdmin) this.userDetailsService
@@ -66,6 +58,26 @@ public class CarController {
 		}
 		return new ResponseEntity<>(carsOnFast, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/searchCarUnregistered/{lowestPrice}/{highestPrice}/{racID}")
+	public ResponseEntity<List<Car>> searchCarUnregistered( @PathVariable Double lowestPrice,
+			@PathVariable Double highestPrice, @PathVariable Long racID) {
+		RentACar rac = rentacarService.findOne(racID);
+		List<Car> allCars = carService.findByRentACar(rac);
+		List<Car> retVal = new ArrayList<>();
+		for (Car car : allCars) {
+			if (lowestPrice != -1 && lowestPrice > car.getPrice()) {
+				continue;
+			}
+			if (highestPrice != -1 && highestPrice < car.getPrice()) {
+				continue;
+			}
+			retVal.add(car);
+		}
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
+	}
+
+	
 	
 	@PutMapping(value = "/removeCarOnFastRes/{carId}")
 	public ResponseEntity<?> removeCarOnFastRes(@PathVariable String carId) {
@@ -249,84 +261,22 @@ public class CarController {
 				}
 			}
 		}
+		
+		ArrayList<Car> forReturn = new ArrayList<>();
+		
 
 		for (int i = 0; i < theFinalList.size(); i++) {
 
-			if (theFinalList.get(i).getOnFastRes()) {
-				theFinalList.remove(i);
+			if (theFinalList.get(i).getOnFastRes()==false) {
+				forReturn.add(theFinalList.get(i));
 			}
 		}
-		System.out.println("The final list sizeeeee: "+theFinalList.size());
-		return new ResponseEntity<>(theFinalList, HttpStatus.OK);
+		return new ResponseEntity<>(forReturn, HttpStatus.OK);
+
 
 	}
 
-	@SuppressWarnings("deprecation")
-	@GetMapping(value = "/findSuitCarsFast/{rentacarId}/{startDate}/{endDate}")
-	public ResponseEntity<List<Car>> findSuitCarsFast(@PathVariable String rentacarId, @PathVariable String startDate,
-			@PathVariable String endDate) {
-
-		List<Car> theFinalList = new ArrayList<>();
-		Date endDatee = null;
-		Date startDatee = null;
-
-		if (!startDate.equals("-1")) {
-			startDatee = new Date(Integer.parseInt(startDate.split("\\-")[0]) - 1900,
-					Integer.parseInt(startDate.split("\\-")[1]) - 1, Integer.parseInt(startDate.split("\\-")[2]));
-		} else {
-			startDatee = new Date();
-		}
-
-		if (!endDate.equals("-1")) {
-			endDatee = new Date(Integer.parseInt(endDate.split("\\-")[0]) - 1900,
-					Integer.parseInt(endDate.split("\\-")[1]) - 1, Integer.parseInt(endDate.split("\\-")[2]));
-
-		}
-
-		RentACar rentacar = rentacarService.findOne(Long.parseLong(rentacarId));
-		ArrayList<Car> cars = (ArrayList<Car>) carService.findByRentACar(rentacar);
-		for (Car car : cars) {
-			Boolean dozvola = true;
-			for (CarReservation res : car.getReservations()) {
-
-				if (!endDate.equals("-1")) {
-					if (startDatee.compareTo(res.getStartDate()) < 0 && endDatee.compareTo(res.getEndDate()) < 0
-							&& endDatee.compareTo(res.getStartDate()) > 0) {
-						dozvola = false;
-					} else if (startDatee.compareTo(res.getStartDate()) <= 0
-							&& endDatee.compareTo(res.getEndDate()) >= 0) {
-						dozvola = false;
-					} else if (startDatee.compareTo(res.getStartDate()) >= 0
-							&& endDatee.compareTo(res.getEndDate()) >= 0
-							&& startDatee.compareTo(res.getEndDate()) < 0) {
-						dozvola = false;
-					} else if (startDatee.compareTo(res.getStartDate()) >= 0
-							&& endDatee.compareTo(res.getEndDate()) <= 0) {
-						dozvola = false;
-					} else {
-						dozvola = true;
-					}
-				} else {
-					if (startDatee.compareTo(res.getStartDate()) >= 0 && startDatee.compareTo(res.getEndDate()) < 0) {
-						dozvola = false;
-					}
-				}
-
-			}
-			if (dozvola) {
-				theFinalList.add(car);
-			}
-		}
-
-		ArrayList<Car> returnList = new ArrayList<>();
-		for (Car car : theFinalList) {
-			if (car.getOnFastRes()) {
-				returnList.add(car);
-			}
-		}
-		return new ResponseEntity<>(returnList, HttpStatus.OK);
-
-	}
+	
 
 	@PutMapping(value = "/api/saveEditedCar", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Car> saveChangesRentACar(@RequestBody CarDTO car) {

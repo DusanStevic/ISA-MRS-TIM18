@@ -2,6 +2,7 @@ package com.tim18.skynet.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +59,21 @@ public class CarReservationController {
 	
 	@Autowired
 	private ReservationService reservationService;
+	
+	
+	@GetMapping(value = "/showCarsOnFastRes/{racID}")
+	public ResponseEntity<List<Car>> showCarsOnFastRes(@PathVariable Long racID) {
+		RentACar rac = rentacarService.findOne(racID);
+		List<Car> cars = carService.findByRentACar(rac);
+		List<Car> carsOnFast = new ArrayList<>();
+		for (Car car : cars) {
+			if (car.getOnFastRes()==true) {
+				carsOnFast.add(car);
+			}
+		}
+		return new ResponseEntity<>(carsOnFast, HttpStatus.OK);
+	}
+	
 
 	@SuppressWarnings("deprecation")
 	@PutMapping(value = "/api/putCarOnFastRes/{carId}/{startDate}/{endDate}/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -122,83 +138,66 @@ public class CarReservationController {
 		return new ResponseEntity<>(car, HttpStatus.OK);
 	}
 
-	@RequestMapping( value="/api/carReservation/{resid}",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
-	public Reservation reserveCar(@RequestBody CarReservationDTO temp, @PathVariable(value = "resid") Long resID){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		RegisteredUser user = (RegisteredUser) this.userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+	@SuppressWarnings("deprecation")
+	@PostMapping(value = "/createCarReservation/{carId}/{startDate}/{endDate}/{passengers}/{flight_res}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CarReservation> create(@PathVariable Long carId, @PathVariable String startDate,
+			@PathVariable String endDate, @PathVariable Integer passengers, @PathVariable String flight_res) {
+		RegisteredUser user = (RegisteredUser) this.userDetailsService
+				.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+		Integer flights = 0;
+		Reservation r = new Reservation();
 		
-		if(user == null){
+
+
+		@SuppressWarnings("deprecation")
+		Date startDatee = new Date(Integer.parseInt(startDate.split("\\-")[0]) - 1900,
+				Integer.parseInt(startDate.split("\\-")[1]) - 1, Integer.parseInt(startDate.split("\\-")[2]));
+		@SuppressWarnings("deprecation")
+		Date endDatee = new Date(Integer.parseInt(endDate.split("\\-")[0]) - 1900,
+				Integer.parseInt(endDate.split("\\-")[1]) - 1, Integer.parseInt(endDate.split("\\-")[2]));
+
+		
+
+		CarReservationDTO dto = new CarReservationDTO(carId, startDatee, endDatee, passengers);
+		CarReservation newCarRes = new CarReservation(dto);
+		Car car = null;
+		try {
+			car = carService.findOne(dto.getCarId());
+		}catch(Exception e) {
 			return null;
 		}
-		
-		Reservation reservation = reservationService.findOne(resID);
-		
-		Car car = carService.findOne(temp.getCarId());
-		
-		CarReservation carReservation = new CarReservation();
-		
-		//if(reservation.getPassangers().isEmpty() || reservation.getSeatReservations().isEmpty()){
-			//return null;
-		//}
-		Date startDate = null;
-		Date endDate = null;
-		
-		startDate = temp.getStartDate();
-		endDate = temp.getEndDate();
-		
-		
-		Interval interval1 = new Interval(startDate.getTime(), endDate.getTime());
-		
-		for(CarReservation reserv : car.getReservations()){
-			Interval interval2 = new Interval(reserv.getStartDate().getTime(), reserv.getEndDate().getTime());
-			Interval overlap = interval2.overlap(interval1);
-			if(overlap != null){
-				return null;
-			}
-		}
-		
-		double price = car.getPrice();
+				
 	
-		carReservation.setReservation(reservation);
-		carReservation.setCar(car);
-		carReservation.setStartDate(startDate);
-		carReservation.setEndDate(endDate);
-		carReservation.setPrice(price);
+		newCarRes.setCar(car);
+		newCarRes.setPrice(car.getPrice());
+
+		newCarRes.setRegistredUser(user);
+		newCarRes.setNumOfPass(passengers);
+
+		RentACar rentacar = rentacarService.findOne(car.getRentacar().getId());
+		newCarRes.setRentacarRes(rentacar);
+
+		carReservationService.save(newCarRes);
+
+		double price = r.getTotalPrice();
+		
+		r.setTotalPrice(price + newCarRes.getPrice());
+		r.setCarReservations(carReservationService.findByCar(car));
+		
+		reservationService.save(r);
+		newCarRes.setReservation(r);
+		newCarRes.setRegistredUser(user);
+		user.setReservations(reservationService.findAll());
+		rentacar.getCarReservations().add(newCarRes);
+		car.getReservations().add(newCarRes);
 		
 		
-		
-		
-		car.getReservations().add(carReservation);
-		reservation.getCarReservations().add(carReservation);
-		
-		carReservationService.save(carReservation);
-		carService.save(car);
-		return reservationService.save(reservation);
+
+		return new ResponseEntity<>(newCarRes, HttpStatus.CREATED);
 	}
-	
-	@RequestMapping( value="/api/removeCarReservation/{id}",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Reservation removeCarReservation(@PathVariable(value = "id") Long id){
-		RegisteredUser user = (RegisteredUser) this.userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		if(user == null){
-			return null;
-		}
-		CarReservation rr = carReservationService.getOne(id);
-		
-		boolean isUser = false;
-		for(RegisteredUser u : rr.getReservation().getPassangers()){
-			if(u.getId() == user.getId()){
-				isUser = true;
-			}
-		}
-		if(isUser == false){
-			return null;
-		}
-		Reservation r = rr.getReservation();
-		rr.setReservation(null);
-		rr.setCar(null);
-		carReservationService.delete(id);
-		return r;
-	}
+
 	
 }
 
