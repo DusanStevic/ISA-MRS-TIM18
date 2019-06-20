@@ -12,7 +12,7 @@ public interface FastRoomReservationRepository extends JpaRepository<FastRoomRes
 	
 	@Query("SELECT DISTINCT fr FROM FastRoomReservation fr " +
 		    "WHERE fr.room.hotel.id = ?1 " +
-			"AND fr.room.bedNumber <= ?4 " +
+			"AND fr.room.bedNumber = ?4 " +
 		    "AND (fr.startDate <= ?2 AND fr.endDate >= ?3) " +
 			"AND fr.room.id NOT IN " +
 				"(SELECT DISTINCT rr.reservedRoom.id FROM RoomReservation rr "+

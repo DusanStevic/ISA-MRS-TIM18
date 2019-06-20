@@ -1,5 +1,6 @@
 package com.tim18.skynet.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,6 +47,29 @@ public class HotelServiceImpl implements HotelService{
 		else{
 			return hotelRepository.findByAddressAndDateAndBeds(address, checkin, checkout, beds);
 		}
+	}
+
+
+	@Override
+	public ArrayList<Object[]> dailyReport(long id) {
+		return hotelRepository.dailyReport(id);
+	}
+
+
+	@Override
+	public ArrayList<Object[]> monthlyReport(long id) {
+		return hotelRepository.monthlyReport(id);
+	}
+	
+	@Override
+	public ArrayList<Object[]> weeklyReport(long id) {
+		return hotelRepository.weeklyReport(id);
+	}
+
+
+	@Override
+	public Long incomeReport(long id, Date date1, Date date2) {
+		return hotelRepository.incomeReport(id, date1, date2);
 	}
 	
 

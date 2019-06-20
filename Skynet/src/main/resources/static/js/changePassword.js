@@ -14,7 +14,7 @@ function checkFirstTime(){
 				}
 			},
 			error : function() {
-				alert('Some error occurred. Please try again later.');
+				//alert('Some error occurred. Please try again later.');
 			}
 	
 		})
@@ -46,11 +46,11 @@ $(document).on('submit', "#changePassword", function(e){
 					window.history.back();
 				}
 				else{
-					alert('Some error occurred. Please try again later.');
+					//alert('Some error occurred. Please try again later.');
 				}
 			},
 			error : function() {
-				alert('Some error occurred. Please try again later.');
+				//alert('Some error occurred. Please try again later.');
 			}
 	
 		})

@@ -109,7 +109,7 @@ public class UserController {
 	@RequestMapping(value = "/api/hadmins", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserTokenState> updateHadmin(
 			@Valid @RequestBody UserDTO u) {
-
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		User ha =(User) this.userInfoService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		if(u.getFirstName().equals("") == false){
 			ha.setName(u.getFirstName());
@@ -134,11 +134,11 @@ public class UserController {
 			ha.setPassword(this.userInfoService.encodePassword(u.getPassword()));
 			ha.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
 		}
-		this.userInfoService.saveUser(ha);
+		userService.save(ha);
 		String jwt = tokenUtils.generateToken(ha.getUsername());
 		int expiresIn = tokenUtils.getExpiredIn();
-		UserRoleName userType = null;
-		return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, userType), HttpStatus.OK);
+
+		return new ResponseEntity<>(new UserTokenState(jwt, expiresIn), HttpStatus.OK);
 	}
 	
 	

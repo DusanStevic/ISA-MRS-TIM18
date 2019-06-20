@@ -1,6 +1,8 @@
 package com.tim18.skynet.service.impl;
 
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,12 +76,12 @@ public class CarServiceImpl implements CarService{
 		
 		return result1;
 	}
-
+	*/
 	@Override
-	public ArrayList<Room> findAvailable(long racId, Date checkin, Date checkout) {
+	public ArrayList<Car> findAvailable(long racId, Date checkin, Date checkout) {
 		return vehicleRepository.findAvailable(racId, checkin, checkout);
 	}
-	*/
+
 
 	@Override
 	public List<Car> findByRentACar(RentACar r) {

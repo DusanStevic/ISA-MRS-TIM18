@@ -124,7 +124,9 @@ public class FastRoomReservationController {
 		}
 		
 		int beds = search.getBeds();
-		return fastRoomReservationService.getAvailbleFastReservaions(hid, date1, date2, beds);
+		List<FastRoomReservation> res = fastRoomReservationService.getAvailbleFastReservaions(hid, date1, date2, beds);
+		System.out.println("OVO JE VELICINA "+res.size());
+		return res;
 	}
 	
 	@RequestMapping( value="/api/getfastRoomReservations/{room_id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

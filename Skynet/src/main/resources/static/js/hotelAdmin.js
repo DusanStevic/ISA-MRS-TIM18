@@ -127,13 +127,19 @@ function getHotelAdmin() {
 			dataType : "json",
 			success : function(data) {
 				if (data == null) {
-					alert('Some error occurred. Please try again later.');
+					alert("Informations updated successfuly! Log out to start using application with new data.");
+					removeJwtToken(TOKEN_KEY);
+					localStorage.clear();
+					window.location.replace("index.html");
 				} else {
 					displayAdmin(data);
 				}
 			},
 			error : function() {
-				alert('Some error occurred. Please try again later.');
+				alert("Informations updated successfuly! Log out to start using application with new data.");
+				removeJwtToken(TOKEN_KEY);
+				localStorage.clear();
+				window.location.replace("index.html");
 			}
 	
 		})
@@ -206,10 +212,11 @@ function getHotel() {
 					}
 				}
 			},
-			error : function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR.status);
-				alert(textStatus);
-				alert(errorThrown);
+			error : function() {
+				alert("Session expiered.");
+				removeJwtToken(TOKEN_KEY);
+				localStorage.clear();
+				window.location.replace("index.html");
 			}
 	
 		})
@@ -403,32 +410,29 @@ $(document).on('click','#editAdminProfile',function(e){
 })
 
 $(document).on('submit','#editHAInfo',function(e){
-	var id = $('#adminID').val();
 	var name = $('#nameEdit').val();
 	var surname = $('#surnameEdit').val();
-	var username = $('#usernameEdit').val();
 	var email = $('#emailEdit').val();
-	if(name == "" || surname == "" || username == "" || email == ""){
-		alert("All fields must be filled!");
+	if(name == "" || surname == "" || email == ""){
+		alert("All fields must be filled (except password).");
 		return;
 	}
-	var oldPass = $('#passwordEdit').val();
 	var newPass = $('#newPasswordEdit').val();
-	if(oldPass == "" && newPass != "" || oldPass != "" && newPass == ""){
-		alert("Please enter old and new password correctly!");
-		return;
-	}
 	$.ajax({
 		type : 'PUT',
-		url : "/api/hadmins",
+		url : 'http://localhost:8080/api/updateUserProfile',
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
-		dataType : "json",
-		data: inputToUser(email, name, surname, username, newPass, id),
-		success : function(data) {
+		contentType: 'application/json',
+		data: formToJSON_profilIZ(newPass,name,surname,  email),
+		success : function(data){
 			setJwtToken(TOKEN_KEY, data.accessToken);
+			alert("Informations updated successfuly!");
 			location.reload();
 		},
-	})
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("Informations updated successfuly! Log out to start using application with new data.");
+		}
+	});	
 })
 
 function displayHotel(data){
@@ -530,7 +534,7 @@ function displayRooms(data){
 		$.each(list, function(index, room){
 			var tr=$('<tr></tr>');
 			tr.append('<td><img src='+room.image+' class="room_display"/></td>');
-			tr.append('<td><table><tr><td><h3>Price per night: '+room.price+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr><tr><td>Room number: '+room.roomNumber+'</td></tr>'+
+			tr.append('<td><table><tr><td><h3>Price per night: '+room.price+'$ </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr><tr><td>Room number: '+room.roomNumber+'</td></tr>'+
 			'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
 			'<tr><td><a href="#" id="viewRoom" name="'+room.id+'">More details</a></td></tr>'+
 			'<tr><td><a href="#" id="deleteRoom" name="'+room.id+'">Delete room</a></td></tr></table></td>');
@@ -621,7 +625,7 @@ function displayChoosenCriteria(string_offers){
 			$.each(list, function(index, room){
 				var tr=$('<tr></tr>');
 				tr.append('<td><img src='+room.image+' class="room_display"/></td>');
-				tr.append('<td><table><tr><td><h3>Price per night: '+room.price+' </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr><tr><td>Room number: '+room.roomNumber+'</td></tr>'+
+				tr.append('<td><table><tr><td><h3>Price per night: '+room.price+'$ </h3></td></tr>'+'<tr><td><h4>Beds: '+room.bedNumber+'</h4></td></tr><tr><td>Room number: '+room.roomNumber+'</td></tr>'+
 				'<tr><td><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></td></tr>'+
 				'<tr><td><a href="#" id="viewRoom" name="'+room.id+'">More details</a></td></tr>'+
 				'<tr><td><a href="#" id="deleteRoom" name="'+room.id+'">Delete room</a></td></tr></table></td>');
@@ -789,6 +793,30 @@ $(document).on('submit', "#uploadImageForm", function(event){
 })
 
 $(document).on('click', "#goToDescription", function (e) {
+	e.preventDefault();
+	var beds = $('#beds').val();
+	var price = $('#price').val();
+	var number = $('#roomNumber').val();
+	if(beds == "" || price == "" || number == ""){
+		alert("All fields must be filled!");
+		return;
+	}
+	if(isNaN(beds) || isNaN(price)){
+		alert("Number of beds and price must be numbers!");
+		return;
+	}
+	if(beds < 1 || beds > 10){
+		alert("Minimal bed numner is 1, maximal is 10.");
+		return;
+	}
+	if(price < 5){
+		alert("Minimal price is 5$.");
+		return;
+	}
+	if(price > 40000){
+		alert("Maximal price is 40000$.");
+		return;
+	}
     var page1 = document.getElementById("view1");
     var page2 = document.getElementById("view3");
     page1.style.display = "none";
@@ -809,6 +837,7 @@ $(document).on('click', "#goToBasic", function (e) {
 });
 
 $(document).on('submit', "#newRoomForm", function(e){
+	e.preventDefault();
     var page1 = document.getElementById("view1");
     var page2 = document.getElementById("view2");
     page1.style.display = "none";
@@ -816,21 +845,14 @@ $(document).on('submit', "#newRoomForm", function(e){
     var page3 = document.getElementById("view3");
     page3.style.display = "block";
     e.preventDefault();
-    console.log("Usao sam");
+
 	var token = getJwtToken(TOKEN_KEY);
 	var image = "images/room.png";
 	var beds = $('#beds').val();
 	var price = $('#price').val();
 	var number = $('#roomNumber').val();
 	var description = $('#roomDesc').val();
-	if(beds == "" || price == "" || description == ""){
-		alert("All fields must be filled!");
-		return;
-	}
-	if(isNaN(beds) || isNaN(price)){
-		alert("Number of beds and price must be numbers!");
-		return;
-	}
+	
 	$.ajax({
 		type:'POST',
 		url:'/api/room',
@@ -1028,7 +1050,7 @@ function printHotelOffers(){
 	});
 }
 
-$(document).on('submit', "#editOfferForm", function (e) {
+$(document).on('submit', "#editOfferForm2", function (e) {
     var modal = document.getElementById('modal');
     var off_name = $('#offerName').val();
     if (off_name != "") {
@@ -1142,4 +1164,14 @@ function inputToFast(roomId, disc, start, end, string_offers, id){
 		"end":end,
 		"hotelOffers":string_offers,
 	})
+}
+
+
+function formToJSON_profilIZ(password,name,surname,  email) {
+	return JSON.stringify({
+		"password" : password,
+		"name" : name,
+		"surname" : surname,
+		"email" : email
+	});
 }

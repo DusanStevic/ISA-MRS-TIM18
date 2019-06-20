@@ -55,62 +55,51 @@ $(document).on('click','#makeRes',function(e){
 	
 	if(nowBeds < beds){
 		curBeds = curBeds + clickedBeds;
-		localStorage.setItem("curBeds", curBeds.toString());
 		left = beds - curBeds;
-		var modal2 = document.getElementById('modal2');
-		modal2.style.display = "none";
-		tr.append('<td>Room is successfuly reserved! You can reserve more rooms for '+left+' persons or you can finish room reservation now and go to next step.</td>');
-		$("#fencyBody").append(tr);
-		var tr2 = $('<tr></tr>');
-		tr2.append('<td><input type="button" id="reserveMore" value="Reserve more rooms" class="greenButton"/></td><td><input type="button" id="nextStep" value="Next step" class="blueButton"/></td>');
-		$("#fencyButtons").append(tr2);
-		return;
 	}
 	
 	else if(nowBeds > beds){
 		left = beds - curBeds;
 		var modal2 = document.getElementById('modal2');
 		modal2.style.display = "none";
-		tr.append('<td>Room could not be reserved. Please select rooms with maximum '+left+' beds or finish your room reservation now and go to next step. If you do not like bed arrangement, go to the Cart box and cancel a room that does not fit. You can also book rooms of other hotels. </td>');
+		tr.append('<td>Room could not be reserved. Please select rooms with maximum '+left+' beds or finish your room reservation now and go to next step. You can also book rooms of other hotels. </td>');
 		$("#fencyBody").append(tr);
 		var tr2 = $('<tr></tr>');
 		tr2.append('<td><input type="button" id="reserveMore" value="Reserve another room" class="greenButton"/></td><td><input type="button" id="nextStep" value="Next step" class="blueButton"/></td>');
-		$("#fencyButtons").append(tr2)
-		return;
-	}
-	
-	else if(nowBeds == beds){
-		var modal2 = document.getElementById('modal2');
-		modal2.style.display = "none";
-		tr.append('<td>You have successfuly reserved rooms! Now go to next step.</td>');
-		$("#fencyBody").append(tr);
-		var tr2 = $('<tr></tr>');
-		tr2.append('<td><input type="button" id="nextStep" value="Next step" class="blueButton"/></td>');
-		$("#fencyButtons").append(tr2)
+		$("#fencyButtons").append(tr2);
 		return;
 	}
 	console.log(offers);
 	var days = 10;
-	var resID = able;
+	//var resID = able;
 	var roomID = localStorage.getItem("roomID");
 	$.ajax({
 		type:'POST',
-		url:'/api/roomReservation/'+able,
+		url:'/api/roomReservation/'+'1000',
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',
-		data:inputToRoomReservation(offers, days, roomID, resID),
+		data:inputToRoomReservation(offers, days, roomID, '1000'),
 		success:function(data){
 			if(data == null){
+				left = beds + curBeds;
+				curBeds = curBeds - clickedBeds;
 				alert("Room could not be reserved. You have already reservd this room, or you have not completed flight reservation.");
 			}
 			else{
-				curBeds = curBeds + clickedBeds;
+				var modal2 = document.getElementById('modal2');
+				modal2.style.display = "none";
+				tr.append('<td>Room is successfuly reserved! You can reserve more rooms for '+left+' persons or you can finish room reservation now and go to next step.</td>');
+				$("#fencyBody").append(tr);
+				var tr2 = $('<tr></tr>');
+				tr2.append('<td><input type="button" id="reserveMore" value="Reserve more rooms" class="greenButton"/></td><td><input type="button" id="nextStep" value="Next step" class="blueButton"/></td>');
+				$("#fencyButtons").append(tr2);
 				localStorage.setItem("curBeds", curBeds.toString());
-				alert("Room reserved!");
 			}
 		},
 		error:function(){
+			left = beds + curBeds;
+			curBeds = curBeds - clickedBeds;
 			alert("Room could not be reserved. You have already reservd this room, or you have not completed flight reservation.");
 		}
 	});
@@ -118,14 +107,14 @@ $(document).on('click','#makeRes',function(e){
 
 $(document).on('click','#fastReserve',function(e){
 	var able = localStorage.getItem("reservation");
-	if(able == null || able == undefined || able == ""){
-		alert("Room can not be reserved before flight. Please reserve flight first.");
-		return;
-	}
+	//if(able == null || able == undefined || able == ""){
+	//	alert("Room can not be reserved before flight. Please reserve flight first.");
+	//	return;
+	//}
 	var id=$(this).attr("name");
 	$.ajax({
 		type:'POST',
-		url:'/api/fastReserve/'+able,
+		url:'/api/fastReserve/'+'1000',
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',
@@ -206,6 +195,7 @@ function displayResInfo(res){
 }
 
 function dispHotelOffers(){
+	var number = localStorage.getItem("nights");
 	$('#offersShow').empty();
 	var id = localStorage.getItem("hotelId1");
 	$.ajax({
@@ -219,7 +209,7 @@ function dispHotelOffers(){
 				$('#offersTab').append('<tr><th>Offer name</th><th>Price</th></tr>');
 				var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 				$.each(list, function(index, offer){
-					$('#offersTab').append('<tr><td>'+offer.name+'</td><td>'+offer.price+'<input type="checkbox" class="custom_checkbox" value="'+offer.price+'" id="'+offer.id+'" name="offerChoice" /></td></tr>');
+					$('#offersTab').append('<tr><td>'+offer.name+'</td><td>'+offer.price * number+'<input type="checkbox" class="custom_checkbox" value="'+offer.price * number+'" id="'+offer.id+'" name="offerChoice" /></td></tr>');
 				});
 			}
 		}

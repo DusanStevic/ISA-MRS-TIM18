@@ -10,8 +10,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/authorization.js"></script>
     <script type="text/javascript" src="js/hotelAdmin.js"></script>
-    <script type="text/javascript" src="js/uploadFile.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    
 </head>
 <body>
     <nav class="navbar navbar-inverse">
@@ -38,41 +39,47 @@
             </ul>
         </div>
     </nav>
-	<div class="ombre_div">
-	<form id="updateRoom">
-		<table class="ombre_table">
-			<tr><td><input type="hidden" id="editId"/></td></tr>
-			<tr><td><h2>Change informations about room:</h2></td></tr>
-			<tr><td>Bed number:</td></tr>
-			<tr><td><input type="text" id="editBeds"/></td></tr>
-			<tr><td>Price per night:</td></tr>
-			<tr><td><input type="text" id="editPrice"/></td></tr>
-			<tr><td>Room description:</td></tr>
-			<tr><td><textarea id="editRoomDesc"></textarea></td></tr>
-			<tr><td><h4>What does this room offer?</h4></td></tr>
-            <tr><td><p>Click <u><a href="#" id="newRoomOffer">here</a></u> to specify what this room offers (balcony, wi-fi...) or select existing offers:</p></td></tr>
-            <tr><td><div class="submit_button"><table id="roomOffers"></table></div></td></tr>
-            <tr><td><input type="submit" value="Save changes"/></td></tr>
-		</table>
-	</form>
-</div>
-<div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <form id="editOfferForm">
-                <table>
-                    <tr>
-                        <td><h3>Specify room offer: </h3></td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" id="offerName" /></td>
-                    </tr>
-                    <tr>
-                        <td><input type="submit" value="Add offer" /></td>
-                    </tr>
-                </table>
-            </form>
-        </div>
+	<div class="blue_middle_container">
+    	
+		<canvas id="myChart" width="400" height="150"></canvas>
     </div>
+     
 </body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
+
+<script>
+var ctx = document.getElementById("myChart");
+var income = localStorage.getItem("income");
+	var myChart = new Chart(ctx, {
+	  type: 'bar',
+	  data: {
+	    labels: ["Income"],
+	    datasets: [{
+	      label: '# In $',
+	      data: [income],
+	      backgroundColor: [
+	        'rgba(255, 99, 132, 0.2)',
+	      ],
+	      borderColor: [
+	        'rgba(255,99,132,1)',
+	      ],
+	      borderWidth: 1
+	    }]
+	  },
+	  options: {
+	    scales: {
+	      yAxes: [{
+	        ticks: {
+	          beginAtZero: true
+	        }
+	      }]
+	    }
+	  }
+	});
+
+
+
+
+    </script>
 </html>

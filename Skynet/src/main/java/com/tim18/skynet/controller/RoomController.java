@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,12 +28,13 @@ import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.dto.RoomDTO;
 import com.tim18.skynet.dto.RoomOffersDTO;
 import com.tim18.skynet.dto.RoomSearchDTO;
-import com.tim18.skynet.model.Airline;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
 import com.tim18.skynet.model.Room;
+import com.tim18.skynet.model.RoomOffer;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
 import com.tim18.skynet.service.impl.HotelServiceImpl;
+import com.tim18.skynet.service.impl.RoomOfferServiceImpl;
 import com.tim18.skynet.service.impl.RoomServiceImpl;
 
 @RestController
@@ -47,6 +47,9 @@ public class RoomController {
 	
 	@Autowired
 	private HotelServiceImpl hotelService;
+	
+	@Autowired
+	private RoomOfferServiceImpl roomOfferService;
 	
 
 	@RequestMapping( value="/api/room",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
@@ -231,10 +234,18 @@ public class RoomController {
 	@RequestMapping( value="/api/deleteRoom/{room_id}",method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Room deleteRoom(@PathVariable(value = "room_id") Long room_id) {
 		Room room = roomService.findOne(room_id);
+		if(room.getReservations().size() > 0){
+			return null;
+		}
+		for(RoomOffer ro : room.getRoomOffers()){
+			if(ro.getRooms().size() < 2){
+				ro.getRooms().remove(room);
+				roomOfferService.delete(ro.getId());
+			}
+		}
+		room.setRoomOffers(null);
 		room.setHotel(null);
 		roomService.delete(room_id);
-		return null;
+		return new Room();
 	}
-	
-	
 }
