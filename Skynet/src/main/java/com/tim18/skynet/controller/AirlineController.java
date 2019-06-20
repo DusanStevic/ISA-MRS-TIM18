@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tim18.skynet.dto.AirlineSearchDTO;
 import com.tim18.skynet.dto.DestinationBean;
+import com.tim18.skynet.dto.FastSeatReservationDTO;
+import com.tim18.skynet.dto.FastSeatReservationDetailsDTO;
 import com.tim18.skynet.dto.FlightBean;
 import com.tim18.skynet.dto.ImageDTO;
 import com.tim18.skynet.dto.RoomSearchDTO;
@@ -34,6 +37,7 @@ import com.tim18.skynet.dto.SeatsBean;
 import com.tim18.skynet.model.Airline;
 import com.tim18.skynet.model.AirlineAdmin;
 import com.tim18.skynet.model.Destination;
+import com.tim18.skynet.model.FastSeatReservation;
 import com.tim18.skynet.model.Flight;
 import com.tim18.skynet.model.Hotel;
 import com.tim18.skynet.model.HotelAdmin;
@@ -42,6 +46,7 @@ import com.tim18.skynet.service.AirlineAdminService;
 import com.tim18.skynet.service.impl.AirlineServiceImpl;
 import com.tim18.skynet.service.impl.CustomUserDetailsService;
 import com.tim18.skynet.service.impl.DestinationService;
+import com.tim18.skynet.service.impl.FastSeatReservationService;
 import com.tim18.skynet.service.impl.FlightService;
 import com.tim18.skynet.service.impl.SeatService;
 
@@ -64,7 +69,10 @@ public class AirlineController {
 	
 	@Autowired
 	private SeatService seatService;
+	@Autowired
+	private FastSeatReservationService fastSeatReservationService;
 	
+	private static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy. HH:mm");
 	private static SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	private static SimpleDateFormat sdf2 = new SimpleDateFormat("dd.MM.yyyy. HH:mm");
 	
@@ -601,5 +609,152 @@ public class AirlineController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	/*DODAVANJE BRZOG SEDISTA*/
+	@RequestMapping(value = "/api/addFastSeatReservation", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('ROLE_AIRLINE_ADMIN')")
+	public ResponseEntity<List<FastSeatReservation>>  addFastSeatReservation(@RequestBody FastSeatReservationDTO fastSeatReservationDTO) {
+		System.out.println("ULETEO SAM U DODAVANJE  BRZE");
+		
+		AirlineAdmin loggedAdmin = (AirlineAdmin) this.userInfoService
+				.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		
+		if (loggedAdmin == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		List<FastSeatReservation> fastSeatReservations = new ArrayList<FastSeatReservation>();
+		
+		if(!fastSeatReservationDTO.getSeats().isEmpty()) {
+			
+		
+		
+			
+			for (String str : fastSeatReservationDTO.getSeats()) {
+				Long flightId = fastSeatReservationDTO.getFlight_id();
+				Long seatId = Long.parseLong(str);
+				Flight flight = flightService.findOne(flightId);
+				Seat s = seatService.findByFlightIdAndId(flightId,seatId);
+				s.setFast(true);
+				seatService.save(s);
+				FastSeatReservation fsr = new FastSeatReservation(s, flight, findPrice(flight, s),
+						fastSeatReservationDTO.getDiscount());
+				fastSeatReservations.add(fsr);
+				fastSeatReservationService.save(fsr);
+				loggedAdmin.getAirline().getFastSeatReservation().add(fsr);
+				airlineService.save(loggedAdmin.getAirline());
+				airlineAdminService.save(loggedAdmin);
+				
+				
+				
+				
+			
+			}
+			
+			
+		}
+		else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			//MORA DA SE REZERVISE LET NEMA REZERVACIJE BEZ LETA
+		}
+		
+		
+		
+		return new ResponseEntity<>(fastSeatReservations, HttpStatus.OK);
+	}
+	
+	
+	
+	private double findPrice(Flight f, Seat s) {
+
+		if (s.getTravelClassa().equals("economic")) {
+			return f.getEconomicPrice();
+		} else if (s.getTravelClassa().equals("business")) {
+			return f.getBusinessPrice();
+		} else {
+			return f.getFirstClassPrice();
+		}
+	}
+	
+	
+	@RequestMapping(value = "/api/getFastSeatReservations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('ROLE_AIRLINE_ADMIN')")
+	public ResponseEntity<ArrayList<FastSeatReservationDetailsDTO>> getFastSeatReservations() {
+		System.out.println("ULETEO SAM U PRIKAZ  BRZE IZ UGLA AERO ADMINA");
+		AirlineAdmin loggedAdmin = (AirlineAdmin) this.userInfoService
+				.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		
+		
+		if (loggedAdmin == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		ArrayList<FastSeatReservationDetailsDTO> returnValue = new ArrayList<>();
+		String startDate, endDate;
+		for (FastSeatReservation fsr : loggedAdmin.getAirline().getFastSeatReservation()) {
+			startDate = sdf.format(fsr.getFlight().getStartDate());
+			endDate = sdf.format(fsr.getFlight().getEndDate());
+			returnValue.add(new FastSeatReservationDetailsDTO(fsr.getId(), fsr.getFlight().getId(),
+					fsr.getSeat().getId(), fsr.getOriginPrice(), fsr.getDiscount(), startDate, endDate,
+					fsr.getFlight().getStartDestination().getNaziv(),
+					fsr.getFlight().getEndDestination().getNaziv(), fsr.getSeat().getSeatRow(),
+					fsr.getSeat().getSeatColumn(), fsr.getSeat().getTravelClassa(), fsr.isTaken()));
+		}
+		return new ResponseEntity<>(returnValue, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "/api/removeFastSeatReservation/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('ROLE_AIRLINE_ADMIN')")
+	public ResponseEntity<String> removeFastSeatReservation(@PathVariable("id") Long id) {
+		
+		
+		AirlineAdmin loggedUser = (AirlineAdmin) this.userInfoService
+				.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		if (loggedUser == null) {
+			return null;
+		}
+		FastSeatReservation reservation = fastSeatReservationService.findOne(id);
+		if (reservation == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		if (reservation.isTaken()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	
+		fastSeatReservationService.remove(id);
+		return new ResponseEntity<>("Fast reservation has been successfully removed!",HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/api/getFastSeatReservations/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('ROLE_USER')")
+	public ResponseEntity<ArrayList<FastSeatReservationDetailsDTO>>getFastSeatReservations(@PathVariable("id") Long id) {
+		System.out.println("ULETEO SAM U PRIKAZ  BRZE IZ UGLA USERA");
+		Airline airline = airlineService.findOne(id);
+		ArrayList<FastSeatReservationDetailsDTO> fastSeatReservations = new ArrayList<>();
+		String startDate, endDate;
+		Date today = new Date();
+		for (FastSeatReservation fastSeatReservation : airline.getFastSeatReservation()) {
+
+			long diffInMillies = fastSeatReservation.getFlight().getStartDate().getTime() - today.getTime();
+			long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+			if (fastSeatReservation.isTaken() == false && diff >= 1) {
+
+				startDate = sdf.format(fastSeatReservation.getFlight().getStartDate());
+				endDate = sdf.format(fastSeatReservation.getFlight().getEndDate());
+				fastSeatReservations.add(new FastSeatReservationDetailsDTO(fastSeatReservation.getId(), fastSeatReservation.getFlight().getId(),
+						fastSeatReservation.getSeat().getId(), fastSeatReservation.getOriginPrice(), fastSeatReservation.getDiscount(), startDate, endDate,
+						fastSeatReservation.getFlight().getStartDestination().getNaziv(),
+						fastSeatReservation.getFlight().getEndDestination().getNaziv(), fastSeatReservation.getSeat().getSeatRow(),
+						fastSeatReservation.getSeat().getSeatColumn(), fastSeatReservation.getSeat().getTravelClassa(), fastSeatReservation.isTaken()));
+			}
+		}
+		
+		if (fastSeatReservations.size()==0) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<>(fastSeatReservations, HttpStatus.OK);
+
 	}
 }

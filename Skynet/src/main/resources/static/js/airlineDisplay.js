@@ -549,8 +549,45 @@ function seatReservationToJSON(flight_id, seats, total){
 }
 
 function displayFastReservations(){
-	
+	var id = localStorage.getItem("airlineid1");
+	alert("ID LETA AVIONA: " + id);
+	$.ajax({                           
+		type : 'GET',
+		url : "http://localhost:8080/api/getFastSeatReservations/" + id,
+		dataType: 'json',
+		success : function(data){
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			$.each(list, function(index, fastSeatReservation){
+				var tr1 = $('<tr></tr>');
+				tr1.append('<td><h2>'+fastSeatReservation.startDate+'</h2></td><td></td>');
+				var tr2 = $('<tr></tr>');
+				tr2.append('<td><p>'+fastSeatReservation.description+'</p></td>'+'<td align="right"><h3>Coordinates: '+fastSeatReservation.coordinates+'</h3></td>');
+				var tr4=$('<tr></tr>');
+				tr4.append('<td><hr /></td><td><hr /></td>');
+				var forma2 = $('<tr><td><input type = "button" name="' + fastSeatReservation.id +'" class="makeFastSeatReservation" value="Make fast seat reservation"></td></tr>');
+				$('#fastRes').append(tr1);
+				$('#fastRes').append(tr2);
+				$('#fastRes').append(tr4);
+				$('#fastRes').append(forma2);
+			});
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	});	
+			
 }
+
+//ovd dodaj obican upit prema bazi bez iscrtavanja sedista
+
+
+
+
+
+
+
+
+
 
 function displayDestinations(){
 	var id = localStorage.getItem("airlineid1");
