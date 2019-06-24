@@ -1504,9 +1504,8 @@ function salji(){
 
 function seatReservationToJSON(flight_id, seats, discount){
 	return JSON.stringify({
-		"flight_id":flight_id,
 		"seats":seats,
-		
+		"flight_id":flight_id,
 		"discount":discount,
 	});
 }

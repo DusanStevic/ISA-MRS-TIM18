@@ -457,20 +457,16 @@ $(document).on('submit', '#dodajDestForma', function(e){
 		dataType : 'json',
 		data: formToJSON_dest(name, coordinates,  description),
 		success : function(data){
-			alert("Successfully added destination.");
-			/*if (data != null){
-				if (file == undefined){
-					$('.main').empty();
-		        	$('.main').append('<p>Uspesno ste dodali novu destinaciju.</p>');
-				}
-				else{
-					uploadImageDest(file);
-				}
-				
-			}
-			else{
-				alert("destinacija sa tim nazivom vec postoji!");
-			}*/
+			$.bootstrapGrowl("Destination has been successfully created!", {
+				  ele: 'body', // which element to append to
+				  type: 'success', // (null, 'info', 'danger', 'success')
+				  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+				  align: 'right', // ('left', 'right', or 'center')
+				  width: 'auto', // (integer, or 'auto')
+				  delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+				  allow_dismiss: false, // If false then will display a cross to close the popup.
+				  stackup_spacing: 10 // spacing between consecutively stacked growls.
+				});
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("ULETEO SAM U AJAX ERROR: " + errorThrown);
@@ -1508,8 +1504,9 @@ function salji(){
 
 function seatReservationToJSON(flight_id, seats, discount){
 	return JSON.stringify({
-		"seats":seats,
 		"flight_id":flight_id,
+		"seats":seats,
+		
 		"discount":discount,
 	});
 }
