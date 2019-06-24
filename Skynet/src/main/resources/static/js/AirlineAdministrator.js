@@ -14,7 +14,7 @@ function getAirline() {
 	if (token) {
 		$.ajax({
 			type : 'GET',
-			url : "https://skynet-deployment.herokuapp.com/api/getAirline",
+			url : "/api/getAirline",
 			headers : createAuthorizationTokenHeader(TOKEN_KEY),
 			dataType : "json",
 			success : function(data) {
@@ -1283,8 +1283,9 @@ function prikazSedistaZaRezervaciju(data){
 				'<ul id="selected-seats"></ul>'+
 				
 				'Total: <b>$<span id="total">0</span></b>'+
-
-				'<button class="checkout-button">Checkout &raquo;</button>'+
+				'<button class="checkout-button"'+
+				'onclick="salji()">Checkout &raquo;</button>'+
+				/*'<button class="checkout-button">Checkout &raquo;</button>'+*/
 				'<button class=\'next-button\' onclick="$(\'#uzas\').click()">Next &raquo;</button>'+
 				'<br><br><br>'+
 				'<div id="legend"></div>'+
@@ -1453,7 +1454,8 @@ function recalculateTotal(sc) {
  return total;
 }
 
-$(document).on('click','.checkout-button',function(e){
+function salji(){
+/*$(document).on('click','.checkout-button',function(e){*/
 	var id = localStorage.getItem("flightID");
 	alert("OVO JE BROJ LETA KOJI HOCEMO DA SALJEMO NA SERVER IZ METODE POKUPI SEDISTA: " + id);
 	var id = localStorage.getItem("flightID");
@@ -1483,7 +1485,7 @@ $(document).on('click','.checkout-button',function(e){
 
 	$.ajax({
 		type:'POST',
-		url:"https://skynet-deployment.herokuapp.com/api/addFastSeatReservation",
+		url:"/api/addFastSeatReservation",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',

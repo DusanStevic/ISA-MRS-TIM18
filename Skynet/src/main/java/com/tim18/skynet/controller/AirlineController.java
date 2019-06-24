@@ -658,7 +658,7 @@ public class AirlineController {
 		
 		
 		
-		return new ResponseEntity<>(fastSeatReservations, HttpStatus.OK);
+		return new ResponseEntity<>(fastSeatReservations, HttpStatus.CREATED);
 	}
 	
 	
