@@ -398,7 +398,8 @@ public class AirlineController {
 		}
 	
 	
-	@RequestMapping(value = "/api/addDestination", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/api/addDestination", method = RequestMethod.POST, 
+			consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('ROLE_AIRLINE_ADMIN')")
 	// Method for adding new destination on which flight company operates
 	public ResponseEntity<Destination>addDestination(@RequestBody DestinationDTO destInfo) {
@@ -609,9 +610,10 @@ public class AirlineController {
 	}
 	
 	/*DODAVANJE BRZOG SEDISTA*/
-	@RequestMapping(value = "/api/addFastSeatReservation", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/api/addFastSeatReservation", method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('ROLE_AIRLINE_ADMIN')")
-	public ResponseEntity<List<FastSeatReservation>>  addFastSeatReservation(@RequestBody FastSeatReservationDTO fastSeatReservationDTO) {
+	public ResponseEntity<ArrayList<FastSeatReservation>>  addFastSeatReservation(@RequestBody FastSeatReservationDTO fastSeatReservationDTO) {
 		System.out.println("ULETEO SAM U DODAVANJE  BRZE");
 		
 		AirlineAdmin loggedAdmin = (AirlineAdmin) this.userInfoService
@@ -621,7 +623,7 @@ public class AirlineController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		List<FastSeatReservation> fastSeatReservations = new ArrayList<FastSeatReservation>();
+		ArrayList<FastSeatReservation> fastSeatReservations = new ArrayList<FastSeatReservation>();
 		
 		if(!fastSeatReservationDTO.getSeats().isEmpty()) {
 			
