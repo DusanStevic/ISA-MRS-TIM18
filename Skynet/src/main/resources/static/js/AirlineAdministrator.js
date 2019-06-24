@@ -14,7 +14,7 @@ function getAirline() {
 	if (token) {
 		$.ajax({
 			type : 'GET',
-			url : "/api/getAirline",
+			url : "https://skynet-deployment.herokuapp.com/api/getAirline",
 			headers : createAuthorizationTokenHeader(TOKEN_KEY),
 			dataType : "json",
 			success : function(data) {
@@ -1483,7 +1483,7 @@ $(document).on('click','.checkout-button',function(e){
 
 	$.ajax({
 		type:'POST',
-		url:"/api/addFastSeatReservation",
+		url:"https://skynet-deployment.herokuapp.com/api/addFastSeatReservation",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType:'application/json',
 		dataType:'json',

@@ -14,7 +14,7 @@ function getAirline() {
 	if (token) {
 		$.ajax({
 			type : 'GET',
-			url : "https://skynet-deployment.herokuapp.com/api/getAirline",
+			url : "/api/getAirline",
 			headers : createAuthorizationTokenHeader(TOKEN_KEY),
 			dataType : "json",
 			success : function(data) {
