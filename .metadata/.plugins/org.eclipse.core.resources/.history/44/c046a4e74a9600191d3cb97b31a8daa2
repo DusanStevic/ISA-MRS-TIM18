@@ -1124,7 +1124,7 @@ function prikazLetova(data){
 		tr.append('<td>'+ let_.startDate_str + '</td>');
 		tr.append('<td>'+ let_.endDate_str + '</td>');
 		tr.append('<td>'+ let_.klasaAviona + '</td>');
-		var forma = $('<form class = "addFastSeatReservation"></form>')
+		var forma = $('<form id = "addFastSeatReservation"></form>')
 		forma.append('<input type = "hidden" value="' + let_.id +'">');
 		forma.append('<input type = "submit" value = "Add fast seat reservation">')
 		var td = $('<td></td>');
@@ -1177,7 +1177,7 @@ function formToJSON_pretraga(flightCompany,startDestination,endDestination,start
 
 
 
-$(document).on('submit', '.addFastSeatReservation', function(e){	
+$(document).on('click', '.addFastSeatReservation', function(e){	
 	e.preventDefault();
 	var brLeta = $(this).attr("name");
 	var adresa = "/api/getFlight/" + brLeta;

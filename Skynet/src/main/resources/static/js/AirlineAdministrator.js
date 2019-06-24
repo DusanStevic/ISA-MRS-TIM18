@@ -1067,7 +1067,7 @@ $(document).on('submit', '#pretragaForma', function(e){
 	
 	$.ajax({
 		type : 'POST',
-		url : "https://skynet-deployment.herokuapp.com/api/flightSearch",
+		url : "/api/flightSearch",
 		headers : createAuthorizationTokenHeader(TOKEN_KEY),
 		contentType: 'application/json',
 		dataType: 'json',
@@ -1124,7 +1124,7 @@ function prikazLetova(data){
 		tr.append('<td>'+ let_.startDate_str + '</td>');
 		tr.append('<td>'+ let_.endDate_str + '</td>');
 		tr.append('<td>'+ let_.klasaAviona + '</td>');
-		var forma = $('<form id = "addFastSeatReservation"></form>')
+		var forma = $('<form class = "addFastSeatReservation"></form>')
 		forma.append('<input type = "hidden" value="' + let_.id +'">');
 		forma.append('<input type = "submit" value = "Add fast seat reservation">')
 		var td = $('<td></td>');
@@ -1177,7 +1177,7 @@ function formToJSON_pretraga(flightCompany,startDestination,endDestination,start
 
 
 
-$(document).on('click', '.addFastSeatReservation', function(e){	
+$(document).on('submit', '.addFastSeatReservation', function(e){	
 	e.preventDefault();
 	var brLeta = $(this).attr("name");
 	var adresa = "/api/getFlight/" + brLeta;
