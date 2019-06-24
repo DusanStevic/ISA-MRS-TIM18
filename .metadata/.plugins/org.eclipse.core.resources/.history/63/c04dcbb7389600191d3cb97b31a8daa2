@@ -9,7 +9,7 @@ function checkFirstTime(){
 			headers : createAuthorizationTokenHeader(TOKEN_KEY),
 			dataType : "json",
 			success : function(data) {
-				if(data.firstTime==true){
+				if(data.firstTime){
 					window.location.href = "changePassword.html";
 				}
 			},
