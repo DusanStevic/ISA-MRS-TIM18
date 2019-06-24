@@ -1179,7 +1179,8 @@ function formToJSON_pretraga(flightCompany,startDestination,endDestination,start
 
 $(document).on('submit', '.addFastSeatReservation', function(e){	
 	e.preventDefault();
-	var brLeta = $(this).attr("name");
+	//var brLeta = $(this).attr("name");
+	var brLeta = $(this).find('input[type=hidden]').val();
 	var adresa = "/api/getFlight/" + brLeta;
 	
 	
