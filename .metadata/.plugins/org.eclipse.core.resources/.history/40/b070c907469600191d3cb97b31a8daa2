@@ -989,7 +989,7 @@ $(document).on('click', '.removeFastSeatReservation', function(e){
 
 
 //GENERISANJE BRZE REZERVACIJE SEDISTA OD STRANE AIRLINEADMIN-A
-$(document).on('click', '#dodajFast_btn', function(e){
+/*$(document).on('click', '#dodajFast_btn', function(e){
 	console.log("Kliknuo");
 	e.preventDefault();
 	alert("USAO JE U PRETRAGU: ");
@@ -1079,8 +1079,8 @@ $(document).on('submit', '#pretragaForma', function(e){
 	});	
 })
 
-
-function prikazLetova(data){
+*/
+/*function prikazLetova(data){
 	if (data == null){
 		$('#main').empty();
 		$('#main').append("Nema pronadjenih letova.");
@@ -1155,19 +1155,7 @@ function formToJSON_pretraga(flightCompany,startDestination,endDestination,start
 		
 	});
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 
 
