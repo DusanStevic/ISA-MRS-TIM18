@@ -1504,7 +1504,7 @@ function salji(){
 			
 		}
 	});
-};
+});
 
 function seatReservationToJSON(flight_id, seats, discount){
 	return JSON.stringify({
